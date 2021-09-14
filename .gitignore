@@ -1,0 +1,50 @@
+# Documentation (temporarily)
+documentation/
+
+# Notes
+*.txt
+TODO*
+
+# Compiled version
+*.pdf
+
+# Latexmk
+*.tex.swp
+*.fdb_latexmk
+*.aux
+*.vrb
+*.glo
+*.bcf
+*.code
+*.idx
+*.fls
+*.log
+*.toc
+*.pytxcode
+*.snm
+*.nav
+*.ist
+*.acn
+*.acr
+*.alg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.wrt
+*.lot
+*.maf
+*.thm
+*.mtc
+*.wrt
+*.run.xml
+*.mtc1
+*.out
+*.synctex.gz
+*.synctex
+
+# BibTeX
+*.bbl
+*.blg
