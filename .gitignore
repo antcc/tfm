@@ -1,3 +1,6 @@
+# Latex configuration
+.latexcfg
+
 # Documentation (temporarily)
 documentation/
 
@@ -27,6 +30,7 @@ TODO*
 *.acn
 *.acr
 *.alg
+*.mw
 *.dvi
 *.glg
 *.gls
@@ -42,8 +46,7 @@ TODO*
 *.run.xml
 *.mtc1
 *.out
-*.synctex.gz
-*.synctex
+*.synctex*
 
 # BibTeX
 *.bbl

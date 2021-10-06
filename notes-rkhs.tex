@@ -1,80 +1,80 @@
-\documentclass[11pt]{article}
-\usepackage[margin=1.3in]{geometry}
-%\usepackage[compact,small]{titlesec}
-%--------------------------------------------------------
-\usepackage{sectsty,todonotes}
-\sectionfont{\normalsize\bfseries}
-\subsectionfont{\normalsize\sf}
-%----------------------------------------------------
-\usepackage[mathcal]{euscript}
-
-\usepackage{bm}                     %AMS Packages
-\usepackage{amsfonts, framed}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{graphicx}               %Graphics
-%\usepackage{pstricks,pst-plot}
-%\usepackage{wrapfig}
-\usepackage{natbib}                 %Citation style
-\usepackage{colortbl}               %Tables
-\usepackage{booktabs}
-\usepackage{hyperref}
-\setlength{\bibsep}{1pt}
-%\usepackage{hypernat}
-
-% Definiciones
-
-\definecolor{violet}{rgb}{0.7,0,0.6}
-\newcommand{\explainindetail}[1]{\todo[color=violet]{#1}}
-\newcommand{\nat}{\mathbb{N}}
-\newcommand{\eps}{\varepsilon}
-\newcommand{\ind}{\mathbb{I}}
-\newcommand{\pr}{\mathbb{P}}
-\newcommand{\B}{B}
-\newcommand{\A}{\mathcal{A}}\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\newcommand{\E}{\mathcal{E}}
-\newcommand{\V}{\mathbb{V}}
-\newcommand{\F}{\mathfrak{F}}
-\newcommand{\G}{\mathbb{G}}
-\newcommand{\M}{\mathcal{M}}
-\newcommand{\X}{\mathcal{X}}
-\newcommand{\Z}{\mathcal{Z}}
-\newcommand{\T}{\mathcal{T}}
-\newcommand{\Y}{\mathcal{Y}}
-\newcommand{\C}{\mathcal{C}}
-\newcommand{\ds}{\displaystyle}
-\newcommand{\D}{\mathcal{D}}
-\newcommand{\deb}{\stackrel{\mathcal{L}}{\longrightarrow}}
-\newcommand{\Vor}{\mbox{Vor}}
-\newcommand{\ang}{\measuredangle}
-\def\cals_+{{\cals_+}}
-\def\cala{{\mathcal{A}}}
-\def\calb{{\mathcal{B}}}
-\def\calc{{\mathcal{C}}}
-\def\cald{{\mathcal{D}}}
-\def\calf{{\mathcal{F}}}
-\def\calh{{\mathcal{H}}}
-\def\call{{\mathcal{L}}}
-\def\cals{{\mathcal{S}}}
-\def\calv{{\mathcal{V}}}
-\def\calg{{\mathcal{G}}}
-\def\calp{{\mathcal{P}}}
-\def\cale{{\mathcal{E}}}
-\def\calo{{\mathcal{O}}}
-\def\calj{{\mathcal{J}}}
-\def\caln{{\mathcal{N}}}
-\def\calm{{\mathcal{M}}}
-
-\hypersetup{
-  colorlinks=true,
-  citecolor=violet
-}
-
-\begin{document}
+% \documentclass[11pt]{article}
+% \usepackage[margin=1.3in]{geometry}
+% %\usepackage[compact,small]{titlesec}
+% %--------------------------------------------------------
+% \usepackage{sectsty,todonotes}
+% \sectionfont{\normalsize\bfseries}
+% \subsectionfont{\normalsize\sf}
+% %----------------------------------------------------
+% \usepackage[mathcal]{euscript}
+%
+% \usepackage{bm}                     %AMS Packages
+% \usepackage{amsfonts, framed}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \usepackage{graphicx}               %Graphics
+% %\usepackage{pstricks,pst-plot}
+% %\usepackage{wrapfig}
+% \usepackage{natbib}                 %Citation style
+% \usepackage{colortbl}               %Tables
+% \usepackage{booktabs}
+% \usepackage{hyperref}
+% \setlength{\bibsep}{1pt}
+% %\usepackage{hypernat}
+%
+% % Definiciones
+%
+% \definecolor{violet}{rgb}{0.7,0,0.6}
+% \newcommand{\explainindetail}[1]{\todo[color=violet]{#1}}
+% \newcommand{\nat}{\mathbb{N}}
+% \newcommand{\eps}{\varepsilon}
+% \newcommand{\ind}{\mathbb{I}}
+% \newcommand{\pr}{\mathbb{P}}
+% \newcommand{\B}{B}
+% \newcommand{\A}{\mathcal{A}}\usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsmath}
+% \usepackage{amsthm}
+% \newcommand{\E}{\mathcal{E}}
+% \newcommand{\V}{\mathbb{V}}
+% \newcommand{\F}{\mathfrak{F}}
+% \newcommand{\G}{\mathbb{G}}
+% \newcommand{\M}{\mathcal{M}}
+% \newcommand{\X}{\mathcal{X}}
+% \newcommand{\Z}{\mathcal{Z}}
+% \newcommand{\T}{\mathcal{T}}
+% \newcommand{\Y}{\mathcal{Y}}
+% \newcommand{\C}{\mathcal{C}}
+% \newcommand{\ds}{\displaystyle}
+% \newcommand{\D}{\mathcal{D}}
+% \newcommand{\deb}{\stackrel{\mathcal{L}}{\longrightarrow}}
+% \newcommand{\Vor}{\mbox{Vor}}
+% \newcommand{\ang}{\measuredangle}
+% \def\cals_+{{\cals_+}}
+% \def\cala{{\mathcal{A}}}
+% \def\calb{{\mathcal{B}}}
+% \def\calc{{\mathcal{C}}}
+% \def\cald{{\mathcal{D}}}
+% \def\calf{{\mathcal{F}}}
+% \def\calh{{\mathcal{H}}}
+% \def\call{{\mathcal{L}}}
+% \def\cals{{\mathcal{S}}}
+% \def\calv{{\mathcal{V}}}
+% \def\calg{{\mathcal{G}}}
+% \def\calp{{\mathcal{P}}}
+% \def\cale{{\mathcal{E}}}
+% \def\calo{{\mathcal{O}}}
+% \def\calj{{\mathcal{J}}}
+% \def\caln{{\mathcal{N}}}
+% \def\calm{{\mathcal{M}}}
+%
+% \hypersetup{
+% colorlinks=true,
+% citecolor=violet
+% }
+%
+% \begin{document}
 
 \begin{center}
 \large \bf  Preliminaries on RKHS's\rm
@@ -132,7 +132,7 @@ RKHS's are spaces of ``regular'' FUNCTIONS (not equivalence classes in $L^2[0,1]
 
 		One could also define the Reproducing Kernel Hilbert Space associated with $K$, by
 $$
-	{\mathcal H}(K)=\left\{x:\in L^2[0,1]:  \sum_{i=1}^\infty\frac{\langle x,e_i\rangle^2}{\lambda_i} <\infty \right\}
+	{\mathcal H}(K)=\left\{x\in L^2[0,1]:  \sum_{i=1}^\infty\frac{\langle x,e_i\rangle^2}{\lambda_i} <\infty \right\}
 	$$
 	with the inner product and norm given by
 	$$
@@ -140,7 +140,7 @@ $$
 	$$
 An equivalent definition:
 	${\mathcal H}(K)={\mathcal K}^{1/2}(L^2[0,1])$,
-	where, from Spectral Theorem, ${\mathcal K}^{1/2}(x)=\sum_i\lambda_i^{1/2}\langle x,e_i\rangle e_i$
+	where, from Spectral Theorem, ${\mathcal K}^{1/2}(x)=\sum_i\lambda_i^{1/2}\langle x,e_i\rangle e_i$. It can be easily shown that ${\mathcal K}(L^2) \varsubsetneq {\mathcal K}^{1/2}(L^2)=\mathcal H(K)$ (the inclusion is straightforward, and $K(s, \cdot)\notin \mathcal K(L^2)$).
 
 \section*{General properties}
 
@@ -195,4 +195,4 @@ Note that
 
 \end{thebibliography}
 
-\end{document}
+%\end{document}
