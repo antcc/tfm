@@ -2,7 +2,7 @@
 .latexcfg
 
 # Documentation (temporarily)
-documentation/
+doc/
 
 # Notes
 *.txt
@@ -20,6 +20,7 @@ TODO*
 *.bcf
 *.code
 *.idx
+*.brf
 *.fls
 *.log
 *.toc
