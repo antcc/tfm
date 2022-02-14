@@ -91,37 +91,22 @@
 \date{\today}
 \maketitle
 
-\margintoc[*-2]
+\margintoc[*-7]
 
-\section{Questions}
-
-Here are some questions.
+\section{TODO}
 
 \begin{enumerate}
 
-  \item Why does it not make sense to regress \(Y\) on a finite combination of projections of \(X\) whenever we consider the \(L^2\) model?
+\item Why does it not make sense to regress \(Y\) on a finite combination of projections of \(X\) whenever we consider the \(L^2\) model?
 
-  \item Why is it that \(k(\cdot, t) \notin \mathcal K(L^2)\)?
+\textbf{ANSWER}: Continuous linear functionals are only obtained by integrating a coefficient function against $x(t)$ (Riesz-Fisher), and it is not possible to select a $\beta(t)$ that produces finite linear combinations of the process after integrating.
 
-  \item We are assuming that \(\beta, \tau\) and \(\sigma^2\) are independent? Independent given \(Y\) and/or \(X\)?
+\item \(\alpha(t)=E [X(t)U]\) is the correlation/covariance of $X$ and $U$ (Berrendero et al. 2019, 2020), if we assume that $E[X(t) \varepsilon]=0$. Moreover, are we assuming $E[(X(t) - m(t))U)]=0$?
 
-  \item How many samples is it usually enough to successfully predict a relatively simple model? What about the execution time?
-
-  \item How to set a sensible value for \(g\) and \(b_0\)? Cross-validation?
-
-  \item Which MCMC sampling algorithm should we use?
-
-  \item Can we ignore the posterior on \(\sigma^2\) and treat it as a nuisance parameter?
-
-  \item \textbf{How to include the case in which} \(\bm{\mathds EX(t)\neq 0}\) \textbf{and/or} \(\bm{\mathds EY\neq 0}\)? Do we add a term \(\mu\) in the model and impose a prior on it as well? How would we treat the terms \(X_i(t_j) - m(t_j)\) resulting from \(\Psi^{-1}_{X_i}(k(\cdot, t_j))\)? Can we just subtract the sample mean to every sample trajectory and response and work with our current model?
-
-  \item How do we get an estimate of the parameters given the posterior distribution?
-
-  \item How do we try the algorithm in a more realistic setting? Which is the standard error measure for the latent parameters?
+\item Since the RMSE is measured on the same scale, with the same units as y, one can expect 68\% of the y values to be within 1 RMSE — given the data is normally distributed.
 
 \end{enumerate}
 
-\newpage
 
 \section{Bayesian Linear Regression}
 
@@ -149,7 +134,7 @@ Following a Bayesian approach, we can set a prior distribution on the parameters
   \beta\mid \tau, \sigma^2 & \sim \mathcal N(b_0, g\sigma^2(\mathcal X_\tau' \mathcal X_\tau)^{-1}),
 \end{align*}
 where\sidenote[][*1]{This is because of the correspondence between \(k(\cdot, t_j)\) and \(X(t_j)\), which becomes relevant when plugging the approximation~\eqref{eq:alpha} into the model~\eqref{eq:model_lin}.}
-\(\mathcal X_\tau(i, j)=X_i(t_j)\). The prior on \(\beta\) is known as Zellner's \(g\)-prior owing to the main hyperparameter \(g\in \R^+\), which controls the confidence we have in the initial estimate \(b_0 \in \R^p\) for the true value of the coefficients. The choice of a non-informative improper prior for \(\sigma^2\) is of course subject to change. All in all, the prior distribution for the parameters becomes
+\(\mathcal X_\tau(i, j)=X_i(t_j)\). The prior on \(\beta\) is known as Zellner's \(g\)-prior owing to the main hyperparameter \(g\in \R^+\), which controls the confidence we have in the initial estimate \(b_0 \in \R^p\) for the true value of the coefficients. The choice of a non-informative improper prior for \(\sigma^2\) (known as Jeffreys prior) is of course subject to change. All in all, the prior distribution for the parameters becomes
 \begin{equation}
   \label{eq:prior}
   \pi(\theta) = \pi(\beta, \tau, \sigma^2) = \pi(\beta \mid \tau, \sigma^2)\pi(\tau \mid \sigma^2)\pi(\sigma^2).
@@ -208,20 +193,9 @@ Some possible modifications of the methods include:
 
 See \sidetextcite[*0]{foreman2013emcee}.
 
-\subsubsection{Resources for MCMC methods}
+\subsubsection{Probabilistic programming in Python: PyMC3}
 
-Some resources on MCMC methods in Python are:
-
-\begin{enumerate}
-  \item \href{https://www.tweag.io/blog/2019-10-25-mcmc-intro1/}{A step-by-step tutorial}
-  \item \href{http://www.stat.columbia.edu/~gelman/research/published/nuts.pdf}{NUTS sampler}
-  \item \href{https://github.com/michaelnowotny/pyjags}{pyjags}
-  \item \href{https://www.cdslab.org/paramonte/index.html}{ParaMonte}
-  \item \href{https://github.com/prmiles/pymcmcstat}{pymcmcstat}
-  \item \href{https://docs.pymc.io/}{\textbf{PyMC3}}
-  \item \href{https://mc-stan.org/}{Stan}
-  \item \href{https://emcee.readthedocs.io/en/stable/tutorials/quickstart/#quickstart}{\textbf{emcee}}
-\end{enumerate}
+See \sidetextcite[*0]{salvatier2016probabilistic}.
 
 \subsection{Model extensions}
 
@@ -236,7 +210,7 @@ Some immediate extensions to the model are the following:
 
   \item Substitute the matrix \(\mathcal X\) for \(\mathcal X + \eta I\) as a form of regularization, to avoid ill-conditioning problems and to increase the stability of the computations.
 
-  \item Derive Bayesian estimates of the support and/or the coefficient function by minimizing a loss function integrated with respect to the posterior distribution, as done in \sidetextcite[*-2]{grollemund2019bayesian}. In particular, it is worth exploring the \textit{prior and posterior predictive probabilities} of the parameters to gain insight into them (as explained \href{https://en.wikipedia.org/wiki/Bayesian_inference#Bayesian_prediction}{here}).
+  \item Derive Bayesian estimates of the support and/or the coefficient function by minimizing a loss function integrated with respect to the posterior distribution, as done in \sidetextcite[*-2]{grollemund2019bayesian}. In particular, it is worth exploring the \textit{prior and posterior predictive probabilities} of the parameters to gain insight into them (as explained \href{https://en.wikipedia.org/wiki/Bayesian_inference#Bayesian_prediction}{here} and illustrated \href{https://docs.pymc.io/en/stable/pymc-examples/examples/diagnostics_and_criticism/posterior_predictive.html}{here}).
 
 \end{enumerate}
 
