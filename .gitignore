@@ -5,8 +5,8 @@
 doc/
 
 # Notes
-*.txt
-TODO*
+_*.txt
+_*.md
 
 # Compiled version
 *.pdf

@@ -96,46 +96,88 @@ In this work we propose a Bayesian approach for functional linear or logistic  r
 
 \end{frontmatter}
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
+
+The problem of inferring a scalar response \(Y\) from a functional covariate \(X(t)\)
+
+\subsubsection{Organization of the paper}
+
+In Section~\ref{sec:intro} we review...
 
 \subsection{A brief review of the theory of RKHS's}
 
-The methodology proposed in this work relies heavily on the use of RKHS's, so before diving into it we will briefly describe the main characteristics of these spaces. In what follows, suppose \(X=X(t)\) is an \(L^2\)-process with trajectories in \(L^2[0,1]\), and further assume that its mean function \(m(t)=\mathbb E[X(t)]\) and the covariance function \(K(s, t)= \mathbb E[(X(t) - m(t)(X(s) - m(s)))]\) are both continuous. To construct the RKHS associated with the covariance function, we start by defining the functional space \(H_0(K)\) of all finite linear combinations of evaluations of \(K\), that is,
+The methodology proposed in this work relies heavily on the use of RKHS's, so before diving into it we will briefly describe the main characteristics of these spaces. In what follows, suppose \(X=X(t)\) is an \(L^2\)-process with trajectories in \(L^2[0,1]\), and further assume that its mean function \(m(t)=\mathbb E[X(t)]\) and its covariance function \(K(t, s)= \mathbb E[(X(t) - m(t))(X(s) - m(s))]\) are both continuous. To construct the RKHS associated with the covariance function, we start by defining the functional space \(\mathcal H_0(K)\) of all finite linear combinations of evaluations of \(K\), that is,
 \[
-H_0(K) = \left\{ f \in L^2[0,1]: f(\cdot) = \sum_{i=1}^p a_i K(\cdot, t_i), \ p \in \N, \ a_i \in \R, \ t_i \in [0, 1] \right\}.
+\mathcal H_0(K) = \left\{ f \in L^2[0,1]: f(\cdot) = \sum_{i=1}^p a_i K(t_i, \cdot), \ p \in \N, \ a_i \in \R, \ t_i \in [0, 1] \right\}.
 \]
 This space is endowed with the inner product
 \[
-\langle f, g\rangle_K = \sum_{i, j} a_i b_j K(s_i, t_j),
+\langle f, g\rangle_K = \sum_{i, j} a_i b_j K(t_i, s_j),
 \]
-given that \(f(\cdot)=\sum_i a_i K(\cdot, s_i) \) and \(g(\cdot)=\sum_j b_j K(\cdot, t_j)\). Lastly, we define \(H(K)\) to be the completion of \(H_0(K)\) under the norm induced by the scalar product defined above.
+given that \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_j, \cdot)\). Lastly, we define \(\mathcal H(K)\) to be the completion of \(\mathcal H_0(K)\) under the norm induced by the scalar product defined above.
 
-As we can see, the covariance function plays a crucial role in characterizing the RKHS. An operator closely related to this covariance function is the so-called covariance operator, i.e.:
+\begin{comment}
+  \(K\) is positive and symmetric. We will refer to it as a \textit{kernel}.
+\end{comment}
+
+\begin{comment}
+  Reproducing property? Convergence entails uniform convergence?
+\end{comment}
+
+As we can see, the covariance function plays a crucial role in characterizing the RKHS. A compact operator closely related to this covariance function is the so-called covariance operator, i.e.:
 \[
-\mathcal Kf(\cdot) = \int_0^1 K(\cdot, t)f(t)\, dt.
+\mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f \in L^2[0, 1].
 \]
 This operator is especially relevant due to the \textit{Karhunen-Loève} theorem \incomment{cita}, which asserts that \(X\) can be decomposed as
-\[
+\begin{equation}\label{eq:karhunen-loeve}
 X(t) = \sum_{j=1}^\infty \xi_j \phi_j(t),
-\]
-where \(\{\phi_j\}\) are the eigenfunctions of the covariance operator \(\mathcal K\) and \(\xi_j = \int X\phi_j\) are uncorrelated zero-mean random variables with variance equal to \(\lambda_j\), the eigenvalue associated with \(\phi_j\):
-
-
+\end{equation}
+where \(\phi_j\) are the (orthonormal) eigenfunctions of the covariance operator \(\mathcal K\) and \(\xi_j = \int X\phi_j\) are uncorrelated zero-mean random variables with variance equal to \(\lambda_j\), the eigenvalue associated with \(\phi_j\). This expansion is the main justification of many FDA techniques, such as functional principal component analysis \incomment{cita}.
 
 There are at least three alternative, equivalent ways of defining the RKHS associated with \(K\), and each of them gives a different insight into the relationship between the process itself and the underlying RKHS.
 
 \begin{enumerate}
-  \item Loeve's isometry
-  \item Sum with lambda j
-  \item Square root of K
+  \item Via \textit{Loeve's isometry}, one can establish a congruence between \(\mathcal H(K)\) and the linear span of the centered process \(X - m\) in the space of all random variables with finite second moment, \(L^2(\Omega)\) \incomment{cita}. This isometry is essentially the completion of the correspondence
+  \begin{equation}\label{eq:loeve}
+  \sum_{i=1}^p a_i (X(t_i) - m(t_i)) \longleftrightarrow \sum_{i=1}^p a_i K(t_i, \cdot).
+\end{equation}
+  \item The space \(\mathcal H(K)\) can also be defined as the image of the square root of the covariance operator, i.e.:
+  \begin{equation}\label{eq:rkhs-square-root}
+  \mathcal H(K) = \mathcal K^{1/2}(L^2[0, 1]).
+\end{equation}
 
-\end{enumerate}3
+  \item Lastly, starting from the above definition and combining expression~\eqref{eq:karhunen-loeve} and the representation of \(K\) given by \textit{Mercer's theorem} \incomment{cita}, we can also express
+  \begin{equation}\label{rkhs-sum-lambda}
+    \mathcal H(K) = \left\{f \in L^2[0, 1]: \sum_{j=1}^\infty \frac{\langle f, \phi_j\rangle}{\lambda_j} < \infty \right\},
+  \end{equation}
+  with the corresponding inner product
+  \[
+  \langle f, g\rangle_K = \sum_{j=1}^\infty \frac{\langle f, \phi_j\rangle\langle g, \phi_j\rangle}{\lambda_j}.
+  \]
+Note that, since the spectral theorem for compact operators tells us that \(\lambda_j \to 0\) \incomment{cita}, this definition highlights the fact that functions in \(\mathcal H(K)\) are smooth, in the sense that their components in an orthonormal basis need to vanish quickly \incomment{and?}.
+\end{enumerate}
 
-\subsection{Overview of Markov chain Monte Carlo methods}
+\begin{comment}
+  Trajectories not in RKHS
+\end{comment}
+
+\begin{comment}
+  Small RKHS norm implies small variations and hence a higher degree of smoothness. Specifically, \(\|f\|_K\) controls how fast the function varies over the input space with respect to the geometry defined by the kernel:
+  \[
+  |f(t) - f(s)| = |\langle f, K_t - K_s\rangle_K| \leq \|f\|_K \|K_t - K_s\|_K.
+  \]
+\end{comment}
+
 
 \section{Bayesian methodology for RKHS-based functional regression models}
 
-Note that starting from a probability distribution \(\mathbb{P}_0\) on \(H_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(H(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap H_0(K))\) for all Borel sets \(B\). The following result proves that any such extension is indeed unique.
+The general idea explored in this work revolves around imposing a prior distribution on the functional space \(\mathcal H_0(K)\), which we know is dense in \(\mathcal H(K)\). Specifically, we consider a functional parameter of the form
+\begin{equation}\label{eq:parameter-rkhs}
+  \beta(t) = \sum_{i=1}^p \beta_i K(t_i, \cdot),
+\end{equation}
+and regard \(p, \beta_i\) and \(t_i\) as free parameters in the parameter space \(\Theta\).
+
+Note that starting from a probability distribution \(\mathbb{P}_0\) on \(\mathcal H_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(\mathcal H(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap \mathcal H_0(K))\) for all Borel sets \(B\). The following result proves that any such extension is indeed unique.
 
 \begin{prop} Let \(H\) be a separable Hilbert space and consider a dense subset \(H_0\subseteq H\). Then, any probability distribution on \((H, \mathcal{B}(H))\) is uniquely determined by its restriction to \((H_0, \mathcal B(H_0))\).
 \end{prop}
@@ -160,8 +202,19 @@ Observe now that \(\langle \alpha, h_n\rangle_H \overset{P}{\to} \langle \alpha,
 and equivalently \(\langle \beta, h_n \rangle_H \overset{P}{\to} \langle \beta, h\rangle_H\), so that \(\langle \alpha, h \rangle_H \equiv \langle \beta,h\rangle_H\). As this is valid for every \(h \in H\), we can conclude that \(\alpha \equiv \beta\) on \(H\).
 \end{proof}
 
+\begin{comment}
+  Note that in an RKHS the evaluation functional is continuous, so a small perturbation \(f\mapsto f + \delta f\) results in a small change in \(f(x)\) for all \(x\). It makes sense to choose the parameter in \(\mathcal H(K)\). Also smooth functions and linear: the model is \textit{linear} because of the correspondence between the RKHS and the linear span of the process (Loeve's isometry).
+\end{comment}
+
+
+
+\begin{comment}
+  Overview of MCMC methods.
+\end{comment}
 
 \subsection{Functional linear regression}
+
+Berrendero et al. (2020).
 
 \subsection{Functional logistic regression}
 
@@ -184,7 +237,7 @@ and equivalently \(\langle \beta, h_n \rangle_H \overset{P}{\to} \langle \beta, 
 \end{supplement}
 
 \bibliographystyle{ba}
-\bibliography{sample}
+\bibliography{bibliography}
 
 \begin{acks}[Acknowledgments]
 This is an acknowledgements section.

@@ -93,34 +93,23 @@
 
 \margintoc[*-7]
 
-\section{TODO}
+\section{Functional Data Analysis}
 
-\begin{enumerate}
-
-\item Why does it not make sense to regress \(Y\) on a finite combination of projections of \(X\) whenever we consider the \(L^2\) model?
-
-\textbf{ANSWER}: Continuous linear functionals are only obtained by integrating a coefficient function against $x(t)$ (Riesz-Fisher), and it is not possible to select a $\beta(t)$ that produces finite linear combinations of the process after integrating.
-
-\item \(\alpha(t)=E [X(t)U]\) is the correlation/covariance of $X$ and $U$ (Berrendero et al. 2019, 2020), if we assume that $E[X(t) \varepsilon]=0$. Moreover, are we assuming $E[(X(t) - m(t))U)]=0$?
-
-\item Since the RMSE is measured on the same scale, with the same units as y, one can expect 68\% of the y values to be within 1 RMSE — given the data is normally distributed.
-
-\end{enumerate}
-
+See \sidetextcite{hsing2015theoretical} for a complete discussion on the subject.
 
 \section{Bayesian Linear Regression}
 
-\marginnote{We assume the functional regressor \(X=X(t)\) to be an \(L^2\)-stochastic process with trajectories in \(L^2[0, 1]\), a vanishing mean function and a continuous covariance function \(k=k(s, t)\).}
+\marginnote{We assume the functional regressor \(X=X(t)\) to be an \(L^2\)-stochastic process with trajectories in \(L^2[0, 1]\), a vanishing mean function and a continuous covariance function \(K=K(t, s)\).}
 
 We consider the RKHS-based functional linear regression model given by\sidenote[][*7]{This formulation comes from considering the (centered) model \(Y=\Psi_X^{-1}(\alpha) + \eps\), where \(\eps\) is an independent normal error term with \(\E\eps=0\) and \(\var(\eps)=\sigma^2\).}
 \begin{equation}
   \label{eq:model_lin}
   Y_i \mid \theta, X_i \stackrel{\text{i.i.d.}}{\sim} \mathcal N(\Psi_{X_i}^{-1}(\alpha), \sigma^2),
 \end{equation}
-where \(\Psi_X\) is \textit{Loeve's isometry} and \(\alpha \in \mathcal H_{k}\) is the regression coefficient function. The main idea is to restrict \(\alpha\) to the linear span of a finite subset of evaluations of the kernel \(\{k(\cdot, t_j)\}_j\), since the whole set of such evaluations is dense in \(\mathcal H_k\). Specifically, we only consider functions of the form
+where \(\Psi_X\) is \textit{Loeve's isometry} and \(\alpha \in \mathcal H(K)\) is the regression coefficient function. The main idea is to restrict \(\alpha\) to the linear span of a finite subset of evaluations of the kernel \(\{K(\cdot, t_j)\}_j\), since the whole set of such evaluations is dense in \(\mathcal H(K)\). Specifically, we only consider functions of the form
 \begin{equation}
   \label{eq:alpha}
-  \alpha(t) = \sum_{j=1}^p \beta_j k(t, t_j),
+  \alpha(t) = \sum_{j=1}^p \beta_j K(t, t_j),
 \end{equation}
 where \(p\) is a fixed hyperparameter. Under these assumptions, the parametric space is the set \(\Theta \subseteq \R^p \times [0, 1]^p \times \R^+\), with elements
 \[
@@ -133,7 +122,7 @@ Following a Bayesian approach, we can set a prior distribution on the parameters
   \tau                     & \sim \mathscr U([0, 1]^p),                                              \\
   \beta\mid \tau, \sigma^2 & \sim \mathcal N(b_0, g\sigma^2(\mathcal X_\tau' \mathcal X_\tau)^{-1}),
 \end{align*}
-where\sidenote[][*1]{This is because of the correspondence between \(k(\cdot, t_j)\) and \(X(t_j)\), which becomes relevant when plugging the approximation~\eqref{eq:alpha} into the model~\eqref{eq:model_lin}.}
+where\sidenote[][*1]{This is because of the correspondence between \(K(\cdot, t_j)\) and \(X(t_j)\), which becomes relevant when plugging the approximation~\eqref{eq:alpha} into the model~\eqref{eq:model_lin}.}
 \(\mathcal X_\tau(i, j)=X_i(t_j)\). The prior on \(\beta\) is known as Zellner's \(g\)-prior owing to the main hyperparameter \(g\in \R^+\), which controls the confidence we have in the initial estimate \(b_0 \in \R^p\) for the true value of the coefficients. The choice of a non-informative improper prior for \(\sigma^2\) (known as Jeffreys prior) is of course subject to change. All in all, the prior distribution for the parameters becomes
 \begin{equation}
   \label{eq:prior}
@@ -218,6 +207,10 @@ Some immediate extensions to the model are the following:
 
 -- Work in progress --
 
+\section{Notes on the theory of RKHS's}
+
+\input{notes-rkhs.tex}
+
 %%%%%%%%%%%%%%%
 % BIBLIOGRAPHY
 %%%%%%%%%%%%%%%
@@ -232,31 +225,6 @@ Some immediate extensions to the model are the following:
 %%%%%%%%%%%%%%%
 
 \appendix
-
-\section{Notes on the theory of RKHS's}
-
-An important thing to note is that in general the trajectories of the process \(X\) \textbf{do not belong to the corresponding RKHS}. More precisely, \(X(t)\notin \mathcal H_k\) with probability \(1\) if \(\mathcal K\) has infinite non-zero eigenvalues. While a rigorous proof of this fact is given in \sidetextcite{hajek1962linear}, an heuristic argument presented in \sidetextcite{wahba1990spline} is as follows. Consider the Karhunen-Loève expansion of \(X\), i.e.,
-\[
-  X(t) = \sum_{j=1}^\infty \zeta_j \phi_j(t),
-\]
-and the truncated version \(X_N(t)\) up to the \(N\)-th term. On the one hand, \(X_N(t)\to X(t)\) in the quadratic mean (for each fixed \(t\)) by the Karhunen-Loève theorem, but on the other hand we have
-\[
-  \mathds E\|X_N(\cdot)\|^2_k = \mathds E \sum_{j=1}^N \frac{\zeta_j^2}{\lambda_j} = N \to \infty \quad (N\to\infty).
-\]
-
-Thus, functions in the RKHS are in a way \textit{smoother} than the trajectories of the process themselves. For convenience, if \(x=x(\omega)\) is a realization of \(X\) (for a fixed \(\omega\)), we will denote \(\langle x, f\rangle_k \equiv \left[\Psi_X^{-1}(f)\right](\omega)\). Some interesting properties stemming from this interpretation are the following (see \sidetextcite[][p.~974]{parzen1961approach}):
-
-\begin{enumerate}
-
-  \item \(\langle X, k(\cdot, t)\rangle_k = X(t) - m(t)\).
-
-  \item \(\mathds{E} \langle X, f\rangle_k = \langle m, f\rangle_k\).
-
-  \item \(\cov \left(\langle X, f \rangle_k , \langle X, g\rangle_k\right) = \langle f, g\rangle_k\).
-
-\end{enumerate}
-
-%\include{notes-rkhs.tex}
 
 \section{Further study}
 
