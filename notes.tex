@@ -76,6 +76,10 @@
 \newcommand{\E} {\ensuremath{\mathds{E}}}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\bm}{\symbf}
+
+%% Scalar product
+\newcommand\dotprod[2]{\left\langle #1,\, #2 \right\rangle}
+
 \DeclareMathOperator{\var} {Var}
 \DeclareMathOperator{\cov} {Cov}
 
@@ -208,6 +212,17 @@ Some immediate extensions to the model are the following:
 -- Work in progress --
 
 \section{Notes on the theory of RKHS's}
+
+  \textbf{Why choose the parameter in the RKHS?}
+
+  - Small RKHS norm implies small variations and hence a higher degree of smoothness. Specifically, \(\|f\|_K\) controls how fast the function varies over the input space with respect to the geometry defined by the kernel:
+  \[
+  |f(t) - f(s)| = |\dotprod{f}{K_t - K_s}_K| \leq \|f\|_K \|K_t - K_s\|_K.
+  \]
+
+  - Note that in an RKHS the evaluation functional is continuous, so a small perturbation \(f\mapsto f + \delta f\) results in a small change in \(f(x)\) for all \(x\). Not equivalence classes.
+
+  - The model is \textit{linear} because of the correspondence between the RKHS and the linear span of the process (Loève's isometry).
 
 \input{notes-rkhs.tex}
 
