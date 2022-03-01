@@ -99,10 +99,6 @@ In this work we propose a Bayesian approach for functional linear or logistic  r
 
 \end{frontmatter}
 
-\begin{comment}
-  Algunos comentarios generales:
-\end{comment}
-
 \section{Introduction}\label{sec:intro}
 
 The problem of inferring a scalar response from a functional covariate is one that has gained traction over the last few decades, as more and more data is being generated with an ever-increasing level of granularity in the measurements. While in principle we could simply treat the functional data as a discretized vector in a very high dimension, there are often many advantages in taking into account the functional nature of the data, ranging from modeling the possibly high correlation among points that are close in the domain, to extracting information that may be hidden in the derivatives of the function in question. As a consequence, numerous proposals have arisen on how to suitably treat functional data, all of them encompassed under the term Functional Data Analysis (FDA), which essentially explores statistical techniques to process, model and make inference on continuous data. A recent survey on such techniques and methods is \citet{cuevas2014partial}, while a more detailed exposition of the theory and applications can be found for example in \citet{hsing2015theoretical} and \citet{horváth2012inference}.
@@ -111,26 +107,25 @@ In this work we are concerned with (supervised) functional linear and logistic r
 
 The most common linear regression model is the classical functional linear regression model, originally introduced in the first edition of the book by~\citet{ramsay2005functional} \incomment{fueron realmente los primeros?}. It can be seen as a generalization of the usual finite-dimensional model, replacing the scalar product in \(\R^n\) for that of the functional space \(L^2[0,1]\):
 \begin{equation}\label{eq:l2-linear-model}
-Y = \dotprod{X}{\beta} + \epsilon = \int_0^1 X(t)\beta(t)\, dt + \epsilon,
+Y = \beta_0 + \dotprod{X}{\beta} + \epsilon = \beta_0 + \int_0^1 X(t)\beta(t)\, dt + \epsilon,
 \end{equation}
-\incomment{mejor poner el producto con el subíndice \(\langle \cdot , \cdot \rangle_2\)?}~where \(\epsilon\) is an independent error term with certain simplifying assumptions. In this case, the main parameter \(\beta=\beta(t)\) is a member of the infinte-dimensional space \(L^2[0, 1]\). Aside from the fact that functional (i.e. infinite-dimensional) optimization is a hard problem in and of itself \incomment{cita?}, there are a number of more subtle drawbacks that arise in this \(L^2\)-framework. For instance, \(L^2[0, 1]\) is a big space that contains many non-smooth or ill-behaved functions, but incidentally the model given by~\eqref{eq:l2-linear-model} does not include a finite-dimensional model based on a linear combination of projections of \(X\) as a particular case (see \citet{berrendero2019rkhs}). Moreover, the non-invertibility of the covariance operator (defined in Section~\ref{sec:rkhs}), which plays the role of the covariance matrix in the infinite case, invalidates the usual least squares theory.
+\incomment{mejor poner el producto con el subíndice \(\langle \cdot , \cdot \rangle_2\)?}~where \(\beta_0\in \R\) and \(\epsilon\) is an independent error term with certain simplifying assumptions. In this case, the main parameter \(\beta=\beta(t)\) is a member of the infinte-dimensional space \(L^2[0, 1]\). Aside from the fact that functional (i.e. infinite-dimensional) optimization is a hard problem in and of itself \incomment{cita?}, there are a number of more subtle drawbacks that arise in this \(L^2\)-framework. For instance, \(L^2[0, 1]\) is a big space that contains many non-smooth or ill-behaved functions, but incidentally the model given by~\eqref{eq:l2-linear-model} does not include a finite-dimensional model based on a linear combination of projections of \(X\) as a particular case (see \citet{berrendero2019rkhs}). Moreover, the non-invertibility of the covariance operator (defined in Section~\ref{sec:rkhs}), which plays the role of the covariance matrix in the infinite case, invalidates the usual least squares theory.
 
 A similar \(L^2\)-based logistic regression model can be derived for the binary classification problem via the logistic function:
-\begin{equation}\label{l2-logistic-model}
+\begin{equation}\label{eq:l2-logistic-model}
   \mathbb P(Y=1 \mid X=x) = \frac{1}{1 + \exp\{-\beta_0 - \dotprod{\beta}{x}\}},
 \end{equation}
-where \(\beta_0 \in \R\) and \(\beta \in L^2[0, 1]\). In this case, the most common way of estimating the slope function \(\beta(t)\) is via its Maximum Likelihood Estimator (MLE). However, not only do the same complications as in the linear regression model apply in this situation, but also there is the additional problem that in functional settings the MLE does not exist with probability one under fairly general conditions (see~\citet[p.~10]{buenolarraz2021functional}).
+where \(\beta_0 \in \R\) and \(\beta \in L^2[0, 1]\). In this case, the most common way of estimating the slope function \(\beta(t)\) is via its Maximum Likelihood Estimator (MLE). However, not only do the same complications as in the linear regression model apply in this situation, but there is also the additional problem that in functional settings the MLE does not exist with probability one under fairly general conditions (see~\citet[p.~10]{buenolarraz2021functional}).
 
-It turns out that a natural alternative to the \(L^2\) model is the so-called Reproducing Kernel Hilbert Space (RKHS) model, which instead assumes the unknown parameter to be a member of the RKHS associated with the covariance function of the process \(X\), making use of the scalar product of that space. As we will show later on, not only is this model simpler and arguably easier to interpret, but it also constrains the parameter space to smoother and more manageable functions. This approach has already been proposed in \citet{berrendero2019rkhs} in the functional linear regression setting, and in \citet{berrendero2018use} for the case of functional classification.
+It turns out that a natural alternative to the \(L^2\) model is the so-called Reproducing Kernel Hilbert Space (RKHS) model, which instead assumes the unknown parameter to be a member of the RKHS associated with the covariance function of the process \(X\), making use of the scalar product of that space. As we will show later on, not only is this model simpler and arguably easier to interpret, but it also constrains the parameter space to smoother and more manageable functions. This approach has already been explored in \citet{berrendero2019rkhs} in the functional linear regression setting, and in \citet{berrendero2018use} for the case of functional classification.
 
-Having provided a general perspective on the problem we are trying to solve, our main contribution is a novel Bayesian approach to linear and logistic regression with functional data, building on the newly introduced RKHS models for these tasks, and deviating from the usual methods of basis expansion and finite-dimensional least squares for parameter estimation. In essence, we suggest to impose a prior distribution on the RKHS associated with the functional regressor, and perform inference on this parametric space via standard Bayesian methodology. Luckily, the posterior distribution can be numerically approximated with Markov Chain Monte Carlo (MCMC) methods (see Section \ref{sec:methodology}), so that a complete end-to-end estimator can be derived. Moreover, the fact that we have a posterior distribution to work with allows us to perform diverse kinds of analyses to validate and assess the model. Similar ideas were presented in \citet{grollemund2019bayesian}, but the authors did not consider an RKHS-based model.
+Having provided a general perspective on the problem we are trying to solve, our main contribution is a novel Bayesian approach to linear and logistic regression with functional data, building on the newly introduced RKHS models for these tasks, and deviating from the usual methods of basis expansion and finite-dimensional least squares for parameter estimation. In essence, we suggest to impose a prior distribution on the RKHS associated with the functional regressor, and perform inference on this parametric space via standard Bayesian methodology. Luckily, the posterior distribution can be numerically approximated with Markov Chain Monte Carlo (MCMC) methods (see Section \ref{sec:methodology}), so that a complete end-to-end estimator can be derived. Moreover, the fact that we have a posterior distribution to work with allows us to perform diverse kinds of posterior checks to validate and assess the model. Similar ideas were presented in \citet{grollemund2019bayesian}, but the authors did not consider an RKHS-based model.
 
-Another set of techniques widely studied in this context are variable selection methods, which aim to select the marginals \(\{X(t_i)\}\) of the process that better summarize it according to some optimality criterion. As it happens, some variable selection methods have already been proposed, both in the RKHS framework and in more general settings (see for example \citet{berrendero2019rkhs}, \citet{berrendero2016mrmr} or \citet{berrendero2016variable}), but in general they have their own dedicated algorithms and procedures. Given the nature of our proposed Bayesian model, we can easily isolate the marginal posterior distribution corresponding to a finite set of points of impact \(\{t_i\}\), thus providing a variable selection method along with the other estimators that naturally arise within our model. In this way, we can not only make predictions about our data, but also evaluate exactly which marginals of the process contain the most information.
+Another set of techniques widely studied in this context are variable selection methods, which aim to select the marginals \(\{X(t_i)\}\) of the process that better summarize it according to some optimality criterion. As it happens, some variable selection methods have already been proposed in the RKHS framework (see for example \citet{berrendero2019rkhs}), but in general they have their own dedicated algorithms and procedures. Given the nature of our suggested Bayesian model, we can easily isolate the marginal posterior distribution corresponding to a finite set of points \(\{t_i\}\), and thus provide a variable selection method along with the other estimators that naturally arise within our model. In this way, in addition to making predictions about the input data, we can evaluate exactly which marginals of the functional explanatory variable contain the most relevant information. These points-of-impact selection models for functional predictors have also appeared recently in the literature; see \citet{poss2020superconsistent} or \citet{ferraty2010most} by way of illustration.
 
 \subsubsection{Organization of the paper}
 
-
-In Section~\ref{sec:intro} we review...
+In Section~\ref{sec:rkhs} we carry out a quick review of the theory of RKHS's from a probabilistic point of view. Section~\ref{sec:methodology} is devoted to explaining the Bayesian methodology and the functional regression models proposed. The empirical results of the experimentation are contained in Section~\ref{sec:results}, which also includes a short discussion of implementation details. Lastly, the conclusions drawn from this work are presented in Section~\ref{sec:conclusion}.
 
 \subsection{A brief review of the theory of RKHS's}\label{sec:rkhs}
 
@@ -151,11 +146,11 @@ given that \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_
   \dotprod{K(t, \cdot)}{f}_K = f(t), \quad \text{for all } f \in \mathcal H(K), \ t \in [0, 1].
 \end{equation}
 
-As we can see, the covariance function (sometimes referred to as the \textit{kernel}) plays a crucial role in characterizing the RKHS \incomment{¿Es necesario destacar alguna suposición/propiedad extra sobre \(K\)? Por ejemplo \(\int\int K^2 <\infty\) o que es simétrico y (semi-) definido positivo}. A linear operator closely related to this covariance function is the so-called covariance operator, i.e.: \incomment{No sé muy bien qué calificativos ponerle: integral Hilbert-Schmidt operator, compact, self-adjoint, bounded, linear functional, ...}
+As we can see, the covariance function (sometimes referred to as the \textit{kernel}) plays a crucial role in characterizing the RKHS \incomment{¿Es necesario destacar alguna suposición/propiedad extra sobre \(K\)? Por ejemplo \(\int\int K^2 <\infty\) o que es simétrica y (semi-) definida positiva}. A linear operator \incomment{No sé muy bien qué calificativos ponerle: integral Hilbert-Schmidt operator, compact, self-adjoint, bounded, linear functional, ...}\  closely related to this covariance function is the so-called covariance operator, namely
 \[
 \mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f \in L^2[0, 1].
 \]
-This operator is especially relevant due to the \textit{Karhunen-Loève} theorem \incomment{cita}, which asserts that a centered process \(X\) can be decomposed as
+This operator is especially relevant due to the \textit{Karhunen-Loève} theorem \incomment{cita?}, which asserts that a centered process \(X\) can be decomposed as
 \begin{equation}\label{eq:karhunen-loeve}
 X(t) = \sum_{j=1}^\infty \xi_j \phi_j(t),
 \end{equation}
@@ -164,11 +159,11 @@ where \(\phi_j\) are the (orthonormal) eigenfunctions of its covariance operator
 There are at least three alternative, equivalent ways of defining the RKHS associated with \(K\), and each of them gives a different insight into the relationship between the process itself and the underlying RKHS.
 
 \begin{enumerate}
-  \item Via \textit{Loeve's isometry}, one can establish a congruence between \(\mathcal H(K)\) and the linear span of the centered process, \(\mathcal L(X)\), in the space of all random variables with finite second moment, \(L^2(\Omega)\) \incomment{cita}. This isometry is essentially the completion of the correspondence
+  \item Via \textit{Loeve's isometry}, one can establish a congruence between \(\mathcal H(K)\) and the linear span of the centered process, \(\mathcal L(X)\), in the space of all random variables with finite second moment, \(L^2(\Omega)\) (see \incomment{cita}). This isometry is essentially the completion of the correspondence
   \[
   \sum_{i=1}^p a_i (X(t_i) - m(t_i)) \longleftrightarrow \sum_{i=1}^p a_i K(t_i, \cdot),
 \]
-and can be formally defined as (see \incomment{cita})
+and can be formally defined as
 \begin{equation}\label{eq:loeves-isometry}
   \Psi_X(U)(t) = \E[U(X(t) - m(t))], \quad U \in \mathcal L(X).
 \end{equation}
@@ -181,7 +176,7 @@ In this case, the inner product can be expressed as
 \dotprod{f}{g}_K = \dotprod{\mathcal K^{1/2}(f)}{\mathcal K^{1/2}(g)}.
 \]
 
-  \item Lastly, starting from the above definition and combining expression~\eqref{eq:karhunen-loeve} and the representation of \(K\) given by \textit{Mercer's theorem} \incomment{cita}, we can also express
+  \item Lastly, starting from the above definition and combining expression~\eqref{eq:karhunen-loeve} and the representation of \(K\) given by \textit{Mercer's theorem} \incomment{cita?}, we can also express
   \begin{equation}\label{rkhs-sum-lambda}
     \mathcal H(K) = \left\{f \in L^2[0, 1]: \sum_{j=1}^\infty \frac{\dotprod{f}{\phi_j}^2}{\lambda_j} < \infty \right\},
   \end{equation}
@@ -190,37 +185,28 @@ In this case, the inner product can be expressed as
   \dotprod{f}{g}_K = \sum_{j=1}^\infty \frac{\dotprod{f}
   {\phi_j}\dotprod{g}{\phi_j}}{\lambda_j}.
   \]
-Note that, since the spectral theorem for compact operators tells us that \(\lambda_j \to 0\) \incomment{cita}, this definition highlights the fact that functions in \(\mathcal H(K)\) are smooth, in the sense that their components in an orthonormal basis need to vanish quickly.
+Note that, since the spectral theorem for compact operators tells us that \(\lambda_j \to 0\) \incomment{cita?}, this definition highlights the fact that functions in \(\mathcal H(K)\) are smooth, in the sense that their components in an orthonormal basis need to vanish quickly.
 \end{enumerate}
 
 \begin{comment}
   Puede que las definiciones 2 y 3 arriba sean innecesarias.
 \end{comment}
 
-Despite the close connection between the process \(X\) and the space \(\mathcal H(K)\), special care must be taken when dealing with concrete realizations of the process, since in general the trajectories do not belong to the RKHS with probability one (see \incomment{cita}). As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined when \(x\) is a realization of \(X\). However, following Parzen's approach \incomment{cita}\ we can leverage Loève's isometry and identify \(\dotprod{x}{f}_K \) with \( \Psi_X^{-1}(f)(\omega)\), for \(x=X(\omega)\) and \(f\in \mathcal H(K)\). This notation often proves to be useful and convenient.
+Despite the close connection between the process \(X\) and the space \(\mathcal H(K)\), special care must be taken when dealing with concrete realizations of the process, since in general the trajectories do not belong to the RKHS with probability one (see \incomment{cita}). As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined when \(x\) is a realization of \(X\). However, following Parzen's approach \incomment{cita}\ we can leverage Loève's isometry and identify \(\dotprod{x}{f}_K \) with \( \Psi_x^{-1}(f) := \Psi_X^{-1}(f)(\omega)\), for \(x=X(\omega)\) and \(f\in \mathcal H(K)\). This notation often proves to be useful and convenient.
 
 \section{Bayesian methodology for RKHS-based functional regression models}\label{sec:methodology}
 
-In this section...
-
-We will assume? the notation from the previous section and suppose WLOG that \(X\) is centered.
-
-\begin{comment}
-
-  - Parametric approach with \(\beta \in H_0(K)\) (further constrain the parameter to this subset of the RKHS, which is dense by construction). Then we can impose a prior on the finite-dimensional parameter space.
-
-  - Substitute scalar product of L2 for that of H(K).
-\end{comment}
-
-The general idea explored in this work revolves around imposing a prior distribution on the functional space \(\mathcal H_0(K)\), which we know is dense in \(\mathcal H(K)\). Specifically, we consider a functional parameter of the form
-\begin{equation}\label{eq:parameter-rkhs}
-  \beta(t) = \sum_{i=1}^p \beta_i K(t_i, \cdot),
+In this section present the precise models and Bayesian methodologies explored in this work. We will assume the notation from the previous sections and suppose without loss of generality that \(X\) is centered, i.e., \(m(t)=0\) for all \(t\in[0, 1]\). The RKHS-based functional models under consideration are those obtained by taking a functional parameter \(\beta \in \mathcal H(K)\) and replacing the scalar product for \(\dotprod{x}{\beta}_K\) in the \(L^2\) models~\eqref{eq:l2-linear-model} and~\eqref{eq:l2-logistic-model}. However, to further simplify things we will follow a parametric approach and suppose that \(\beta\) is in fact a member of the dense subset \(\mathcal H_0(K)\), i.e.,
+\begin{equation}\label{eq:beta-parameter-rkhs}
+  \beta(\cdot) = \sum_{i=1}^p \beta_i K(t_i, \cdot).
 \end{equation}
-and regard \(p \in \N\), \(\beta_i \in \R\) and \(t_i \in [0, 1]\) as free parameters in the parameter space \(\Theta = \N \times \R^p \times [0, 1]^p\).
 
-As a matter of fact, to simplify things further we will consider \(\pi(p) = \delta_{\hat p}\), or equivalently, we will consider a fixed value \(\hat p\) for the dimension of the model.
+The value of \(p\), the dimensionality of the model, will be fixed beforehand in a suitable way (see Section~\ref{sec:model-choice} for details), and we will regard \(\beta_i \in \R\) and \(t_i \in [0, 1]\) as free parameters. In view of expression \eqref{eq:beta-parameter-rkhs}, to set a prior distribution on the unknown function \(\beta\) (that is, a prior distribution on the functional space \(\mathcal H_0(K)\)) it suffices to consider \(p\)-dimensional continuous prior distributions for the coefficients \(\{\beta_i\}\) and the times \(\{t_i\}\) separately. Moreover, as we said before, we will take the expression \(\dotprod{x}{\beta}_K\) to mean \(\Psi_x^{-1}(\beta)\), where \(\Psi\) is \textit{Loève's isometry}. Hence, taking into account that \(\Psi_x^{-1}(K(t, \cdot)) = X(t)\) by definition (see~\eqref{eq:loeves-isometry}), we have
+\[
+\dotprod{x}{\beta}_K \equiv \sum_{i=1}^p \beta_i x(t_i).
+\]
 
-Note that starting from a probability distribution \(\mathbb{P}_0\) on \(\mathcal H_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(\mathcal H(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap \mathcal H_0(K))\) for all Borel sets \(B \in \mathcal B(\mathcal H(K))\). The following result proves that any such extension is indeed unique.
+On a separate note, it is worth mentioning that starting from a probability distribution \(\mathbb{P}_0\) on \(\mathcal H_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(\mathcal H(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap \mathcal H_0(K))\) for all Borel sets \(B \in \mathcal B(\mathcal H(K))\). This is why our simplifying assumption on \(\beta\) is not actually very restricting, since any prior distribution on \(\mathcal H_0(K)\) can be directly extended to a prior distribution on \(\mathcal H(K)\). The following result proves that any such extension is indeed unique.
 
 \begin{prop} Let \(H\) be a separable Hilbert space and consider a dense subset \(H_0\subseteq H\). Then, any probability distribution on \((H, \mathcal{B}(H))\) is uniquely determined by its restriction to \((H_0, \mathcal B(H_0))\).
 \end{prop}
@@ -240,20 +226,26 @@ Observe now that \(\dotprod{\alpha}{h_n}_H \overset{P}{\to} \dotprod{\alpha}{h}_
 and equivalently \(\dotprod{\beta}{h_n}_H \overset{P}{\to} \dotprod{\beta}{h}_H\), so that \(\dotprod{\alpha}{h}_H \equiv \dotprod{\beta}{h}_H\). As this is valid for every \(h \in H\), we can conclude that \(\alpha \equiv \beta\) on \(H\).
 \end{proof}
 
-\begin{comment}
-Bayesian variable selection: select marginal and then apply multivariate methods.
-\end{comment}
+In any case, after having selected a suitable prior distribution \(\pi(\theta)\) on the chosen finite-dimensional parameter space \(\Theta_p\), we can resort to Bayes' theorem to perform the inference step, which in the case of i.i.d. samples amounts to \incomment{es necesario escribirlo?}
+\begin{equation}\label{eq:bayes-theorem}
+  \pi(\theta \mid Y_1, \dots, Y_n) \propto \left[ \prod_{i=1}^n \pi(Y_i\mid \theta) \right]\pi(\theta).
+\end{equation}
+In Sections~\ref{sec:rkhs-linear-model} and~\ref{sec:rkhs-logistic-model} we proceed to specify the parameter spaces, prior distributions and concrete models for \(Y\mid \theta\) considered in the case of functional linear regression and functional logistic regression, respectively.
 
-\subsubsection{Overview of MCMC methods}
+A last technicality to discuss is the fact that in~\eqref{eq:bayes-theorem} we have omitted the possibly intractable integral related to the normalizing constant. Nevertheless, we can sample from the posterior distribution\footnote{Provided that the \textit{marginal likelihood} \(\int_{\Theta_p} \pi(Y\mid \theta)\pi(\theta)\, d\theta\) is finite.} using an algorithm of the family of MCMC sampling methods. These are subset of the more general Monte Carlo simulation methods, which are specifically designed to sample from a multi-dimensional distribution when only a function proportional to its density (or its log-density) is known. Generally speaking, these algorithms obtain samples from a continuous random variable by generating Markov chains whose stationary distribution is proportional to the function given. In short, they build stochastic processes of random walkers that travel the parameter space, selecting where to move based on certain criteria that make them more likely to generate samples from the intended distribution. The Metropolis-Hastings algorithm (e.g.~\cite{chib1995understanding}) is arguably the most well-known method in this regard.
 
-\subsection{Functional linear regression}
+\subsection{Functional linear regression}\label{sec:rkhs-linear-model}
  The model remains linear because of the correspondence between the RKHS and the linear span of the process (Loève’s isometry). The RKHS model includes both L2 model and finite model (most problems solved). Cite Berrendero et al 2020.
 
 \begin{comment}
+  - Parameter space \(\Theta_p = \R^p \times [0, 1]^p\ldots\).
+  - Prior distributions (cite "A study of variable selection using
+g-prior distribution with ridge parameter")+ log-posterior
   - Estimators derived.
+  - Bayesian variable selection: select marginal and then apply multivariate methods.
 \end{comment}
 
-\subsection{Functional logistic regression}
+\subsection{Functional logistic regression}\label{sec:rkhs-logistic-model}
 
 An RKHS aproach is given by:.......
 
@@ -261,14 +253,17 @@ An RKHS aproach is given by:.......
 As well as the other problems, The problem of MLE are solved, and to avoid the problem in finite dimension, we could use the strategy in Bueno Larraz 2021 (Firth + 2 phase algorithm for t and beta).
 
 \begin{comment}
+  - Parameter space \(\Theta_p = \R^p \times [0, 1]^p\ldots\).
+  - Prior distributions + log-posterior
   - Estimators derived.
+  - Bayesian variable selection: similar to the linear regression case.
 \end{comment}
 
-\subsection{Model choice and validation}
+\subsection{Model choice and validation}\label{sec:model-choice}
 
 \begin{comment}
-  - Choice of p, MLE, BIC, ...
-
+  - The parameter p could be included; but problems: label switching, difficulty in implementation, etc.
+  - Choice of p: equivalent to Dirac's delta prior; chosen via MLE and BIC, ...
   - Posterior predictive checks, ¿Bayesian p-values?, ...
 \end{comment}
 
@@ -277,7 +272,8 @@ As well as the other problems, The problem of MLE are solved, and to avoid the p
 \section{Experimental results}
 
 \begin{comment}
-  Not only MSE/Acc but also credible intervals, points-of-impact model --> variable selection included.
+  - comentar el método MCMC usado y por qué (vs. Metropolis and other gradient-based such as NUTS).
+  - Not only MSE/Acc but also credible intervals, points-of-impact model --> variable selection included.
 
   - Comparar con Grollemund et al. ?
 \end{comment}
