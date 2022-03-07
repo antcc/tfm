@@ -112,7 +112,7 @@ The problem of inferring a scalar response from a functional covariate is one th
 
 In this work we are concerned with (supervised) functional linear and logistic regression models, that is, situations where the goal is to predict a continuous or dichotomous variable from functional observations. Even though these problems can be formally stated with almost no differences from their finite-dimensional counterparts, there are some fundamental challenges that emerge as a result of working in infinite dimensions. To set a common framework, throughout this work we will consider a scalar response variable \(Y\) (either continuous or binary) which has some hidden dependence on a stochastic \(L^2\)-process \(X=X(t)=X(t, \omega)\) with trajectories in \(L^2[0, 1]\). We will assume the existence of a ``labeled'' data set \(\mathcal D_n =\{(X_i, Y_i): i=1,\dots, n\}\) of independent observations from \((X, Y)\), and our aim will be to accurately predict the response corresponding to unlabeled samples from \(X\).
 
-The most common linear regression model is the classical \(L^2\)-model, originally introduced in the first edition of the book by~\citet{ramsay2005functional} \incomment{fue realmente así?}. It can be seen as a generalization of the usual finite-dimensional model, replacing the scalar product in \(\R^d\) for that of the functional space \(L^2[0,1]\):
+The most common functional linear regression model is the classical \(L^2\)-model, originally introduced in the first edition of the book by~\citet{ramsay2005functional} \incomment{fue realmente así?}. It can be seen as a generalization of the usual finite-dimensional model, replacing the scalar product in \(\R^d\) for that of the functional space \(L^2[0,1]\):
 \begin{equation}\label{eq:l2-linear-model}
 Y = \beta_0 + \dotprod{X}{\beta} + \epsilon = \beta_0 + \int_0^1 X(t)\beta(t)\, dt + \epsilon,
 \end{equation}
@@ -127,6 +127,10 @@ where \(\beta_0 \in \R\) and \(\beta \in L^2[0, 1]\). In this case, the most com
 It turns out that in both situations a natural alternative to the \(L^2\)-model is the so-called Reproducing Kernel Hilbert Space (RKHS) model, which instead assumes the unknown parameter to be a member of the RKHS associated with the covariance function of the process \(X\), making use of the scalar product of that space. As we will show later on, not only is this model simpler and arguably easier to interpret, but it also constrains the parameter space to smoother and more manageable functions. These RKHS-based models have already been explored in \citet{berrendero2020general} in the functional linear regression setting, and in \citet{berrendero2018use} for the case of functional classification. The main contribution of this work is a parametric Bayesian approach to parameter estimation within these recently-proposed models, in which a prior distribution is imposed on the unknown function to  obtain a posterior distribution after seeing the data.
 
 Another set of techniques widely studied in this context are variable selection methods, which aim to select the marginals \(\{X(t_i)\}\) of the process that better summarize it according to some optimality criterion. As it happens, some variable selection methods have already been proposed in the RKHS framework \citep[see for example][]{berrendero2019rkhs}, but in general they have their own dedicated algorithms and procedures. As will become apparent in the forthcoming sections, given the nature of our suggested Bayesian model we could easily isolate the marginal posterior distribution corresponding to a finite set of points \(\{t_i\}\), and thus provide a variable selection method along with the other estimators that naturally arise within our model. In this way, in addition to making predictions about the input data, we could evaluate exactly which marginals of the functional explanatory variable contain the most relevant information. These points-of-impact selection models for functional predictors have also appeared recently in the literature; see \citet{poss2020superconsistent}, \citet{berrendero2016variable} or \citet{ferraty2010most} by way of illustration.
+
+\begin{comment}
+  Quizás falta comentar algo de los resultados experimentales...
+\end{comment}
 
 \subsubsection{Organization of the paper}
 
@@ -213,7 +217,7 @@ In this section we present the precise models and Bayesian methodologies explore
 
 The value of \(p\), the dimensionality of the model, will be fixed beforehand in a suitable way (see Section~\ref{sec:model-choice} for details), and we will regard \(\beta_j\) and \(t_j\) as free parameters. Thus, we will search for our functional parameter in the set
 \[
-\mathcal H_{0,p}(K)=\left\{ \sum_{j=1}^p \beta_j K(t_j, \cdot): \ \beta_1,\dots,\beta_j \in \R, \ t_1,\dots,t_j \in [0, 1]\right\}.
+\mathcal H_{0,p}(K)=\left\{ \sum_{j=1}^p \beta_j K(t_j, \cdot): \ \beta_1,\dots,\beta_p \in \R, \ t_1,\dots,t_p \in [0, 1]\right\}.
 \]
 
 The general idea will be to impose a prior distribution on these free parameters (and possibly others) to eventually derive a posterior model after incorporating the evidence of the available sample data. In view of expression~\eqref{eq:alpha-parameter-rkhs}, to set a prior distribution on the unknown function \(\alpha\) (that is, a prior distribution on the functional space \(\mathcal H_{0,p}(K)\)) it suffices to consider \(p\)-dimensional continuous prior distributions for the coefficients \(\{\beta_j\}\) and the times \(\{t_j\}\) separately. Moreover, as we said before, with a slight abuse of notation we will understand the expression \(\dotprod{x}{\alpha}_K\) as \(\Psi_x^{-1}(\alpha)\), where \(\Psi\) is Loève's isometry. Hence, taking into account that \(\Psi_X^{-1}(K(t, \cdot)) = X(t)\) by definition (see~\eqref{eq:loeves-isometry}), we have
@@ -285,11 +289,11 @@ When performing the empirical posterior approximation, on each of the \(M\) step
     \hat Y_i = \hat{\alpha}_0 + \sum_{j=1}^p \hat{\beta}_j X_i(\hat{t}_j), \quad i=1,\dots, n'.
   \]
   The choice of a specific summary statistic results in a veiled assumption of an underlying loss function between the estimated and real parameters. In general, the mean is more sensitive to outliers while the median is more robust, but the latter assumes a \(L^1\)-type loss function. On the other hand, the mode is also a good candidate because it represents the point of highest probability. At any rate, these decisions are strongly dependent on several factors such as the skewness or the number of modes in the resulting posterior distribution, and thus should be made on a case-by-case basis.
-  \item[Distributional estimates] We can also look at the approximate posterior distribution as a whole and compute the distribution \(Y^*\) of the ``sampled responses''
+  \item[Distributional estimates] We can also look at the approximate posterior distribution as a whole and compute the distribution of the ``sampled responses'' at each step of the chain following model~\eqref{eq:rkhs-model-linear-2}:
   \[
-  \left\{Y_i^{(m)*} \equiv Y_i \mid X_i, \theta^{(m)*}:\ i=1,\dots,n', \ m=1,\dots,M\right\}
+  Y^{(m)*} := \left\{Y_i^{(m)*} \equiv Y_i \mid X_i, \theta^{(m)*}:\ i=1,\dots,n'\right\}, \quad m=1,\dots,M.
   \]
-  following model~\eqref{eq:rkhs-model-linear-2}. Then, we can take the mean of all such samples as a proxy for the response:
+  Then, we can take the mean of all such samples as a proxy for each response variable:
   \[
   \hat Y_i = \frac{1}{M}\sum_{m=1}^M Y_i^{(m)*}, \quad i=1,\dots,n'.
   \]
@@ -308,11 +312,11 @@ Note that these estimators can be obtained all at once after only one round of t
 
 \subsection{Functional logistic regression}\label{sec:rkhs-logistic-model}
 
-In the case of functional logistic regression, we can view the binary response variable \(Y\in\{0, 1\}\) as a Bernoulli random variable given the regressor \(X\), and consider an RKHS approach given by the following functional logistic equation:
+In the case of functional logistic regression, we can view the binary response variable \(Y\in\{0, 1\}\) as a Bernoulli random variable given the regressor \(X=x \in L^2[0, 1]\), and suppose that \(\log\left(p(x)/(1-p(x))\right)\) is linear in \(x\), where \(p(x)=\mathbb P(Y=1\mid X=x)\). Then, an RKHS approach given by the following functional logistic equation:
 \begin{equation}\label{eq:rkhs-model-logistic}
   \mathbb P(Y=1 \mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \Psi^{-1}_X(\alpha)\}}, \quad \alpha \in \mathcal H_{0,p}(K).
 \end{equation}
-Following our previous approach, after incorporating the sample information we can rewrite the classification model~\eqref{eq:rkhs-model-logistic} as
+Following our previous strategy, after incorporating the sample information we can rewrite the classification model~\eqref{eq:rkhs-model-logistic} as
 \begin{equation}\label{eq:rkhs-model-logistic-2}
 Y_i \mid X_i,\theta \ \stackrel{\text{i.i.d.}}{\sim} \operatorname{Bernoulli}(p_i), \quad i=1,\dots, n,
 \end{equation}
@@ -323,6 +327,10 @@ with
 where in turn \(\beta_j\in\R\), \(t_j\in[0, 1]\) and \(\alpha_0\in\R\).
 
 In much the same way as the functional linear regression model explained in the previous section, this RKHS-based logistic regression model partially solves some of the issues with the \(L^2\)-model~\eqref{eq:l2-logistic-model} stated in Section~\ref{sec:intro}. Moreover, it negates the problem of non-existence of the MLE in the functional case, since our proposed model is finite-dimensional\footnote{Even in finite-dimensional settings there are cases of quasi-complete separation in which the MLE does not exist. However, this problem can be easily circumvented using, for example, Firth's corrected estimator \citep{firth1993bias}.}. Additionally, under specific conditions this model also entails the logistic \(L^2\)-model in the Gaussian homoscedastic case \citep[see][Th.~1]{buenolarraz2021functional}.
+
+\begin{comment}
+  The proposed model holds whenever \(X_0\), \(X_1\) are homoscedastic Gaussian processes (Bueno-Larraz et al.).
+\end{comment}
 
 As far as prior distributions go, we propose to use the same ones as we did in~\eqref{eq:prior-linear} for the regression approach \incomment{Me gustaría probar con otras distribuciones a priori, especialmente para los coeficientes \(\beta\), ya que aquí no sé si tiene tanto sentido mantener \(\sigma^2\) como parámetro y usar el prior de Zellner. ¿Sabéis de alguna que se use en el caso de regresión logística?}. However, in this case the parameter \(\sigma^2\) is a nuisance parameter and can be safely ignored at the end, since it does not appear in the final model~\eqref{eq:rkhs-model-logistic-2}.
 
@@ -345,7 +353,7 @@ where \(\mathbb I\) is the indicator function and the hat estimates are obtained
   \[
     \hat Y_i = \mathbb I\left(\frac{1}{M} \sum_{m=1}^M p_i^{(m)*} \geq \gamma\right), \quad i=1,\dots,n'.
   \]
-  \item[Sampled majority vote] If we choose to average the sampled binary responses \(Y^*\) instead, we compute the predictions as
+  \item[Sampled majority vote] If we choose to average the sampled binary responses \(Y^{(m)*}\) instead, we compute the predictions as
 \[
   \hat Y_i = \mathbb I\left(\frac{1}{M} \sum_{m=1}^M Y_i^{(m)*} \geq \gamma\right), \quad i=1,\dots,n',
 \]
@@ -361,7 +369,7 @@ As for the default values of the rest of hyperparameters in~\eqref{eq:prior-line
 \begin{itemize}
   \item For the expected value \(b_0\) we propose to use (an approximation of) the MLE of \(\beta\) (see Section~\ref{sec:results} for details on the implementation). Our numerical studies showed that the results were much better with this choice than, say, with a random or null vector.
   \item We found that the parameter \(g\) does not have as much influence on the final result, and the experimentation suggests that \(g=5\) is a good value.
-  \item Lastly, we observed that the choice of \(\eta\) can have a considerable impact on the final estimator. That is why, in an effort to normalize its scale, we consider a compound parameter \(\eta = \tilde \eta \lambda_{\max}(G_\tau)\), where \(\lambda_{\max}(G_\tau)\) is the largest eigenvalue of the matrix \(G_\tau\) and \(\tilde\eta > 0\) is the actual tuning parameter. This standardization technique was used previously in the literature; see for example \citet{grollemund2019bayesian}.
+  \item Lastly, we observed that the choice of \(\eta\) can have a considerable impact on the final estimator. That is why, in an effort to normalize its scale, we consider a compound parameter \(\eta = \tilde \eta \lambda_{\max}(G_\tau)\), where \(\lambda_{\max}(G_\tau)\) is the largest eigenvalue of the matrix \(G_\tau\) and \(\tilde\eta > 0\) is the actual tuning parameter. This standardization technique has been used previously in the literature; see for example \citet{grollemund2019bayesian}.
 \end{itemize}
 
 To conclude this section, it is worth mentioning that the Bayesian aspects of our model allow us to perform some model validation checks straight away. For example, we can derive credible intervals for each of the parameters, and in the case of linear regression, we can use the sampled values of \(\sigma^2\) as a measure of the uncertainty of the predictions. Moreover, we can perform various \textit{visual checks}, such as a plot comparing both the observed and posterior predictive distribution of the responses, or a diagram showing the distribution of some statistic \(T(Y^*)\) of the posterior predictive distribution (see Figure~\ref{fig:ppc}). In addition, we can calculate the so-called \textit{Bayesian p-values} for several statistics, which are defined as \(P(T(Y^*)\leq T(Y)\mid Y)\), and are computed by simply measuring the proportion of generated samples \(\{T(Y^{(m)*})\}\) that fall below the real value of the statistic. They are expected to be around 0.5 when the model accurately represents the data \citep[see][Ch.~6]{gelman1995bayesian}.
