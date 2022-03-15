@@ -129,7 +129,7 @@ It turns out that in both situations a natural alternative to the \(L^2\)-model 
 Another set of techniques widely studied in this context are variable selection methods, which aim to select the marginals \(\{X(t_i)\}\) of the process that better summarize it according to some optimality criterion. As it happens, some variable selection methods have already been proposed in the RKHS framework \citep[see for example][]{berrendero2019rkhs}, but in general they have their own dedicated algorithms and procedures. As will become apparent in the forthcoming sections, given the nature of our suggested Bayesian model we could easily isolate the marginal posterior distribution corresponding to a finite set of points \(\{t_i\}\), and thus provide a variable selection method along with the other estimators that naturally arise within our model. In this way, in addition to making predictions about the input data, we could evaluate exactly which marginals of the functional explanatory variable contain the most relevant information. These points-of-impact selection models for functional predictors have also appeared recently in the literature; see \citet{poss2020superconsistent}, \citet{berrendero2016variable} or \citet{ferraty2010most} by way of illustration.
 
 \begin{comment}
-  Quizás falta comentar algo de los resultados experimentales...
+  Quizás falta comentar algo de los resultados experimentales... también habría que hacer más hincapié en cuál es nuestra propuesta; que se vea bien.
 \end{comment}
 
 \subsubsection{Organization of the paper}
@@ -170,7 +170,7 @@ X(t) = \sum_{i=1}^\infty \xi_i \phi_i(t),
 \end{equation}
 where \(\phi_i\) are the (orthonormal) eigenfunctions of its covariance operator \(\mathcal K\) and \(\xi_i = \int X\phi_i\) are uncorrelated zero-mean random variables with variance equal to \(\lambda_i\), the eigenvalue associated with \(\phi_i\). This expansion is the main justification for many FDA techniques, such as functional principal component analysis (FPCA)~\cite[see for example][Ch.~8]{ramsay2005functional}.
 
-There are at least three alternative, equivalent ways of defining the RKHS associated with \(K\), and each of them gives a different insight into the relationship between the process itself and the underlying RKHS.
+There are at least three alternative, equivalent ways of defining the RKHS associated with \(K\), and each of them gives a different insight into the relationship between the process itself and the underlying RKHS:
 
 \begin{description}
   \item[From an isometry] Via \textit{Loève's isometry}, one can establish a congruence between \(\mathcal H(K)\) and the linear span of the centered process, \(\mathcal L(X)\), in the space of all random variables with finite second moment, \(L^2(\Omega)\) (see Lemma 1.1 in \citet{lukic2001stochastic}). This isometry is essentially the completion of the correspondence
@@ -281,7 +281,7 @@ where \(I\) is the identity matrix, \(G_\tau = \mathcal X_\tau'\mathcal X_\tau\)
 
 \end{comment}
 
-When performing the empirical posterior approximation, on each of the \(M\) steps of the iterative MCMC algorithm we get a sample \(\theta^{(m)*}\) of the posterior distribution \(\pi(\theta\mid \mathcal D_n)\). Assuming now a previously unseen test set \(\mathcal D_{n'}\) in the same conditions as \(\mathcal D_n\), we propose to construct three different kinds of estimators based on the MCMC samples:
+When performing the empirical posterior approximation, on each of the \(M\) steps of the iterative MCMC algorithm we get a sample \(\theta^{(m)*}\) of the posterior distribution \(\pi(\theta\mid \mathcal D_n)\). Assuming now a previously unseen test set \(\mathcal D'_{n'}\) in the same conditions as \(\mathcal D_n\), we propose to construct three different kinds of estimators based on the MCMC samples:
 
 \begin{description}
   \item[Point estimates] If we consider a point-estimate statistic \(T\) to act as a summary of the posterior distribution, we can get the corresponding estimates \(\hat{\theta}=(\hat \beta, \hat \tau, \hat{\alpha}_0, \hat{\sigma}^2) = T(\{\theta^{(m)*}\})\) and predict the responses in the usual way by
@@ -347,7 +347,9 @@ Another thing to consider is that in this case we are approximating a probabilit
 \[
 \hat Y_i = \mathbb I \left( \left[\displaystyle 1 + \exp\left\{-\hat\alpha_0 - \sum_{j=1}^p \hat\beta_j X_i(\hat t_j)\right\}\right]^{-1} \geq \gamma \right), \quad i=1,\dots,n',
 \]
-where \(\mathbb I\) is the indicator function and the hat estimates are obtained through a summary statistic of the corresponding marginal posterior distributions. On the other hand, the distributional estimates are somewhat different now, since there is the question of which response (the Bernoulli variables in~\eqref{eq:rkhs-model-logistic-2} or the raw probabilities in~\eqref{eq:rkhs-model-logistic-2-parameter}) to consider when averaging the posterior samples:
+where \(\mathbb I\) is the indicator function. The hat estimates are again obtained through a summary statistic of the corresponding marginal posterior distributions.
+
+On the other hand, the distributional estimates are somewhat different now, since there is the question of which response (the Bernoulli variables in~\eqref{eq:rkhs-model-logistic-2} or the raw probabilities in~\eqref{eq:rkhs-model-logistic-2-parameter}) to consider when averaging the posterior samples:
 \begin{description}
   \item[Average sampled probability] If we choose to average the sampled probabilities \(p_i^{(m)*} = \mathbb P(Y_i =1 \mid X_i,\theta^{(m)*})\), we get the following estimator:
   \[
@@ -359,6 +361,7 @@ where \(\mathbb I\) is the indicator function and the hat estimates are obtained
 \]
 where each \(Y_i^{(m)*}\) follows a Bernoulli distribution of parameter \(p_i^{(m)*}\), for \(m=1,\dots,M\).
 \end{description}
+
 Lastly, the variable selection method is essentially the same as in the case of linear regression: we select \(p\) times from each trajectory based on the posterior distribution of \(\tau\mid \mathcal D_n\), and then feed the reduced dataset to a multivariate binary classification procedure.
 
 \subsection{Model choice and validation}\label{sec:model-choice}
@@ -367,12 +370,12 @@ One of the key decisions in our Bayesian modeling scheme was whether to consider
 
 As for the default values of the rest of hyperparameters in~\eqref{eq:prior-linear}, several comments can be made:
 \begin{itemize}
-  \item For the expected value \(b_0\) we propose to use (an approximation of) the MLE of \(\beta\) (see Section~\ref{sec:results} for details on the implementation). Our numerical studies showed that the results were much better with this choice than, say, with a random or null vector.
+  \item For the expected value \(b_0\) we propose to use (an approximation of) the MLE of \(\beta\) (see Section~\ref{sec:results} for details on the implementation) \incomment{La función de verosimilitud es complicada... pero nos basta con una aproximación como punto de partida}. Our numerical studies showed that the results were much better with this choice than, say, with a random or null vector.
   \item We found that the parameter \(g\) does not have as much influence on the final result, and the experimentation suggests that \(g=5\) is a good value.
   \item Lastly, we observed that the choice of \(\eta\) can have a considerable impact on the final estimator. That is why, in an effort to normalize its scale, we consider a compound parameter \(\eta = \tilde \eta \lambda_{\max}(G_\tau)\), where \(\lambda_{\max}(G_\tau)\) is the largest eigenvalue of the matrix \(G_\tau\) and \(\tilde\eta > 0\) is the actual tuning parameter. This standardization technique has been used previously in the literature; see for example \citet{grollemund2019bayesian}.
 \end{itemize}
 
-To conclude this section, it is worth mentioning that the Bayesian aspects of our model allow us to perform some model validation checks straight away. For example, we can derive credible intervals for each of the parameters, and in the case of linear regression, we can use the sampled values of \(\sigma^2\) as a measure of the uncertainty of the predictions. Moreover, we can perform various \textit{visual checks}, such as a plot comparing both the observed and posterior predictive distribution of the responses, or a diagram showing the distribution of some statistic \(T(Y^*)\) of the posterior predictive distribution (see Figure~\ref{fig:ppc}). In addition, we can calculate the so-called \textit{Bayesian p-values} for several statistics, which are defined as \(P(T(Y^*)\leq T(Y)\mid Y)\), and are computed by simply measuring the proportion of generated samples \(\{T(Y^{(m)*})\}\) that fall below the real value of the statistic. They are expected to be around 0.5 when the model accurately represents the data \citep[see][Ch.~6]{gelman1995bayesian}.
+To conclude this section, it is worth mentioning that the Bayesian aspects of our model allow us to perform some model validation checks straight away. For example, we can derive credible intervals for each of the parameters, and in the case of linear regression, we can use the sampled values of \(\sigma^2\) as a measure of the uncertainty of the predictions. Moreover, we can perform various \textit{visual checks}, such as a plot comparing both the observed and posterior predictive distribution of the responses, or a diagram showing the distribution of some statistic \(T(Y^*)\) of the posterior predictive distribution (see Figure~\ref{fig:ppc}) \incomment{conseguir mejor calidad de la figura}. In addition, we can calculate the so-called \textit{Bayesian p-values} for several statistics, which are defined as \(P(T(Y^*)\leq T(Y)\mid Y)\), and are computed by simply measuring the proportion of generated samples \(\{T(Y^{(m)*})\}\) that fall below the real value of the statistic. They are expected to be around 0.5 when the model accurately represents the data \citep[see][Ch.~6]{gelman1995bayesian}.
 
 \begin{figure}[h]
   \centering
@@ -403,6 +406,7 @@ To conclude this section, it is worth mentioning that the Bayesian aspects of ou
 %% be provided in {supplement} environment  %%
 %% with title and short description.        %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{supplement}
 \stitle{Title of Supplement A}
 \sdescription{Short description of Supplement A, with DOI and/or links to additional material (code, ...)}
