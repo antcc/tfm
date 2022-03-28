@@ -108,10 +108,8 @@ We propose a Bayesian approach for functional linear or logistic  regression mod
 
 \begin{comment}
   \begin{itemize}
-    \item Utilizar \(\alpha\) como parámetro en los modelos \(L^2\)?
-    \item Qué se demuestra exactamente en la proposición 2.1?
-    \item Suponer que los datos \(X\) están centrados desde el principio.
-    \item Definir la isometría de Loève al revés
+    \item Poner los vectores en negrita.
+    \item Quitar notas a pie de página
   \end{itemize}
 \end{comment}
 
@@ -119,7 +117,7 @@ We propose a Bayesian approach for functional linear or logistic  regression mod
 
 The problem of predicting a scalar response from a functional covariate is one that has gained traction over the last few decades, as more and more data is being generated with an ever-increasing level of granularity in the measurements. While in principle we could simply regard the functional data as a discretized vector in a very high dimension, there are often many advantages in taking into account the functional nature of the data, ranging from modeling the possibly high correlation among points that are close in the domain, to extracting information that may be hidden in the derivatives of the function in question. As a consequence, numerous proposals have arisen on how to suitably deal with functional data, all of them encompassed under the term Functional Data Analysis (FDA), which essentially explores statistical techniques to process, model and make inference on continuous data. A partial survey on such techniques and methods is \citet{cuevas2014partial}, while a more detailed exposition of the theory and applications can be found for example in \citet{hsing2015theoretical} and \citet{horváth2012inference}.
 
-In this work we are concerned with functional linear and logistic regression models, that is, situations where the goal is to predict a continuous or dichotomous variable from functional observations. Even though these problems can be formally stated with almost no differences from their finite-dimensional counterparts, there are some fundamental challenges as well as some more subtle drawbacks that emerge as a result of working in infinite dimensions. To set a common framework, throughout this work we will consider a scalar response variable \(Y\) (either continuous or binary) which has some dependence on a stochastic \(L^2\)-process \(X=X(t)=X(t, \omega)\) with trajectories in \(L^2[0, 1]\). In addition, without loss of generality we will suppose that \(X\) is centered, i.e., that its mean function \(m(t)=\E[X(t)]\) vanishes for all \(t\in[0,1]\). Furthermore, we will assume the existence of a ``labeled'' data set \(\mathcal D_n =\{(X_i, Y_i): i=1,\dots, n\}\) of independent observations from \((X, Y)\), and our aim will be to accurately predict the response corresponding to unlabeled samples from \(X\).
+In this work we are concerned with functional linear and logistic regression models, that is, situations where the goal is to predict a continuous or dichotomous variable from functional observations. Even though these problems can be formally stated with almost no differences from their finite-dimensional counterparts, there are some fundamental challenges as well as some more subtle drawbacks that emerge as a result of working in infinite dimensions. To set a common framework, throughout this work we will consider a scalar response variable \(Y\) (either continuous or binary) which has some dependence on a stochastic \(L^2\)-process \(X=X(t)=X(t, \omega)\) with trajectories in \(L^2[0, 1]\). We will further suppose without loss of generality that \(X\) is centered, that is, its mean function \(m(t)=\E[X(t)]\) vanishes for all \(t\in[0,1]\). In addition, we will assume the existence of a ``labeled'' data set \(\mathcal D_n =\{(X_i, Y_i): i=1,\dots, n\}\) of independent observations from \((X, Y)\), and our aim will be to accurately predict the response corresponding to unlabeled samples from \(X\).
 
 \subsubsection{\(L^2\)-models, shortcomings and alternatives}
 
@@ -148,7 +146,7 @@ In Section~\ref{sec:rkhs} we review the basics of the theory of RKHS's from a pr
 
 \subsection{Some essentials on RKHS's and notation}\label{sec:rkhs}
 
-The methodology proposed in this work relies heavily on the use of RKHS's, so before diving into it we will briefly describe the main characteristics of these spaces (for a more detailed account, see for example~\citet{berlinet2004reproducing}). In what follows, suppose \(X=X(t)\) is a centered \(L^2\)-process with trajectories in \(L^2[0,1]\), and further assume that its covariance function \(K(t, s)= \mathbb E[(X(t) - m(t))(X(s) - m(s))]\) is continuous. To construct the RKHS associated with the covariance function, we start by defining the functional space \(\mathcal H_0(K)\) of all finite linear combinations of evaluations of \(K\), that is,
+The methodology proposed in this work relies heavily on the use of RKHS's, so before diving into it we will briefly describe the main characteristics of these spaces (for a more detailed account, see for example~\citet{berlinet2004reproducing}). In what follows, suppose \(X=X(t)\) is a centered \(L^2\)-process with trajectories in \(L^2[0,1]\), and further assume that its covariance function \(K(t, s)= \mathbb E[X(t)X(s)]\) is continuous. To construct the RKHS associated with the covariance function, we start by defining the functional space \(\mathcal H_0(K)\) of all finite linear combinations of evaluations of \(K\), that is,
 \begin{equation}\label{eq:h0}
 \mathcal H_0(K) = \left\{ f \in L^2[0,1]: f(\cdot) = \sum_{i=1}^p a_i K(t_i, \cdot), \ p \in \N, \ a_i \in \R, \ t_i \in [0, 1] \right\}.
 \end{equation}
@@ -169,10 +167,12 @@ An important detail to note is that \(\mathcal H(K)\) is a space of genuine func
   SUPONER QUE X ESTÁ CENTRADA DESDE EL PRINCIPIO.
 \end{comment}
 
-As we can see, the covariance function (sometimes referred to as the \textit{kernel}) plays a crucial role in characterizing the RKHS. A compact self-adjoint operator \incomment{No sé muy bien qué calificativos ponerle: integral Hilbert-Schmidt operator, compact, self-adjoint, bounded, linear functional, ...}\ closely related to this covariance function is the so-called covariance operator, namely
+As we can see, the covariance function (sometimes referred to as the \textit{kernel}) plays a crucial role in characterizing the RKHS. An integral operator closely related to this covariance function is the so-called covariance operator, namely
 \[
-\mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f \in L^2[0, 1].
+\mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f \in L^2[0, 1],
 \]
+which is compact and self-adjoint when \(K\) is continuous \incomment{cita}.
+
 \begin{comment}
   QUITAR K-L Y HABLAR DE LOS AUTOVALORES EN LA DEFINICIÓN ALTERNATIVA.
 \end{comment}
@@ -190,9 +190,9 @@ There are at least three alternative, equivalent ways of defining the RKHS assoc
   \[
   \sum_{i=1}^p a_i X(t_i) \longleftrightarrow \sum_{i=1}^p a_i K(t_i, \cdot),
 \]
-and can be formally defined as \incomment{Defnir al revés y usar \(\Psi\) directamente en lo sucesivo.}
+and can be formally defined as
 \begin{equation}\label{eq:loeves-isometry}
-  \Psi_X(U)(t) = \E[U X(t)], \quad U \in \mathcal L(X).
+  \Psi^{-1}_X(U)(t) = \E[U X(t)], \quad U \in \mathcal L(X).
 \end{equation}
   \item[From the covariance operator] The space \(\mathcal H(K)\) can also be identified with the image of the square root of the covariance operator, i.e.:
   \begin{equation}\label{eq:rkhs-square-root}
@@ -219,41 +219,21 @@ Note that, since the spectral theorem for compact operators tells us that the se
   Enlazar con la definición de isometría de loeve
 \end{comment}
 
-Despite the close connection between the process \(X\) and the space \(\mathcal H(K)\), special care must be taken when dealing with concrete realizations of the process, since under rather general conditions the trajectories of \(X\) do not belong to the corresponding RKHS with probability one \citep[see for example][Cor.~7.1]{lukic2001stochastic}. As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined and lacks meaning when \(x\) is a realization of \(X\). However, following Parzen's approach \citep[Th.~4E]{parzen1961approach} we can leverage Loève's isometry and identify \(\dotprod{x}{f}_K \) with \( \Psi_x^{-1}(f) := \Psi_X^{-1}(f)(\omega)\), for \(x=X(\omega)\) and \(f\in \mathcal H(K)\). This notation often proves to be useful and convenient.
+Despite the close connection between the process \(X\) and the space \(\mathcal H(K)\), special care must be taken when dealing with concrete realizations of the process, since under rather general conditions the trajectories of \(X\) do not belong to the corresponding RKHS with probability one \citep[see for example][Cor.~7.1]{lukic2001stochastic}. As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined and lacks meaning when \(x\) is a realization of \(X\). However, following Parzen's approach \citep[Th.~4E]{parzen1961approach} we can leverage Loève's isometry and identify \(\dotprod{x}{f}_K \) with \( \Psi_x(f) := \Psi_X(f)(\omega)\), for \(x=X(\omega)\) and \(f\in \mathcal H(K)\). This notation often proves to be useful and convenient.
 
 \section{Bayesian methodology for RKHS-based functional regression models}\label{sec:methodology}
 
-In this section we present the precise models and Bayesian methodologies explored in this work. The RKHS-based functional models under consideration are those obtained by taking a functional parameter \(\alpha \in \mathcal H(K)\) and replacing the scalar product for Loève's isometry \(\dotprod{x}{\alpha}_K\) in the \(L^2\)-models~\eqref{eq:l2-linear-model} and~\eqref{eq:l2-logistic-model}. However, to further simplify things we will follow a parametric approach and suppose that \(\alpha\) is in fact a member of the dense subset \(\mathcal H_0(K)\) defined in \eqref{eq:h0}, i.e.,
-\begin{equation}\label{eq:alpha-parameter-rkhs}
-  \alpha(\cdot) = \sum_{j=1}^p \beta_j K(t_j, \cdot) \in \mathcal H_0(K).
-\end{equation}
-
-The value of \(p\), the dimensionality of the model, will be fixed beforehand in a suitable way (see Section~\ref{sec:model-choice} for details), and we will regard \(\beta_j\) and \(t_j\) as free parameters. Thus, we will search for our functional parameter in the set
+In this section we present the precise models and Bayesian methodologies explored in this work. The RKHS-based functional models under consideration are those obtained by taking a functional parameter \(\alpha \in \mathcal H(K)\) and replacing the scalar product for Loève's isometry \(\dotprod{x}{\alpha}_K\) in the \(L^2\)-models~\eqref{eq:l2-linear-model} and~\eqref{eq:l2-logistic-model}. However, to further simplify things we will follow a parametric approach and suppose that \(\alpha\) is in fact a member of the dense subspace \(\mathcal H_0(K)\) defined in~\eqref{eq:h0}. The value of \(p\), the dimensionality of the model, will be fixed beforehand in a suitable way (see Section~\ref{sec:model-choice} for details), and we will regard \(\beta_j\) and \(t_j\) as free parameters. Thus, we will search for our functional parameter in the set
 \[
 \mathcal H_{0,p}(K)=\left\{ \sum_{j=1}^p \beta_j K(t_j, \cdot): \ \beta_1,\dots,\beta_p \in \R, \ t_1,\dots,t_p \in [0, 1]\right\}.
 \]
 
-The general idea will be to impose a prior distribution on these free parameters (and possibly others) to eventually derive a posterior model after incorporating the information of the available sample data. \incomment{Una de las cosas difíciles en estadística bayesiana es poner un prior en un espacio de funciones. Una de las ventajas del modelopropuesto (y por el que advocamos por este modelo) es que facilita esta tarea, de manera natural y manejable. Poner una subsubsection con: definición de una priori adecuada en nuestro RKHS framework}In view of expression~\eqref{eq:alpha-parameter-rkhs}, to set a prior distribution on the unknown function \(\alpha\) (that is, a prior distribution on the functional space \(\mathcal H_{0,p}(K)\)) it suffices to consider \(p\)-dimensional continuous prior distributions for the coefficients \(\{\beta_j\}\) and the times \(\{t_j\}\) separately. Moreover, as we said before, with a slight abuse of notation we will understand the expression \(\dotprod{x}{\alpha}_K\) as \(\Psi_x^{-1}(\alpha)\), where \(\Psi\) is Loève's isometry. Hence, taking into account that \(\Psi_X^{-1}(K(t, \cdot)) = X(t)\) by definition (see~\eqref{eq:loeves-isometry}), we have
+The general idea will be to impose a prior distribution on these free parameters (and possibly others) to eventually derive a posterior model after incorporating the available sample information. \incomment{Una de las cosas difíciles en estadística bayesiana es poner un prior en un espacio de funciones. Una de las ventajas del modelopropuesto (y por el que advocamos por este modelo) es que facilita esta tarea, de manera natural y manejable. Poner una subsubsection con: definición de una priori adecuada en nuestro RKHS framework}In view of expression~\eqref{eq:alpha-parameter-rkhs}, to set a prior distribution on the unknown function \(\alpha\) (that is, a prior distribution on the functional space \(\mathcal H_{0,p}(K)\)) it suffices to consider \(p\)-dimensional continuous prior distributions for the coefficients \(\{\beta_j\}\) and the times \(\{t_j\}\) separately. Moreover, as we said before, with a slight abuse of notation we will understand the expression \(\dotprod{x}{\alpha}_K\) as \(\Psi_x(\alpha)\), where \(\Psi\) is Loève's isometry. Hence, taking into account that \(\Psi_X(K(t, \cdot)) = X(t)\) by definition (see~\eqref{eq:loeves-isometry}), we have
 \[
 \dotprod{x}{\alpha}_K \equiv \sum_{j=1}^p \beta_j x(t_j).
 \]
 
-To begin with, note that starting from a probability distribution \(\mathbb{P}_0\) on \(\mathcal H_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(\mathcal H(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap \mathcal H_0(K))\) for all Borel sets \(B \in \mathcal B(\mathcal H(K))\). This is why our simplifying assumption on \(\alpha\) is not actually very restrictive, since any prior distribution on \(\mathcal H_0(K)\) can be directly extended to a prior distribution on \(\mathcal H(K)\). The following result proves that any such extension is indeed unique.
-
-\begin{prop} Let \(H\) be a separable Hilbert space and consider a dense subset \(H_0\subseteq H\). \incomment{Decirlo al revés: la distribución se extiende de forma única a partir del denso.} Then, any probability distribution on \((H, \mathcal{B}(H))\) is uniquely determined by its restriction to \((H_0, \mathcal B(H_0))\).
-\end{prop}
-
-\begin{proof}
-
-First, note that Theorem 7.1.2 in \citet[p.~177]{hsing2015theoretical} establishes that the distribution of any random variable \(X: (\Omega, \mathcal A, \mathbb{P})\to (H, \mathcal B(H))\) is uniquely determined by the distribution of its random projections \(\dotprod{X}{h}_H\) for all \(h \in H\).
-Consider two random variables \(\alpha\) and \(\beta\), taking values in \(H\) and equally distributed on \(H_0\), and let \(h \in H\). Since \(H_0\) is dense in \(H\), there is a sequence \(\{h_n\}\subseteq H_0\) such that \(\|h_n - h\|_H \to 0\), and necessarily \(\dotprod{\alpha}{h_n}_H \equiv \dotprod{\beta}{h_n}_H\) for all \(n\), where the equality is in distribution.
-
-Observe now that \(\dotprod{\alpha}{h_n}_H \overset{P}{\to} \dotprod{\alpha}{h}_H\), since
-\[
-\forall \epsilon > 0 \quad \mathbb{P}\{|\dotprod{\alpha}{h_n - h}_H| > \epsilon\} \leq \mathbb{P}\{\|\alpha\|_H \|h_n - h\|_H > \epsilon\} \to 0,
-\]
-and equivalently \(\dotprod{\beta}{h_n}_H \overset{P}{\to} \dotprod{\beta}{h}_H\), so that \(\dotprod{\alpha}{h}_H \equiv \dotprod{\beta}{h}_H\). As this is valid for every \(h \in H\), we can conclude that \(\alpha \equiv \beta\) on \(H\).
-\end{proof}
+To begin with, note that starting from a probability distribution \(\mathbb{P}_0\) on \(\mathcal H_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(\mathcal H(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap \mathcal H_0(K))\) for all Borel sets \(B \in \mathcal B(\mathcal H(K))\). This is why our simplifying assumption on \(\alpha\) is not actually very restrictive, since any prior distribution on \(\mathcal H_0(K)\) can be directly extended to a prior distribution on \(\mathcal H(K)\).
 
 \incomment{Mencionar que en realidad trabajamos en \(H_{0,p}\).}
 
@@ -263,15 +243,17 @@ In any case, after selecting a suitable prior distribution \(\pi(\theta)\) for t
 \end{equation}
 In Sections~\ref{sec:rkhs-linear-model} and~\ref{sec:rkhs-logistic-model} we proceed to specify the parameter spaces, prior distributions and concrete models for \(\pi(Y\mid X,\theta)\) considered in the case of functional linear regression and functional logistic regression, respectively.
 
-A last technicality to discuss is the fact that in~\eqref{eq:bayes-theorem} we have omitted the possibly intractable integral related to the normalizing constant. Nevertheless, we can sample from the posterior distribution\footnote{Provided that the marginal likelihood \(\int \pi(Y\mid \theta)\pi(\theta)\, d\theta\) is finite.} using an algorithm of the family of Markov Chain Monte Carlo (MCMC) sampling methods. These are subset of the more general Monte Carlo simulation methods, which are specifically designed to sample from a multi-dimensional distribution when only a function proportional to its density (or its log-density) is known. Generally speaking, these algorithms obtain samples from a continuous random variable by generating Markov chains whose stationary distribution is proportional to the given function. In short, they operate by building stochastic processes of random walkers that travel the parameter space, selecting where to move based on certain criteria that make them more likely to generate samples from the intended distribution. The Metropolis-Hastings algorithm \citep[e.g.][]{chib1995understanding} is arguably the most well-known method in this regard.
+\incomment{Disminuir mucho el párrafo de MCMC, simplemente comentarlo de pasada y en todo caso alguna referencia a una survey.}
+
+A last technicality to discuss is the fact that in~\eqref{eq:bayes-theorem} we have omitted the possibly intractable integral related to the normalizing constant. Nevertheless, we can sample from the posterior distribution using an algorithm of the family of Markov Chain Monte Carlo (MCMC) sampling methods. These are subset of the more general Monte Carlo simulation methods, which are specifically designed to sample from a multi-dimensional distribution when only a function proportional to its density (or its log-density) is known. Generally speaking, these algorithms obtain samples from a continuous random variable by generating Markov chains whose stationary distribution is proportional to the given function. In short, they operate by building stochastic processes of random walkers that travel the parameter space, selecting where to move based on certain criteria that make them more likely to generate samples from the intended distribution. The Metropolis-Hastings algorithm \citep[e.g.][]{chib1995understanding} is arguably the most well-known method in this regard.
 
 \subsection{Functional linear regression}\label{sec:rkhs-linear-model}
 
 In the case of functional linear regression, the RKHS model considered (with a functional parameter \(\alpha\in \mathcal H_{0,p}(K)\)) is
 \begin{equation}\label{eq:rkhs-model-linear}
-  Y = \alpha_0 + \Psi^{-1}_X(\alpha) + \epsilon = \alpha_0 + \sum_{j=1}^p \beta_j X(t_j) + \epsilon,
+  Y = \alpha_0 + \Psi_X(\alpha) + \epsilon = \alpha_0 + \sum_{j=1}^p \beta_j X(t_j) + \epsilon,
 \end{equation}
-where \(\beta_j \in \R\), \(t_j \in [0, 1]\), \(\alpha_0\in\R\), and \(\epsilon\) is an independent normally-distributed error term verifying \(\E[\epsilon]=0\) and \(\Var(\epsilon)=\sigma^2\in \R^+\). When \(p\) is fixed, the parameter space of dimension \(2p + 2\) becomes \(\Theta_p = \R^p \times [0, 1]^p \times \R \times \R^+\), and note that given the times \(\{t_j\}\) the model becomes a multivariate linear model with the \(X(t_j)\) as scalar covariates. Before proceeding any further, observe that we can rewrite model~\eqref{eq:rkhs-model-linear} in a more explicit and practical fashion in terms of the available sample information in \(\mathcal D_n\). For a generic element \(\theta = (\beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2) \equiv (\beta, \tau, \alpha_0, \sigma^2) \in \Theta_p\), the reinterpreted model assumes the form
+where \(\beta_j \in \R\), \(t_j \in [0, 1]\), \(\alpha_0\in\R\), and \(\epsilon\) is an independent normally-distributed error term verifying \(\E[\epsilon]=0\) and \(\Var(\epsilon)=\sigma^2\in \R^+\). When \(p\) is fixed, the parameter space of dimension \(2p + 2\) becomes \(\Theta_p = \R^p \times [0, 1]^p \times \R \times \R^+\), and note that given the times \(\{t_j\}\) the model becomes a multiple linear model with the \(X(t_j)\) as scalar covariates. Before proceeding any further, observe that we can rewrite model~\eqref{eq:rkhs-model-linear} in a more explicit and practical fashion in terms of the available sample information in \(\mathcal D_n\). For a generic element \(\theta = (\beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2) \equiv (\beta, \tau, \alpha_0, \sigma^2) \in \Theta_p\), the reinterpreted model assumes the form
 \begin{equation}\label{eq:rkhs-model-linear-2}
   Y_i \mid X_i, \theta \ \stackrel{\text{i.i.d.}}{\sim} \mathcal N\left(\alpha_0 + \sum_{j=1}^p \beta_j X_i(t_j), \ \sigma^2\right), \quad i =1,\dots, n.
 \end{equation}
@@ -286,20 +268,24 @@ The prior distribution \(\pi(\theta)\) suggested for the parameter \(\theta \in 
   \beta\mid \tau, \sigma^2 & \sim \mathcal N_p(b_0, g\sigma^2(G_\tau + \eta I)^{-1}),
 \end{split}
 \end{align}
-where \(I\) is the identity matrix, \(G_\tau = \mathcal X_\tau'\mathcal X_\tau\) is the Gram matrix corresponding to the matrix \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and \(b_0\in \R^p, \ g \in \R\) and \(\eta \in \R^+\) are hyperparameters of the model. On the one hand, note the use of a joint prior distribution on \(\alpha_0\) and \(\sigma^2\), which is a widely used non-informative prior known as Jeffrey's prior \citep{jeffreys1946invariant}. In any event, the estimation of \(\alpha_0\) is straightforward, since \(\alpha_0 = \E[Y]\) by~\eqref{eq:rkhs-model-linear-2}, so we could have left this parameter out of the model altogether. On the other hand, the prior on \(\beta\) is a slight modification of the well-known Zellner's g-prior \citep{zellner1986assessing} in which a regularizing term is added to avoid ill-conditioning problems in the Gram matrix, obtaining a ridge-like Zellner prior controlled by the tuning parameter \(\eta\) \citep{baragatti2012study}.
+where \(I\) is the identity matrix, \(G_\tau = \mathcal X_\tau'\mathcal X_\tau\) is the Gram matrix corresponding to the matrix \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and \(b_0\in \R^p, \ g \in \R\) and \(\eta \in \R^+\) are hyperparameters of the model. On the one hand, note the use of a joint prior distribution on \(\alpha_0\) and \(\sigma^2\), which is a widely used non-informative prior known as Jeffrey's prior \citep{jeffreys1946invariant}. In any event, the estimation of \(\alpha_0\) is straightforward, since \(\alpha_0 = \E[Y]\) by~\eqref{eq:rkhs-model-linear-2}, so we could have left this parameter out of the model altogether. On the other hand, the prior on \(\beta\) is a slight modification of the well-known Zellner's g-prior \citep{zellner1986assessing} in which a regularizing term is added to avoid ill-conditioning problems in the Gram matrix, obtaining a ridge-like Zellner prior controlled by the tuning parameter \(\eta\) \citep{baragatti2012study}. \incomment{Comentar la distribución a priori en su forma completa, decir que son independientes.}
 
 \begin{comment}
-¿Es necesario/conveniente escribir aquí la expresión teórica de la distribución a posteriori? O quizás en el apéndice/material suplementario mejor?
+Pequeña proposición con la cuenta de la posteriori
 \[
 \pi(\beta, \tau, \alpha_0, \log\sigma\mid \mathcal D_n) \propto \frac{|G_\tau|^{1/2}}{\sigma^{p+n}} \exp\left\{ -\frac{1}{2\sigma^2} \left(\|Y- \alpha_0\boldsymbol{1} - \mathcal X_\tau\beta\|^2 + \frac{1}{g}(\beta - b_0)'G_\tau(\beta - b_0) \right) \right\}.
 \]
 
 \end{comment}
 
-When performing the empirical posterior approximation, on each of the \(M\) steps of the iterative MCMC algorithm we get a sample \(\theta^{(m)*}\) of the posterior distribution \(\pi(\theta\mid \mathcal D_n)\). Assuming now a previously unseen test set \(\mathcal D'_{n'}\) in the same conditions as \(\mathcal D_n\), we propose to construct three different kinds of estimators based on the MCMC samples:
+When performing the empirical posterior approximation, on each of the \(M\) steps of the iterative MCMC algorithm we get an approximate sample \(\theta^{(m)*}\) of the posterior distribution \(\pi(\theta\mid \mathcal D_n)\). Assuming now a previously unseen test set \(\mathcal D'_{n'}\) in the same conditions as \(\mathcal D_n\), we propose to construct three different kinds of estimators based on the MCMC samples: \incomment{Recordemos que el algoritmo nos da una observación del vector de parámetros,y hay varias estrategias para usarlas.}
+
+\begin{comment}
+  Comentar que una es promediar y luego predecir, y la otra es al revés. Separar un poco lo de selección de variables, comentando que nos concentramos solo en los tiempos y descartamos el resto (se consideran nuisance) (promediar los subvectores de tiempos y luego predecir como en la estrategia A, pero usando modelo multivariante). Cambiar los nombres.
+\end{comment}
 
 \begin{description}
-  \item[Point estimates] If we consider a point-estimate statistic \(T\) to act as a summary of the posterior distribution, we can get the corresponding estimates \(\hat{\theta}=(\hat \beta, \hat \tau, \hat{\alpha}_0, \hat{\sigma}^2) = T(\{\theta^{(m)*}\})\) and predict the responses in the usual way by
+  \item[Point estimates] If we consider a point-estimate statistic \(T\) to act as a summary of the posterior distribution, we can get the corresponding estimates \(\hat{\theta}=(\hat \beta, \hat \tau, \hat{\alpha}_0, \hat{\sigma}^2) = T(\{\theta^{(m)*}\})\) and predict the responses in the usual way \incomment{Following model...} by
   \[
     \hat Y_i = \hat{\alpha}_0 + \sum_{j=1}^p \hat{\beta}_j X_i(\hat{t}_j), \quad i=1,\dots, n'.
   \]
@@ -315,6 +301,11 @@ When performing the empirical posterior approximation, on each of the \(M\) step
   \item[Variable selection estimates] Lastly, we can focus only on the marginal posterior distribution of \(\tau\mid\mathcal D_n\) and perform variable selection via a point-estimate statistic \(T\). Specifically, we can consider the times \(\hat t_j = T(\{t_j^{(m)*}\})\) and reduce the original data set to the scalar variables \(\{X_i(\hat t_j):\ i=1, \dots,n, \ j=1,\dots,p\}\). After this selection, we can treat the problem as a finite-dimensional regression task and use any of the well-known multivariate algorithms suited for this situation.
 \end{description}
 
+\begin{comment}
+Comentar después en la sección de resultados cómo se comparan, cuál es más estable.....
+\end{comment}
+
+
 Note that these estimators can be obtained all at once after only one round of training (that is, an individual MCMC run to approximate the posterior distribution). As a consequence, what we have in practice is a single algorithm that can produce multiple estimators at the same computational cost, so that any of them can be chosen (or even switched back and forth) depending on the particularities of the problem at hand. Moreover, one could even contemplate an \textit{ensemble model} in which some kind of aggregation of several of the available estimators is performed to produce a final result.
 
 \begin{comment}
@@ -329,7 +320,7 @@ Note that these estimators can be obtained all at once after only one round of t
 
 In the case of functional logistic regression, we can view the binary response variable \(Y\in\{0, 1\}\) as a Bernoulli random variable given the regressor \(X=x \in L^2[0, 1]\), and suppose that \(\log\left(p(x)/(1-p(x))\right)\) is linear in \(x\), where \(p(x)=\mathbb P(Y=1\mid X=x)\). Then, an RKHS approach given by the following functional logistic equation:
 \begin{equation}\label{eq:rkhs-model-logistic}
-  \mathbb P(Y=1 \mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \Psi^{-1}_X(\alpha)\}}, \quad \alpha \in \mathcal H_{0,p}(K).
+  \mathbb P(Y=1 \mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \Psi_X(\alpha)\}}, \quad \alpha \in \mathcal H_{0,p}(K).
 \end{equation}
 Following our previous strategy, after incorporating the sample information we can rewrite the classification model~\eqref{eq:rkhs-model-logistic} as
 \begin{equation}\label{eq:rkhs-model-logistic-2}
@@ -352,7 +343,7 @@ As far as prior distributions go, we propose to use the same ones as we did in~\
 \begin{comment}
   Misma pregunta que antes: ¿ponemos la expresión de la posteriori?
   \begin{align*}
-\log \pi(\beta, \tau, \alpha_0, \log\sigma\mid \mathcal D_n) & \propto \sum_{i=1}^n \left[ \left(\alpha_0 + \Psi^{-1}_{x_i}(\alpha)\right)y_i - \log\left(1 + \exp\left\{\alpha_0 + \Psi_{x_i}^{-1}(\alpha)\right\}\right)\right]\\
+\log \pi(\beta, \tau, \alpha_0, \log\sigma\mid \mathcal D_n) & \propto \sum_{i=1}^n \left[ \left(\alpha_0 + \Psi_{x_i}(\alpha)\right)y_i - \log\left(1 + \exp\left\{\alpha_0 + \Psi_{x_i}(\alpha)\right\}\right)\right]\\
 \quad &+ \frac{1}{2}\log |G_\tau| - p\log \sigma -\frac{1}{2g\sigma^2} (\beta - b_0)'G_\tau(\beta - b_0).
 \end{align*}
 
@@ -381,6 +372,10 @@ Lastly, the variable selection method is essentially the same as in the case of 
 
 \subsection{Model choice and validation}\label{sec:model-choice}
 
+\begin{comment}
+  Distancia máxima a la que puede estar una función de \(H_0,p\) de otra de \(H\)? O de \(H_0\)?
+\end{comment}
+
 One of the key decisions in our Bayesian modeling scheme was whether to consider the number of components \(p\) as a member or the parameter space and integrate it into the model. While theoretically we could impose a prior distribution on \(p\) as well, we found that it would have some unwanted practical implications. For instance, it would make the implementation more complex, since the dimensionality of the parameters \(\beta\) and \(\tau\) would need to be fixed at a certain maximum value, but in the MCMC algorithm the working value of \(p\) would vary from one iteration to the next. In this case we would face a label switching issue \citep[c.f.][Sec.~2.3]{grollemund2019bayesian}, as we would have no way of knowing which set of parameters is ``active'' at any given time. Another possibility would be to adapt a purely Bayesian model selection technique \citep[see][Ch.~7]{piironen2017comparison, gelman1995bayesian} to our framework, or even derive some model aggregation methods to combine the posterior distributions obtained for different-sized models. In the end, for the sake of simplicity we decided to let \(p\) be an hyperparameter, so that we could use any model selection criteria (e.g. BIC, DIC, \ldots) to select its optimal value \incomment{deberíamos elegir uno de los criterios?}.
 
 As for the default values of the rest of hyperparameters in~\eqref{eq:prior-linear}, several comments can be made:
@@ -407,6 +402,7 @@ To conclude this section, it is worth mentioning that the Bayesian aspects of ou
     \item Métricas usadas para medir el error.
     \item Contar los algoritmos de comparación usados (elegir algunos; ver Torrecilla et al 2021, incluir regla de clasificación ``óptima'').
     \item Mostrar tablas de resultados y gráficas. En las gráficas, unificar el eje Y para los mismos modelos, y a ser posible, pintar media y desviación típica de varias ejecuciones (haciendo CV con distintos splits train/test).
+    \item Hacer un caso de estudio en el dataset RKHS, mostrando las aproximaciones de los tiempos a los tiempos reales.
 \end{itemize}
 \end{comment}
 
