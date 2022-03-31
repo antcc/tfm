@@ -34,6 +34,7 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\E}{\mathbb{E}}
+\newcommand{\Hcal}{\ensuremath\mathcal{H}}
 \newcommand{\Var}{\ensuremath\operatorname{Var}}
 
 %% Scalar product
@@ -117,7 +118,11 @@ We propose a Bayesian approach for functional linear or logistic  regression mod
 
 The problem of predicting a scalar response from a functional covariate is one that has gained traction over the last few decades, as more and more data is being generated with an ever-increasing level of granularity in the measurements. While in principle we could simply regard the functional data as a discretized vector in a very high dimension, there are often many advantages in taking into account the functional nature of the data, ranging from modeling the possibly high correlation among points that are close in the domain, to extracting information that may be hidden in the derivatives of the function in question. As a consequence, numerous proposals have arisen on how to suitably deal with functional data, all of them encompassed under the term Functional Data Analysis (FDA), which essentially explores statistical techniques to process, model and make inference on continuous data. A partial survey on such techniques and methods is \citet{cuevas2014partial}, while a more detailed exposition of the theory and applications can be found for example in \citet{hsing2015theoretical} and \citet{horváth2012inference}.
 
-In this work we are concerned with functional linear and logistic regression models, that is, situations where the goal is to predict a continuous or dichotomous variable from functional observations. Even though these problems can be formally stated with almost no differences from their finite-dimensional counterparts, there are some fundamental challenges as well as some more subtle drawbacks that emerge as a result of working in infinite dimensions. To set a common framework, throughout this work we will consider a scalar response variable \(Y\) (either continuous or binary) which has some dependence on a stochastic \(L^2\)-process \(X=X(t)=X(t, \omega)\) with trajectories in \(L^2[0, 1]\). We will further suppose without loss of generality that \(X\) is centered, that is, its mean function \(m(t)=\E[X(t)]\) vanishes for all \(t\in[0,1]\). In addition, we will assume the existence of a ``labeled'' data set \(\mathcal D_n =\{(X_i, Y_i): i=1,\dots, n\}\) of independent observations from \((X, Y)\), and our aim will be to accurately predict the response corresponding to unlabeled samples from \(X\).
+\begin{comment}
+Comentar los enfoques principales en la literatura: reducción a problema multivariante, desarrollo en bases, splines, etc. Active area of research.... (ver papers para comparar).
+\end{comment}
+
+In this work we are concerned with functional linear and logistic regression models, that is, situations where the goal is to predict a continuous or dichotomous variable from functional observations. Even though these problems can be formally stated with almost no differences from their finite-dimensional counterparts, there are some fundamental challenges as well as some more subtle drawbacks that emerge as a result of working in infinite dimensions. To set a common framework, throughout this work we will consider a scalar response variable \(Y\) (either continuous or binary) which has some dependence on a stochastic \(L^2\)-process \(X=X(t)=X(t, \omega)\) with trajectories in \(L^2[0, 1]\). We will further suppose without loss of generality that \(X\) is centered, that is, its mean function \(m(t)=\E[X(t)]\) vanishes for all \(t\in[0,1]\). In addition, we will tacitly assume the existence of a ``labeled'' data set \(\mathcal D_n =\{(X_i, Y_i): i=1,\dots, n\}\) of independent observations from \((X, Y)\), and our aim will be to accurately predict the response corresponding to unlabeled samples from \(X\).
 
 \subsubsection{\(L^2\)-models, shortcomings and alternatives}
 
@@ -125,7 +130,7 @@ In this work we are concerned with functional linear and logistic regression mod
 \begin{equation}\label{eq:l2-linear-model}
 Y = \alpha_0 + \dotprod{X}{\beta} + \epsilon = \alpha_0 + \int_0^1 X(t)\beta(t)\, dt + \epsilon,
 \end{equation}
-where \(\alpha_0\in \R\), \(\epsilon\) is an error term independent from \(X\) with \(\E [\epsilon]=0\), and the functional slope parameter \(\beta=\beta(\cdot)\) is supposed to be a member of the infinite-dimensional space \(L^2[0, 1]\). In this case, the inference on \(\beta\) is hampered by the fact that \(L^2[0,1]\) is an extremely wide space that contains many non-smooth or ill-behaved functions, so that any estimation procedure involving optimization on it would typically be very hard. In spite of this, model~\eqref{eq:l2-linear-model} is not flexible enough to include ``simple'' finite-dimensional models based on a linear combination of the marginals, such as \(Y=\beta_0 + \beta_1 X(t_1)+ \cdots + \beta_p X(t_p) + \epsilon\) for some constants \(\beta_j\in\R\) and instants \(t_j\in[0,1]\) \citep[see][]{berrendero2019rkhs, berrendero2020general}. Moreover, the non-invertibility of the covariance operator associated with \(X\) (defined in Section~\ref{sec:rkhs}), which plays the role of the covariance matrix in the infinite case, invalidates the usual least squares theory.
+where \(\alpha_0\in \R\), \(\epsilon\) is an error term independent from \(X\) with \(\E [\epsilon]=0\), and the functional slope parameter \(\beta=\beta(\cdot)\) is assumed to be a member of the infinite-dimensional space \(L^2[0, 1]\). In this case, the inference on \(\beta\) is hampered by the fact that \(L^2[0,1]\) is an extremely wide space that contains many non-smooth or ill-behaved functions, so that any estimation procedure involving optimization on it would typically be very hard. In spite of this, model~\eqref{eq:l2-linear-model} is not flexible enough to include ``simple'' finite-dimensional models based linear combinations of the marginals, such as \(Y=\alpha_0 + \beta_1 X(t_1)+ \cdots + \beta_p X(t_p) + \epsilon\) for some constants \(\beta_j\in\R\) and instants \(t_j\in[0,1]\) (see \citet{berrendero2020general} for additional details on this). Moreover, the non-invertibility of the covariance operator associated with \(X\) (defined in Section~\ref{sec:rkhs}), which plays the role of the covariance matrix in the infinite case, invalidates the usual least squares theory.
 
 A similar \(L^2\)-based functional logistic equation can be derived for the binary classification problem via the logistic function:
 \begin{equation}\label{eq:l2-logistic-model}
@@ -146,94 +151,34 @@ In Section~\ref{sec:rkhs} we review the basics of the theory of RKHS's from a pr
 
 \subsection{Some essentials on RKHS's and notation}\label{sec:rkhs}
 
-The methodology proposed in this work relies heavily on the use of RKHS's, so before diving into it we will briefly describe the main characteristics of these spaces (for a more detailed account, see for example~\citet{berlinet2004reproducing}). In what follows, suppose \(X=X(t)\) is a centered \(L^2\)-process with trajectories in \(L^2[0,1]\), and further assume that its covariance function \(K(t, s)= \mathbb E[X(t)X(s)]\) is continuous. To construct the RKHS associated with the covariance function, we start by defining the functional space \(\mathcal H_0(K)\) of all finite linear combinations of evaluations of \(K\), that is,
+The methodology proposed in this work relies heavily on the use of RKHS's, so before diving into it we will briefly describe the main characteristics of these spaces (for a more detailed account, see for example~\citet{berlinet2004reproducing}). In what follows, suppose that the covariance function of \(X\), \(K(t, s)= \mathbb E[X(t)X(s)]\), is continuous. To construct the RKHS \(\Hcal(K)\) associated with the covariance function, we start by defining the functional space \(\Hcal_0(K)\) of all finite linear combinations of evaluations of \(K\), that is,
 \begin{equation}\label{eq:h0}
-\mathcal H_0(K) = \left\{ f \in L^2[0,1]: f(\cdot) = \sum_{i=1}^p a_i K(t_i, \cdot), \ p \in \N, \ a_i \in \R, \ t_i \in [0, 1] \right\}.
+\Hcal_0(K) = \left\{ f \in L^2[0,1]: \ f(\cdot) = \sum_{i=1}^p a_i K(t_i, \cdot), \ p \in \N, \ a_i \in \R, \ t_i \in [0, 1] \right\}.
 \end{equation}
-This space is endowed with the inner product
-\[
-\dotprod{f}{g}_K = \sum_{i, j} a_i b_j K(t_i, s_j),
-\]
-given that \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_j, \cdot)\). Then, we define \(\mathcal H(K)\) to be the completion of \(\mathcal H_0(K)\) under the norm induced by the scalar product defined above.
-\incomment{Contar definiciones alternativas (con referencias), y definir el operador lineal \(\mathcal K\) inline, diciendo que al ser K continua es compacto y autoadjunto.} As it turns out, functions in this space verify the \textit{reproducing property}, thus giving it its name:
-\begin{equation}\label{eq:reproducing-property}
-  \dotprod{K(t, \cdot)}{f}_K = f(t), \quad \text{for all } f \in \mathcal H(K), \ t \in [0, 1].
-\end{equation}
-An important detail to note is that \(\mathcal H(K)\) is a space of genuine functions, and not of equivalence classes of functions. Hence, the values of these functions at particular points are in fact relevant, unlike in \(L^2\)-spaces.
+This space is endowed with the inner product \(\dotprod{f}{g}_K = \sum_{i, j} a_i b_j K(t_i, s_j)\), given that \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_j, \cdot)\). Then, we define \(\Hcal(K)\) to be the completion of \(\Hcal_0(K)\) under the norm induced by the scalar product defined above. As it turns out, functions in this space verify the \textit{reproducing property} \(\dotprod{K(t, \cdot)}{f}_K = f(t)\) for all \(f \in \Hcal(K)\) and \(t \in [0, 1]\), thus giving it its name. An important detail to note is that, since \(\Hcal(K)\) is a space of genuine functions and not of equivalence classes, the values of these functions at particular points are in fact relevant, unlike in \(L^2\)-spaces.
 
-\begin{comment}
-  Un enfoque particularmente útil en estadística es la isometría de Loeve....
+As we can see, the covariance function of \(X\) (sometimes referred to as the \textit{kernel}) plays a crucial role in characterizing the RKHS. An integral operator closely related to this kernel is the so-called covariance operator, namely \(\mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds\) for \(f \in L^2[0, 1]\), which is self-adjoint and compact when \(K\) is continuous \citep[e.g.][Th.~4.6.2]{hsing2015theoretical}. It is worth mentioning that this operator provides several alternative definitions of \(\Hcal(K)\); for example, the RKHS can be identified with the image of the square root of the covariance operator, i.e., \(\Hcal(K) = \mathcal K^{1/2}(L^2[0, 1])\), with inner product \(\dotprod{f}{g}_K = \dotprod{\mathcal K^{-1/2}(f)}{\mathcal K^{-1/2}(g)}\). Furthermore, we can think of the norm in \(\Hcal(K)\) as an \(L^2\)-like regularized norm, since it is easy to show that we can also express \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), with the corresponding inner product \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}\), where in turn \(\lambda_j\) and \(\phi_j\) are the eigenvalues and eigenfunctions of \(\mathcal K\), respectively. Note that, since the spectral theorem for compact operators tells us that the sequence of eigenvalues \(\{\lambda_j\}\subset \R^+_0\) tends to zero \citep[e.g.][Th.~4.2.4]{hsing2015theoretical}, this definition highlights the fact that functions in \(\Hcal(K)\) are smooth, in the sense that their components in an orthonormal basis need to vanish quickly.
 
-  SUPONER QUE X ESTÁ CENTRADA DESDE EL PRINCIPIO.
-\end{comment}
-
-As we can see, the covariance function (sometimes referred to as the \textit{kernel}) plays a crucial role in characterizing the RKHS. An integral operator closely related to this covariance function is the so-called covariance operator, namely
-\[
-\mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f \in L^2[0, 1],
-\]
-which is compact and self-adjoint when \(K\) is continuous \incomment{cita}.
-
-\begin{comment}
-  QUITAR K-L Y HABLAR DE LOS AUTOVALORES EN LA DEFINICIÓN ALTERNATIVA.
-\end{comment}
-
-This operator is especially relevant due to the \textit{Karhunen-Loève} theorem~\cite[e.g.][Th.~1.5]{bosq2000linear}, which asserts that \(X\) can be decomposed as
-\begin{equation}\label{eq:karhunen-loeve}
-X(t) = \sum_{i=1}^\infty \xi_i \phi_i(t),
-\end{equation}
-where \(\phi_i\) are the (orthonormal) eigenfunctions of its covariance operator \(\mathcal K\) and \(\xi_i = \int X\phi_i\) are uncorrelated zero-mean random variables with variance equal to \(\lambda_i\), the eigenvalue associated with \(\phi_i\). This expansion is the main justification for many FDA techniques, such as functional principal component analysis (FPCA)~\cite[see for example][Ch.~8]{ramsay2005functional}.
-
-There are at least three alternative, equivalent ways of defining the RKHS associated with \(K\), and each of them gives a different insight into the relationship between the process itself and the underlying RKHS:
-
-\begin{description}
-  \item[From an isometry] Via \textit{Loève's isometry}, one can establish a congruence between \(\mathcal H(K)\) and the linear span of the centered process, \(\mathcal L(X)\), in the space of all random variables with finite second moment, \(L^2(\Omega)\) (see Lemma 1.1 in \citet{lukic2001stochastic}). This isometry is essentially the completion of the correspondence
+Lastly, a particularly useful approach in statistics is to regard \(\Hcal(K)\) as an isometric copy of a well-known space. Specifically, via \textit{Loève's isometry} one can establish a congruence between \(\Hcal(K)\) and the linear span of the process, \(\mathcal L(X)\), in the space of all random variables with finite second moment, \(L^2(\Omega)\) (see Lemma 1.1 in \citet{lukic2001stochastic}). This isometry is essentially the completion of the correspondence
   \[
   \sum_{i=1}^p a_i X(t_i) \longleftrightarrow \sum_{i=1}^p a_i K(t_i, \cdot),
 \]
-and can be formally defined as
-\begin{equation}\label{eq:loeves-isometry}
-  \Psi^{-1}_X(U)(t) = \E[U X(t)], \quad U \in \mathcal L(X).
-\end{equation}
-  \item[From the covariance operator] The space \(\mathcal H(K)\) can also be identified with the image of the square root of the covariance operator, i.e.:
-  \begin{equation}\label{eq:rkhs-square-root}
-  \mathcal H(K) = \mathcal K^{1/2}(L^2[0, 1]).
-\end{equation}
-In this case, the inner product can be expressed as
-\[
-\dotprod{f}{g}_K = \dotprod{\mathcal K^{1/2}(f)}{\mathcal K^{1/2}(g)}.
-\]
-
-  \item[From a \(\bf L^2\)-like smoothed norm] Lastly, starting from the above definition and combining expression~\eqref{eq:karhunen-loeve} and the representation of \(K\) given by \textit{Mercer's theorem} \citep{mercer1909functions}, we can also express
-  \begin{equation}\label{rkhs-sum-lambda}
-    \mathcal H(K) = \left\{f \in L^2[0, 1]: \sum_{j=1}^\infty \frac{\dotprod{f}{\phi_j}^2}{\lambda_j} < \infty \right\},
-  \end{equation}
-  with the corresponding inner product
-  \[
-  \dotprod{f}{g}_K = \sum_{j=1}^\infty \frac{\dotprod{f}
-  {\phi_j}\dotprod{g}{\phi_j}}{\lambda_j}.
-  \]
-Note that, since the spectral theorem for compact operators tells us that the sequence of eigenvalues \(\{\lambda_j\}\) tends to zero \citep[e.g.][Th.~4.2.4]{hsing2015theoretical}, this definition highlights the fact that functions in \(\mathcal H(K)\) are smooth, in the sense that their components in an orthonormal basis need to vanish quickly.
-\end{description}
-
-\begin{comment}
-  Enlazar con la definición de isometría de loeve
-\end{comment}
-
-Despite the close connection between the process \(X\) and the space \(\mathcal H(K)\), special care must be taken when dealing with concrete realizations of the process, since under rather general conditions the trajectories of \(X\) do not belong to the corresponding RKHS with probability one \citep[see for example][Cor.~7.1]{lukic2001stochastic}. As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined and lacks meaning when \(x\) is a realization of \(X\). However, following Parzen's approach \citep[Th.~4E]{parzen1961approach} we can leverage Loève's isometry and identify \(\dotprod{x}{f}_K \) with \( \Psi_x(f) := \Psi_X(f)(\omega)\), for \(x=X(\omega)\) and \(f\in \mathcal H(K)\). This notation often proves to be useful and convenient.
+and can be formally defined as \(\Psi^{-1}_X(U)(t) = \E[U X(t)]\) for \(U \in \mathcal L(X)\).
+Despite the close connection between the process \(X\) and the space \(\Hcal(K)\), special care must be taken when dealing with concrete realizations of the process, since under rather general conditions the trajectories of \(X\) do not belong to the corresponding RKHS with probability one \citep[see for example][Cor.~7.1]{lukic2001stochastic}. As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined and lacks meaning when \(x\) is a realization of \(X\). However, following Parzen's approach in his seminal work on time series analysis \citep[Th.~4E]{parzen1961approach}, we can leverage Loève's isometry and identify \(\dotprod{x}{f}_K \) with \( \Psi_x(f) := \Psi_X(f)(\omega)\), for \(x=X(\omega)\) and \(f\in \Hcal(K)\). This notation often proves to be useful and convenient.
 
 \section{Bayesian methodology for RKHS-based functional regression models}\label{sec:methodology}
 
-In this section we present the precise models and Bayesian methodologies explored in this work. The RKHS-based functional models under consideration are those obtained by taking a functional parameter \(\alpha \in \mathcal H(K)\) and replacing the scalar product for Loève's isometry \(\dotprod{x}{\alpha}_K\) in the \(L^2\)-models~\eqref{eq:l2-linear-model} and~\eqref{eq:l2-logistic-model}. However, to further simplify things we will follow a parametric approach and suppose that \(\alpha\) is in fact a member of the dense subspace \(\mathcal H_0(K)\) defined in~\eqref{eq:h0}. The value of \(p\), the dimensionality of the model, will be fixed beforehand in a suitable way (see Section~\ref{sec:model-choice} for details), and we will regard \(\beta_j\) and \(t_j\) as free parameters. Thus, we will search for our functional parameter in the set
+In this section we present the precise models and Bayesian methodologies explored in this work. The RKHS-based functional models under consideration are those obtained by taking a functional parameter \(\alpha \in \Hcal(K)\) and replacing the scalar product for Loève's isometry \(\dotprod{x}{\alpha}_K\) in the \(L^2\)-models~\eqref{eq:l2-linear-model} and~\eqref{eq:l2-logistic-model}. However, to further simplify things we will follow a parametric approach and suppose that \(\alpha\) is in fact a member of the dense subspace \(\Hcal_0(K)\) defined in~\eqref{eq:h0}. The value of \(p\), the dimensionality of the model, will be fixed beforehand in a suitable way (see Section~\ref{sec:model-choice} for details), and we will regard \(\beta_j\) and \(t_j\) as free parameters. Thus, we will search for our functional parameter in the set
 \[
-\mathcal H_{0,p}(K)=\left\{ \sum_{j=1}^p \beta_j K(t_j, \cdot): \ \beta_1,\dots,\beta_p \in \R, \ t_1,\dots,t_p \in [0, 1]\right\}.
+\Hcal_{0,p}(K)=\left\{ \sum_{j=1}^p \beta_j K(t_j, \cdot): \ \beta_1,\dots,\beta_p \in \R, \ t_1,\dots,t_p \in [0, 1]\right\}.
 \]
 
-The general idea will be to impose a prior distribution on these free parameters (and possibly others) to eventually derive a posterior model after incorporating the available sample information. \incomment{Una de las cosas difíciles en estadística bayesiana es poner un prior en un espacio de funciones. Una de las ventajas del modelopropuesto (y por el que advocamos por este modelo) es que facilita esta tarea, de manera natural y manejable. Poner una subsubsection con: definición de una priori adecuada en nuestro RKHS framework}In view of expression~\eqref{eq:alpha-parameter-rkhs}, to set a prior distribution on the unknown function \(\alpha\) (that is, a prior distribution on the functional space \(\mathcal H_{0,p}(K)\)) it suffices to consider \(p\)-dimensional continuous prior distributions for the coefficients \(\{\beta_j\}\) and the times \(\{t_j\}\) separately. Moreover, as we said before, with a slight abuse of notation we will understand the expression \(\dotprod{x}{\alpha}_K\) as \(\Psi_x(\alpha)\), where \(\Psi\) is Loève's isometry. Hence, taking into account that \(\Psi_X(K(t, \cdot)) = X(t)\) by definition (see~\eqref{eq:loeves-isometry}), we have
+The general idea will be to impose a prior distribution on these free parameters (and possibly others) to eventually derive a posterior model after incorporating the available sample information. \incomment{Una de las cosas difíciles en estadística bayesiana es poner un prior en un espacio de funciones. Una de las ventajas del modelopropuesto (y por el que advocamos por este modelo) es que facilita esta tarea, de manera natural y manejable. Poner una subsubsection con: definición de una priori adecuada en nuestro RKHS framework}In view of expression~\eqref{eq:alpha-parameter-rkhs}, to set a prior distribution on the unknown function \(\alpha\) (that is, a prior distribution on the functional space \(\Hcal_{0,p}(K)\)) it suffices to consider \(p\)-dimensional continuous prior distributions for the coefficients \(\{\beta_j\}\) and the times \(\{t_j\}\) separately. Moreover, as we said before, with a slight abuse of notation we will understand the expression \(\dotprod{x}{\alpha}_K\) as \(\Psi_x(\alpha)\), where \(\Psi\) is Loève's isometry. Hence, taking into account that \(\Psi_X(K(t, \cdot)) = X(t)\) by definition, we have
 \[
 \dotprod{x}{\alpha}_K \equiv \sum_{j=1}^p \beta_j x(t_j).
 \]
 
-To begin with, note that starting from a probability distribution \(\mathbb{P}_0\) on \(\mathcal H_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(\mathcal H(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap \mathcal H_0(K))\) for all Borel sets \(B \in \mathcal B(\mathcal H(K))\). This is why our simplifying assumption on \(\alpha\) is not actually very restrictive, since any prior distribution on \(\mathcal H_0(K)\) can be directly extended to a prior distribution on \(\mathcal H(K)\).
+To begin with, note that starting from a probability distribution \(\mathbb{P}_0\) on \(\Hcal_0(K)\) we can obtain a probability distribution \(\mathbb{P}\) on \(\Hcal(K)\) simply by defining \(\mathbb{P}(B) = \mathbb{P}_0(B\cap \Hcal_0(K))\) for all Borel sets \(B \in \mathcal B(\Hcal(K))\). This is why our simplifying assumption on \(\alpha\) is not actually very restrictive, since any prior distribution on \(\Hcal_0(K)\) can be directly extended to a prior distribution on \(\Hcal(K)\).
 
 \incomment{Mencionar que en realidad trabajamos en \(H_{0,p}\).}
 
@@ -249,7 +194,7 @@ A last technicality to discuss is the fact that in~\eqref{eq:bayes-theorem} we h
 
 \subsection{Functional linear regression}\label{sec:rkhs-linear-model}
 
-In the case of functional linear regression, the RKHS model considered (with a functional parameter \(\alpha\in \mathcal H_{0,p}(K)\)) is
+In the case of functional linear regression, the RKHS model considered (with a functional parameter \(\alpha\in \Hcal_{0,p}(K)\)) is
 \begin{equation}\label{eq:rkhs-model-linear}
   Y = \alpha_0 + \Psi_X(\alpha) + \epsilon = \alpha_0 + \sum_{j=1}^p \beta_j X(t_j) + \epsilon,
 \end{equation}
@@ -320,7 +265,7 @@ Note that these estimators can be obtained all at once after only one round of t
 
 In the case of functional logistic regression, we can view the binary response variable \(Y\in\{0, 1\}\) as a Bernoulli random variable given the regressor \(X=x \in L^2[0, 1]\), and suppose that \(\log\left(p(x)/(1-p(x))\right)\) is linear in \(x\), where \(p(x)=\mathbb P(Y=1\mid X=x)\). Then, an RKHS approach given by the following functional logistic equation:
 \begin{equation}\label{eq:rkhs-model-logistic}
-  \mathbb P(Y=1 \mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \Psi_X(\alpha)\}}, \quad \alpha \in \mathcal H_{0,p}(K).
+  \mathbb P(Y=1 \mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \Psi_X(\alpha)\}}, \quad \alpha \in \Hcal_{0,p}(K).
 \end{equation}
 Following our previous strategy, after incorporating the sample information we can rewrite the classification model~\eqref{eq:rkhs-model-logistic} as
 \begin{equation}\label{eq:rkhs-model-logistic-2}
