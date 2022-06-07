@@ -9,7 +9,7 @@
 %
 
 \RequirePackage{fix-cm}
-\documentclass[10pt, spanish, professionalfonts]{beamer}
+\documentclass[10pt, english, professionalfonts]{beamer}
 
 \usepackage{pifont}  % xmark, cmark
 \newcommand{\cmark}{\ding{51}}%
@@ -72,7 +72,7 @@ extendedchars=true
 
 \renewcommand{\baselinestretch}{1}
 \definecolor{mLightBrown}{HTML}{f97e0b}
-\newcommand\maroon[1]{\color{mLightBrown}#1\color{black}}
+\newcommand\maroon[1]{\color{mLightBrown}#1\color{mDarkTeal}}
 \let\lmin\wedge
 \let\lmax\vee
 \newtheorem{prop}{Proposición}
@@ -100,10 +100,10 @@ extendedchars=true
 
 % TÍTULO
 
-\title{Métodos Bayesianos en modelos RKHS para regresión funcional}
+\title{Bayesian methods in RKHS models for functional regression}
 \providecommand{\subtitle}[1]{}
-\subtitle{Marco teórico y experimentación en Python}
-\date{Congreso SEIO Granada\\ 8 de mayo de 2022\\}
+\subtitle{Theoretical framework and experiments}
+\date{SEIO Congress Granada\\ 8th May 2022\\}
 \author{José R. Berrendero \\ Antonio Coín  \\ Antonio Cuevas\\}
 \institute{Universidad Autónoma de Madrid \\ \textit{Departamento de Matemáticas}}
 
@@ -117,86 +117,101 @@ extendedchars=true
 \begin{document}
 \maketitle
 
-\begin{frame}{Índice de contenidos}
+\begin{frame}{Table of contents}
   \tableofcontents
 \end{frame}
 
-\section{TODO}
+\section{Introduction}
 
-\begin{frame}{Problemas a resolver}
-  \(\bullet\) Regresión \maroon{lineal} con datos funcionales
-
-\begin{figure}
-    \includegraphics[width=.65\textwidth]{img/data_lin}
-  \end{figure}
-
-\(\bullet\) Regresión \maroon{logística} con datos funcionales
+\begin{frame}{FDA: linear regression}
+  \textbf{First problem}: \maroon{Linear } regression with functional data.
+  \vspace{1em}
 
 \begin{figure}
-    \includegraphics[width=.65\textwidth]{img/data_log}
+    \includegraphics[width=\textwidth]{img/data_lin}
+    \caption{Linear regression data set simulated from a fractional brownian motion.}
   \end{figure}
+  \vspace{-1em}
+\end{frame}
+\begin{frame}{FDA: logistic regression}
+  \textbf{Second problem}: \maroon{Logistic } regression with functional data.
+\vspace{1em}
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{img/data_log}
+    \caption{Logistic regression data set simulated from a fractional brownian motion.}
+  \end{figure}
+  \vspace{-1em}
 \end{frame}
 
-\begin{frame}{Modelos usuales}
-  \(\bullet\) \(Y\) variable real (continua o binaria).
+\begin{frame}{Usual models}
+  \(\bullet\) \(Y\) real variable (continuous or dichotomous).
 
-  \(\bullet\) \(X(t)\) proceso estocástico de segundo orden con trayectorias en \(L^2[0, 1]\).
+  \(\bullet\) \(X(t)\) second order stochastic process with trajectories in \(L^2[0, 1]\).
+
+  \(\bullet\) \(\beta \in L^2[0,1]\) \maroon{functional parameter}.
 
   \vspace{1em}
 
-\begin{block}{Modelo lineal \(\bm{L^2}\)}
+\begin{block}{Linear \(\bm{L^2}\)-model}
   \[
     Y = \alpha_0 + \maroon{\langle X, \beta \rangle_2} + \varepsilon = \alpha_0 + \int_0^1 X(t)\beta(t)\, dt + \varepsilon.
   \]
 \end{block}
-\begin{block}{Modelo logístico \(\bm{L^2}\)}
+\begin{block}{Logistic \(\bm{L^2}\)-model}
     \[
     \mathbb P (Y=1\mid X) = \frac{1}{\exp\{-\alpha_0 - \maroon{\langle X, \beta\rangle_2}\}} = \frac{1}{\exp\{-\alpha_0 - \int_0^1 X(t)\beta(t)\, dt\}}.
   \]
 \end{block}
-  \(\alpha_0\in\mathbb R\), \(\beta \in L^2[0, 1]\), \(\varepsilon \sim \mathcal N(0, \sigma^2), \mathbb E[\varepsilon]=0, X \bot \varepsilon\).
+  \(\alpha_0\in\mathbb R\), \ \(\varepsilon \sim \mathcal N(0, \sigma^2), \ \mathbb E[\varepsilon]=0, \ X \bot \varepsilon\).
 \end{frame}
 
 
-\begin{frame}{Algunas desventajas de los modelos \(\bm{L^2}\)}
+\begin{frame}{Some shortcomings of the \(\bm{L^2}\)-models}
   \begin{itemize}
-    \item \(L^2[0, 1]\) es un espacio extenso, que contiene además funciones muy irregulares.
-    \item La teoría usual de mínimos cuadrados no es aplicable directamente. Se requieren técnicas de regularización o reducción de dimensionalidad.
-    \item No incluyen como casos particulares modelos sencillos basados en combinaciones lineales de las marginales del proceso, e.g.:
+    \item \(L^2[0, 1]\) is a extremely wide space, which also contains very ill-behaved functions.
+    \item The usual least-squares theory cannot be applied directly; some regularization or dimensionality reduction techniques are required.
+    \item They do not include simple models based on linear combinations of the marginal of the process as particular cases, such as
     \[
       Y = \alpha_0 + \sum_{j=1}^p \beta_j X(t_j) + \varepsilon.
     \]
-    \item En el caso logístico, no existe el estimador de máxima verosimilitud con probabilidad 1 bajo condiciones muy generales.
+    \item In the logistic case, the maximum likelihood estimator does not exist with probability one under fairly general conditions.
   \end{itemize}
 \end{frame}
 
+\section{A RKHS model for functional regression}
 
-\begin{frame}{Modelo alternativo: RKHS}
 
-Haremos uso de la teoría de los \textit{espacios de Hilbert con núcleo reproductor} (RKHS's, por sus siglas en inglés).
+\begin{frame}{Alternative model: RKHS}
 
-\begin{alertblock}{Propuesta}
-  Cambiar el hábitat del parámetro functional \(\beta(\cdot)\).
+We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's).
+
+\vspace{1em}
+\begin{alertblock}{Proposal}
+  Change the habitat of the functional parameter \(\beta(\cdot)\).
 \end{alertblock}
 
-  En lugar de suponer \(\beta \in L^2[0, 1]\), consideramos \maroon{\(\beta \in \mathcal H(K)\)}, el RKHS asociado a la función de covarianza \(K(t, s)=\mathbb E[X(t)X(s)]\) del proceso centrado \(X\). Además, sustituiremos la evaluación de \(\dotprod{X}{\beta}_2\) por \maroon{\(\dotprod{X}{\beta}_K\)}.
+\vspace{1em}
+  Instead of assuming \(\beta \in L^2[0, 1]\), we consider \maroon{\(\beta \in \mathcal H(K)\)}, the RKHS associated with the covariance function \(K(t, s)=\mathbb E[X(t)X(s)]\) of the centered process \(X\). Moreover, we substitute \(\dotprod{X}{\beta}_2\) for \maroon{\(\dotprod{X}{\beta}_K\)}.
 \end{frame}
 
 
-\begin{frame}{Un repaso muy breve de los RKHS's}
+\begin{frame}{RKHS essentials}
   \begin{definition}
-    Suponemos que la función de convarianzas \(K\) (el \textit{kernel}) es continua, y definimos el espacio
+    Let \(K\) be continuous, and define the preliminary space
     \[
     \Hcal_0(K) = \left\{ f \in L^2[0,1]: \ f(\cdot) = \sum_{i=1}^p a_i K(t_i, \cdot),  p \in \N,  a_i \in \R,  t_i \in [0, 1] \right\},
     \]
-    al que dotamos del producto escalar \(\dotprod{f}{g}_K = \sum_{i, j} a_i b_j K(t_i, s_j)\), dadas \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) y \(g(\cdot)=\sum_j b_j K(s_j, \cdot)\). Entonces, \(\Hcal(K)\) se obtiene al completar \(\Hcal_0(K)\) bajo este producto escalar.
+    which is endowed with the scalar product \(\dotprod{f}{g}_K = \sum_{i, j} a_i b_j K(t_i, s_j)\), for \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_j, \cdot)\). Then, \(\Hcal(K)\) is the completion of \(\Hcal_0(K)\) under this scalar product.
   \end{definition}
 
-  \(\Hcal(K)\subset L^2[0, 1]\), pero las funciones en \(\Hcal(K)\) son más simples y manejables en general. Además, es un espacio de \maroon{funciones}, y no de clases de equivalencia.
+  \vspace{1em}
+
+  Note that \(\Hcal(K)\subset L^2[0, 1]\), but the elements of \(\Hcal(K)\) are simpler and more manageable in general. Plus, the latter is a space of \maroon{functions}, and not of equivalence classes.
 \end{frame}
 
 
-\begin{frame}{Un repaso muy breve de los RKHS's II}
+\begin{frame}{Un repaso muy breve de los RKHS's (cont.)}
 Se pueden dar otras definiciones equivalentes de \(\Hcal(K)\), basadas en el \textit{operador de covarianzas}
 \[
 \mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f\in L^2[0, 1].
@@ -209,33 +224,35 @@ Se pueden dar otras definiciones equivalentes de \(\Hcal(K)\), basadas en el \te
 \end{enumerate}
 \end{definition}
 
-La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hcal(K)\) son "simples", en el sentido de que sus componentes en una base ortonormal tienden a \(0\) rápidamente.
+La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hcal(K)\) son ``simples'', en el sentido de que sus componentes en una base ortonormal tienden a \(0\) rápidamente.
 
 \end{frame}
 
-\begin{frame}{Una pequeña sutileza}
+\begin{frame}{A small subtlety}
 
-  En general, las realizaciones \(x=X(\omega)\) \maroon{no pertenecen a \(H(K)\)} \ con probabilidad 1, por lo que la expresión \(\dotprod{x}{\beta}_K\) carece de sentido. Sin embargo, aprovechamos la relación entre \(\Hcal(K)\) y \(\mathcal L(X)\), el espacio de Hilbert generado por el proceso \(X\) en \(L^2(\Omega)\).
-  \begin{block}{Isometría de Loève}
-    Es la completación de la correspondencia
+  Generally speaking, the concrete realizations \(x=X(\omega)\) \maroon{do not belong to \(\Hcal(K)\) with probability \(1\)}, so the expression \(\dotprod{x}{\beta}_K\) lacks meaning. However, we can make use of the relationship between \(\Hcal(K)\) and \(\mathcal L(X)\), the linear span of the process \(X\) within \(L^2(\Omega)\).
+
+
+  \vspace{1em}
+  \begin{block}{Loève's isometry}
+    It is the completion of the correspondence
     \[
-\sum_{j=1}^p a_j X(t_j) \longleftrightarrow \sum_{j=1}^p a_j K(t_j, \cdot),
+\sum_{j=1}^p a_j X(t_j) \longleftrightarrow \sum_{j=1}^p a_j K(t_j, \cdot).
     \]
-    Formalmente, \(\Psi^{-1}_X(U)(t) := \E[U X(t)]\) para \(U \in \mathcal L(X)\).
+    Formally, \(\Psi^{-1}_X(U)(t) := \E[U X(t)]\) for \(U \in \mathcal L(X)\).
   \end{block}
-  Utilizaremos la notación \maroon{\(\dotprod{x}{\beta}_k \equiv \Psi_x(\beta)\)}.
+  With a slight abuse of notation, we will write \maroon{\(\dotprod{x}{\beta}_k \equiv \Psi_x(\beta)\)}. This correspondence will allow us to still call our models ``linear''.
 \end{frame}
 
 
-
-\begin{frame}{Un nuevo parámetro funcional...}
+\begin{frame}{A new functional parameter...}
   \begin{itemize}
-    \item La idea inicial era suponer \(\beta \in \Hcal(K)\).
-    \item Para simplificar el modelo, haremos la suposición extra de que \(\beta \in \Hcal_0(K)\), que es denso en \(\Hcal(K)\) por construcción. Es decir,
+    \item The initial idea was to suppose \(\beta \in \Hcal(K)\).
+    \item To further simplify the model, we will assume \(\beta \in \Hcal_0(K)\), which is dense in \(\Hcal(K)\) by construction. That is,
     \[
       \beta(\cdot) = \sum_{j=1}^p \beta_j K(t_j, \cdot).
     \]
-    \item A la hora de evaluar \(\dotprod{x}{\beta}_K\) para \(x=X(\omega)\), utilizaremos la isometría de Loève:
+    \item When evaluating \(\dotprod{x}{\beta}_K\) for a trajectory \(x=X(\omega)\), we resort to Loeve's isometry:
     \[
       \dotprod{x}{\beta}_K = \Psi_x(\beta) = \sum_{j=1}^p \beta_j X(t_j).
     \]
@@ -244,98 +261,168 @@ La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hc
 \end{frame}
 
 
-\begin{frame}{...y dos nuevos modelos}
-  Dado un conjunto de datos \(\{(X_i, Y_i): i=1,\dots, n\}\) con muestras i.i.d. de \((X, Y)\), consideramos:
+\begin{frame}{...and two new models}
+  Given a data set \(\mathcal D_n = \{(X_i, Y_i): i=1,\dots, n\}\) composed of i.i.d. samples of \((X, Y)\), we consider:
 
   \vspace{1em}
 
-  \begin{block}{Modelo lineal RKHS}
+  \begin{block}{Linear RKHS model}
   \[
     Y_i = \alpha_0 + \maroon{\langle X_i, \beta \rangle_K} + \varepsilon = \alpha_0 + \sum_{j=1}^p \beta_j X_i(t_j) + \varepsilon.
   \]
 \end{block}
-\begin{block}{Modelo logístico RKHS}
+\begin{block}{Logistic RKHS model}
     \[
     \mathbb P (Y_i=1\mid X_i) = \frac{1}{\exp\{-\alpha_0 - \maroon{\langle X_i, \beta\rangle_K}\}} = \frac{1}{\exp\{-\alpha_0 - \sum_{j=1}^p \beta_j X_i(t_j)\}}.
   \]
 \end{block}
 \end{frame}
 
-\begin{frame}{Estimación de parámetros: un enfoque bayesiano}
-  teorema de bayes + aproximación posteriori
-  se extiende por densidad
-  vector de parámetros theta
+\begin{frame}{Benefits of the RKHS models}
+  \begin{itemize}
+    \item MLE existe..
+    \item El modelo es verdadero en algunos casos...
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Distribuciones a priori}
-  Se propone utilizar las mismas distribuciones a priori tanto para el caso de regresión lineal como para el de regresión logística:
+\section{A bayesian approach}
+
+\begin{frame}{Parameter estimation}
+
+  We have a parameter vector \(\theta = (p, \beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2)\), on which we impose a prior distribution \(\pi(\theta)\). In practice, we are establishing a prior distribution on the functional space \(\Hcal(K)\) via a density argument.
+
+  \vspace{1em}
+
+  Afterwards we apply \textit{Bayes'}  theorem in the usual way to obtain the posterior distribution of the parameters given the data.
+
+  \begin{block}{Bayes's theorem}
+      \[
+      \pi(\theta \mid \mathcal D_n) \propto \left( \prod_{i=1}^n \pi(Y_i\mid X_i, \theta) \right)\pi(\theta).
+      \]
+  \end{block}
+  \vspace{1em}
+
+  Finally, we obtain samples of the approximate posterior distribution using an algorithm of the family of \textit{Markov chain Monte Carlo} (MCMC) methods.
+
+\end{frame}
+
+\begin{frame}{Prior distributions}
+  Same prior scenario for both linear and logistic models.
+  \begin{block}{Prior de los parámetros}
+    \vspace{-1em}
   \begin{align*}
-    p &\sim \text{Categórica}(p_{\text{max}}),\\
+    p &\sim \text{Categorical}(p_{\text{max}}),\\
   \pi(\alpha_0, \sigma^2)              & \propto 1/\sigma^2,                                                     \\
   \tau                     & \sim \mathcal U([0, 1]^p),                                              \\
   \beta\mid \tau, \sigma^2 & \sim \mathcal N\big(b_0, g\sigma^2{\underbrace{\left[\mathcal X_\tau' \mathcal X_\tau + \eta I\right]}_{G_\tau}}^{-1}\big),
 \end{align*}
-donde \(I\) es la matriz identidad, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), y \(b_0\in \R^p, \ g \in \R\) y \(\eta \in \R^+\) son hiperparámetros.
+where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and \(b_0\in \R^p, \ g \in \R\) and \(\eta \in \R^+\) are hyperparameters.
+\end{block}
 
 \metroset{block=transparent}
-\begin{alertblock}{Selección de hiperparámetros}
+
+\begin{alertblock}{Hyperparameter selection}
   \vspace{0.1em}
-  Para \(b_0\) se usa una aproximación computacional del MLE; el resto de hiperparámetros se fija por \textit{cross-validation}.
+  For \(b_0\) we use a computational approximation of the MLE; the rest of hyperparameters are set via \textit{cross-validation}.
 \end{alertblock}
 \metroset{block=fill}
 \end{frame}
 
-\begin{frame}{Distribuciones a posteriori}
-  \begin{align*}
-  \log \pi(\theta\mid \boldsymbol{Y}) &\propto \frac{1}{2}\log |G_\tau| - (p+n)\log \sigma\\
-  &-\frac{1}{2\sigma^2} \left(\|\boldsymbol{Y}-\alpha_0\boldsymbol{1} - \mathcal X_\tau\beta\|^2 + \frac{1}{g}(\beta - b_0)'G_\tau(\beta - b_0) \right).
+\begin{frame}{Posterior distributions}
+  \begin{block}{Linear log-posterior}
+    \vspace{-1em}
+    \begin{align*}
+  \log \pi(\theta\mid \mathcal D_n) &\propto \frac{1}{2}\log |G_\tau| - (p+n)\log \sigma\\
+  &-\frac{1}{2\sigma^2} \left(\|\boldsymbol{Y}-\alpha_0\boldsymbol{1} - \mathcal X_\tau\beta\|^2 + \frac{1}{g}(\beta - b_0)'G_\tau(\beta - b_0) \right),
 \end{align*}
+where \(\bm Y=(Y_1,\dots,Y_n)'\) y \(\bm{1}\) is an \(n\)-dimensional vector of ones.
+  \end{block}
+
+\vspace{1em}
+  \begin{block}{Logistic log-posterior}
+      \vspace{-1em}
+    \begin{align*}
+  \log \pi(\theta \mid \mathcal D_n) \propto {} & \sum_{i=1}^n \left[ \left(\alpha_0 + \Psi_{X_i}(\alpha)\right)Y_i - \log\left(1 + \exp\left\{\alpha_0 + \Psi_{X_i}(\alpha)\right\}\right)\right]\\
+  \quad &+ \frac{1}{2}\log |G_\tau| - p\log \sigma -\frac{1}{2g\sigma^2} (b - b_0)'G_\tau(b - b_0).
+\end{align*}
+Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
+  \end{block}
 \end{frame}
 
+\begin{frame}{Posterior approximation}
+  We use the Python library \maroon{emcee}, which implements an MCMC algorithm consisting on multiple chains that interact with each other to advance on each step (\textit{Affine-invariant ensemble sampler}).
 
+  \vspace{1em}
 
-\begin{frame}{Predicciones}
-  \textbf{Estimación puntual}: Se resume la distribución a posteriori de los parámetros \(\theta\mid Y\) mediante un estimador puntual (media, mediana, moda), y se utilizan para predecir según el modelo:
-  \[
-  \hat Y_i =\hat \alpha_0 + \sum_{j=1}^p \hat \beta_j x_i(\hat \tau_j), \quad i=1,\dots, n.
-  \]
-
-  \textbf{Estimación distribucional}: Se utiliza la media de \textit{todas}  las muestras generadas de \(Y^*\) como predicción:
-  \[
-    \hat Y = \frac{1}{M}\sum_{m=1}^M Y^{(j)*}.
-  \]
-
-  En ambos casos se puede considerar solo una de cada \(k\) muestras.
+  \begin{figure}
+    \includegraphics[width=.7\textwidth]{img/posterior}
+    \caption{Estimated posterior distribution \(\theta|\mathcal D_n\).}
+  \end{figure}
 \end{frame}
 
-\begin{frame}{Predicciones II}
-    Podemos hacer también una selección de \(p\) variables usando los estimadores puntuales de \(\tau \mid Y\), y después aplicar cualquier algoritmo de regresión lineal.
+\begin{frame}{Predictions}
+  \textbf{Summarize-then-predict}. A summary of the posterior distribution \(\theta| \mathcal D_n\) is obtained via a point-estimate statistic (mean, median, mode), and then predictions are made according to the assumed model, e.g.:
+  \[
+  \hat Y_i =\hat \alpha_0 + \sum_{j=1}^p \hat \beta_j X_i(\hat \tau_j), \quad i=1,\dots, n.
+  \]
+
+  \textbf{Predict-then-summarize}. For each MCMC iteration we get a sample \(\theta^{(m)*}\) of the approximate posterior. We first construct predictions on each step following our model, i.e.:
+  \[
+    Y_i^{(m)*} \equiv Y_i \mid X_i, \theta^{(m)*}, \quad m=1,\dots,M, \quad i=1,\dots, n.
+  \]
+
+  Then, the mean of all such intermediate predictions (\textit{posterior predictive distribution}) is used as a proxy for the response variable:
+  \[
+    \hat Y_i = \frac{1}{M}\sum_{m=1}^M Y_i^{(m)*}, \quad i=1,\dots, n.
+  \]
+
+\end{frame}
+
+\begin{frame}{Predictions (cont.)}
+    \textbf{Variable selection}. We select \(p\) variables using only a point estimator of \(\tau=(t_1,\dots, t_p)|\mathcal D_n\) (so-called \textit{impact points}), and then we can apply any multiple regression algorithm to the reduced data set.
+    \vspace{1em}
 
     \begin{figure}
-      \includegraphics[width=\textwidth]{img/tau_posterior_lin}
-      \caption{Distribución a posteriori estimada para los puntos de impacto.}
+      \includegraphics[width=\textwidth]{img/tau_posterior}
+      \caption{Approximate posterior distribution for the impact points.}
     \end{figure}
 
-    En cualquier caso, medimos el error usando el MSE como métrica.
+    At any rate, all the above predictors can be obtained after a single run of the MCMC algorithm.
 \end{frame}
+
+\subsection{Validación de modelos}
 
 \begin{frame}{Model checking}
   \begin{itemize}
-    \item Análisis de la traza de las cadenas y de la distribución a posteriori de los parámetros. Se obtienen \textbf{intervalos creíbles} para los parámetros.
-    \item En cada paso obtenemos una estimación \(\tilde \theta_m\), y podemos generar \(Y^{(m)*} \mid \theta_m, X\) siguiendo el modelo asumido.
-    \item \textit{Bayesian p-values}: \(p=P(T(Y^*)\leq T(Y)\mid Y)\) para ciertas elecciones de \(T\): mínimo, máximo, mediana, media. Se calcula contando la proporción de muestras generadas que cumplen la desigualdad, y se espera que esté en torno a \(0.5\).
+    \item Análisis de la traza de las cadenas y de la distribución a posteriori de los parámetros. Se obtienen directamente \maroon{intervalos creíbles } para los parámetros.
+    \item \textit{Bayesian p-values}: \(\tilde p=P(T(Y^*)\leq T(Y)\mid Y)\) para ciertas elecciones de \(T\): mínimo, máximo, mediana, media, etc. Se calcula contando la proporción de muestras aproximadas que cumplen la desigualdad, y se espera que esté en torno a \(0.5\).
+    \item Análisis descriptivo y visual de la distribución a posteriori predictiva, tanto con los datos de entrenamiento como con nuevos datos de validación.
   \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Model checking II}
+\begin{frame}{Model checking (cont.)}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/ppc_lin}
-    \caption{\textit{Posterior predictive checks} bajo un modelo RKHS.}
+    \includegraphics[width=\textwidth]{img/ppc_linear}
+    \caption{\textit{Posterior predictive checks} para regresión lineal.}
   \end{figure}
 \end{frame}
 
-\subsection{Experimentos}
+\begin{frame}{Model checking (cont.)}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/ppc_logistic1}
+    \includegraphics[width=\textwidth]{img/ppc_logistic2}
+    \caption{\textit{Posterior predictive checks} para regresión logística.}
+  \end{figure}
+\end{frame}
+
+\section{Experimentos}
+
+\begin{frame}{Metodología}
+  \begin{itemize}
+    \item Por motivos prácticos, consideramos la posibilidad de fijar el valor de \(p\) de antemano, considerándolo como un hiperparámetro más del modelo (equivalente a una distribución a priori degenerada).
+  \end{itemize}
+\end{frame}
 
 \begin{frame}{Datos sintéticos}
   Se consideran 150 ejemplos de \(X \sim GP(0, K(s, t))\) y tres posibles variantes de \(K\): movimiento browniano fraccional (\(H=0.8\)), Ornstein-Uhlenbeck y kernel RBF.
@@ -401,7 +488,7 @@ Consideramos una malla regular de \(N=100\) puntos en \([0, 1]\), y un reparto d
 Además, repetimos este proceso con los datos suavizados en una base de Fourier con 11 elementos (también con los algoritmos de comparación).
 \end{frame}
 
-\begin{frame}{Metodología experimental II}
+\begin{frame}{Metodología experimental (cont.)}
   Fijamos algunos hiperparámetros:
   \begin{itemize}
     \item Número de cadenas: 64.
@@ -415,116 +502,10 @@ Además, repetimos este proceso con los datos suavizados en una base de Fourier 
   \textit{Nota:} El valor de \(g\) no parece afectar al resultado, por lo que podríamos eliminar este parámetro.
 \end{frame}
 
-\begin{frame}{Resultados RKHS}
-\textbf{Sin base}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \cmark & \cmark\\
-      O-U & \cmark & \cmark\\
-      RBF & \cmark & \cmark
-    \end{tabular}
-  \end{table}
-
-  \textbf{Base Fourier(11)}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \cmark &  \cmark\\
-      O-U & \cmark & \xmark\\
-      RBF & \cmark & \cmark
-    \end{tabular}
-  \end{table}
-\end{frame}
-
-\begin{frame}{Resultados RKHS II}
+\begin{frame}{Resultados L2}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/res/reg_emcee_rkhs_fixed}
+    \includegraphics[width=\textwidth]{img/reg_emcee_l2}
     \caption{caption.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados RKHS III}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/lin_rkhs_fbm_base11}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/lin_rkhs_ou_base11}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/lin_rkhs_rbf_base11}
-    \caption{MSE de los 5 mejores modelos en cada caso con el modelo subyacente RKHS y con base de Fourier.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados \(\boldsymbol{L^2}\)}
-\textbf{Sin base}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \xmark & \xmark\\
-      O-U & \xmark & \xmark\\
-      RBF & \xmark & \xmark
-    \end{tabular}
-  \end{table}
-\textbf{Base Fourier(11)}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \cmark &  \cmark\\
-      O-U & \cmark & \cmark\\
-      RBF & \xmark & \xmark
-    \end{tabular}
-  \end{table}
-\end{frame}
-
-\begin{frame}{Resultados \(\boldsymbol{L^2}\) II}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/lin_l2_fbm_nobase}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/lin_l2_ou_nobase}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/lin_l2_rbf_nobase}
-    \caption{MSE de los 5 mejores modelos en cada caso con el modelo subyacente \(L^2\) y sin usar suavizado con bases.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados \(\boldsymbol{L^2}\) III}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/lin_l2_fbm_base11}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/lin_l2_ou_base11}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/lin_l2_rbf_base11}
-    \caption{MSE de los 5 mejores modelos en cada caso con el modelo subyacente \(L^2\) y con base de Fourier.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados datos reales}
-\textbf{Sin base}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Dataset & Victoria & Victoria sel. variables \\ \hline
-      Tecator & \xmark & \xmark\\
-      Aemet & \xmark & \cmark\\
-    \end{tabular}
-  \end{table}
-
-  \textbf{Base Fourier(11)}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Dataset & Victoria & Victoria sel. variables \\ \hline
-      Tecator & \xmark &  \xmark\\
-      Aemet & \xmark & \cmark\\
-    \end{tabular}
-  \end{table}
-\end{frame}
-
-\begin{frame}{Resultados datos reales II}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/lin_tecator_nobase}\hspace{5em}
-    \includegraphics[width=0.3\textwidth]{img/results/lin_aemet_nobase}
-    \caption{MSE de los 5 mejores modelos en cada caso con datos reales y sin usar suavizado con bases.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados datos reales III}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/lin_tecator_base11}\hspace{5em}
-    \includegraphics[width=0.3\textwidth]{img/results/lin_aemet_base11}
-    \caption{MSE de los 5 mejores modelos en cada caso con datos reales y con base de Fourier.}
   \end{figure}
 \end{frame}
 
@@ -536,7 +517,6 @@ Además, repetimos este proceso con los datos suavizados en una base de Fourier 
   \item En ocasiones, nuestro algoritmo supera con holgura a todos los algoritmos de comparación. Cuando pierde, suele ser frente a uno o dos de ellos (y por poco), pero sigue superando al resto.
   \item Se puede considerar como algoritmo de comparación el estimador de máxima verosimilitud de los parámetros. En casi todas las pruebas experimentales, el desempeño de nuestro algoritmo supera al del MLE.
 \end{itemize}
-
 
 \end{frame}
 
@@ -552,7 +532,7 @@ Además, repetimos este proceso con los datos suavizados en una base de Fourier 
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Dificultades II}
+\begin{frame}{Dificultades (cont.)}
   \begin{itemize}
     \item Hay un problema de \textit{identificabilidad} de los coeficientes (son intercambiables), que se agudiza especialmente al usar varias cadenas.
     \item En el caso en el que el modelo subyacente es RKHS, es posible que no se recuperen los verdaderos valores de los parámetros debido a interacciones entre los coeficientes (si \(p\) es mayor que el número real de componentes).
@@ -580,22 +560,6 @@ Además, repetimos este proceso con los datos suavizados en una base de Fourier 
 p_i \equiv p(x_i)=\mathbb P(Y_i=1\mid X_i=x_i) = \frac{1}{1 + \exp\left\{-\alpha_0-\displaystyle\sum_{j=1}^p \beta_jx_i(\tau_j)\right\}}.
 \]
 
-\textbf{Distribuciones a priori}: Igual que en regresión lineal.
-
-\textbf{Log-posterior}:
-\begin{align*}
-  \log \ &\pi(\beta, \tau, \alpha_0, \log\sigma\mid Y) \propto\\
-   &\sum_{i=1}^n \left[ \left(\alpha_0 + \Psi^{-1}_{x_i}(\alpha)\right)y_i - \log\left(1 + \exp\left\{\alpha_0 + \Psi_{x_i}^{-1}(\alpha)\right\}\right)\right]\\
-   &+
-\frac{1}{2}\log |G_\tau| - p\log \sigma -\frac{1}{2g\sigma^2} (\beta - b_0)'G_\tau(\beta - b_0).
-\end{align*}
-\end{frame}
-
-\begin{frame}{Model checking}
-  \begin{figure}
-    \includegraphics[width=\textwidth]{img/ppc_log}
-    \caption{\textit{Posterior predictive checks} bajo un modelo RKHS.}
-  \end{figure}
 \end{frame}
 
 \begin{frame}{Predicciones}
@@ -654,124 +618,6 @@ Seguimos la misma estrategia de generación de datos antes. Se consideran las mi
   \vspace{1em}
 
   Mismo preprocesado y metodología experimental que en el caso de regresión lineal, utilizando esta vez 9 coeficientes de Fourier.
-\end{frame}
-
-\begin{frame}{Resultados RKHS}
-\textbf{Sin base}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \xmark & \xmark\\
-      O-U & \xmark & \cmark\\
-      RBF & \cmark & \xmark
-    \end{tabular}
-  \end{table}
-
-  \textbf{Base Fourier(9)}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \cmark &  \cmark\\
-      O-U & \cmark & \cmark\\
-      RBF & \cmark & \cmark
-    \end{tabular}
-  \end{table}
-\end{frame}
-
-\begin{frame}{Resultados RKHS II}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/log_rkhs_fbm_nobase}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_rkhs_ou_nobase}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_rkhs_rbf_nobase}
-    \caption{Precisión de los 5 mejores modelos en cada caso con el modelo subyacente RKHS y sin usar suavizado con bases. Distinguimos los algoritmos de comparación, nuestro algoritmo Bayesiano (emcee), y nuestra selección de variables Bayesiana.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados RKHS III}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/log_rkhs_fbm_base9}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_rkhs_ou_base9}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_rkhs_rbf_base9}
-    \caption{Precisión de los 5 mejores modelos en cada caso con el modelo subyacente RKHS y con base de Fourier.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados \(\boldsymbol{L^2}\)}
-\textbf{Sin base}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \xmark & \xmark\\
-      O-U & \cmark & \xmark\\
-      RBF & \cmark & \cmark
-    \end{tabular}
-  \end{table}
-
-  \textbf{Base Fourier(9)}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Kernel & Victoria & Victoria sel. variables \\ \hline
-      fBM & \xmark &  \cmark\\
-      O-U & \xmark & \cmark\\
-      RBF & \cmark & \cmark
-    \end{tabular}
-  \end{table}
-\end{frame}
-
-\begin{frame}{Resultados \(L^2\) II}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/log_l2_fbm_nobase}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_l2_ou_nobase}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_l2_rbf_nobase}
-    \caption{Precisión de los 5 mejores modelos en cada caso con el modelo subyacente \(L^2\) y sin usar suavizado con bases.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados \(L^2\) III}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/log_l2_fbm_base9}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_l2_ou_base9}\hfill
-    \includegraphics[width=0.3\textwidth]{img/results/log_l2_rbf_base9}
-    \caption{Precisión de los 5 mejores modelos en cada caso con el modelo subyacente \(L^2\) y con base de Fourier.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados datos reales}
-\textbf{Sin base}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Dataset & Victoria & Victoria sel. variables \\ \hline
-      Medflies & \xmark & \xmark\\
-      Growth & \cmark & \cmark\\
-    \end{tabular}
-  \end{table}
-
-  \textbf{Base Fourier(9)}
-  \begin{table}
-    \begin{tabular}{c|cc}
-      Dataset & Victoria & Victoria sel. variables \\ \hline
-      Medflies & \xmark &  \xmark\\
-      Growth & \cmark & \cmark\\
-    \end{tabular}
-  \end{table}
-
-  Tanto en las victorias como en las derrotas, la precisión es muy similar. Podemos considerar un empate en ambos conjuntos.
-\end{frame}
-
-\begin{frame}{Resultados datos reales II}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/log_medflies_nobase}\hspace{5em}
-    \includegraphics[width=0.3\textwidth]{img/results/log_growth_nobase}
-    \caption{Precisión de los 5 mejores modelos en cada caso con datos reales y sin usar suavizado con bases.}
-  \end{figure}
-\end{frame}
-
-\begin{frame}{Resultados datos reales III}
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{img/results/log_medflies_base9}\hspace{5em}
-    \includegraphics[width=0.3\textwidth]{img/results/log_growth_base9}
-    \caption{Precisión de los 5 mejores modelos en cada caso con datos reales y con base de Fourier.}
-  \end{figure}
 \end{frame}
 
 \end{document}
