@@ -36,13 +36,17 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[absolute,overlay]{textpos}
-\usepackage[spanish, es-nodecimaldot]{babel}
+\usepackage[english]{babel}
 \usepackage{microtype}
 \usepackage{epigraph}
 \usepackage{hyperref}
 \usepackage{bm}
 \usepackage{amssymb, amsmath, amsthm, amsfonts, amscd}
 \usepackage{listings}
+
+\usepackage[backend=biber,style=numeric-comp,sorting=none]{biblatex}
+\addbibresource{bibliography.bib}
+\setbeamertemplate{bibliography item}[article]
 
 % FONTS
 %\usefonttheme{professionalfonts}
@@ -100,7 +104,7 @@ extendedchars=true
 
 % TÍTULO
 
-\title{Bayesian methods in RKHS models for functional regression}
+\title{Bayesian RKHS-based methods in functional regression}
 \providecommand{\subtitle}[1]{}
 \subtitle{Theoretical framework and experiments}
 \date{SEIO Congress Granada\\ 8th May 2022\\}
@@ -144,7 +148,7 @@ extendedchars=true
   \vspace{-1em}
 \end{frame}
 
-\begin{frame}{Usual models}
+\begin{frame}{The usual \(\bm{L^2}\)-models}
   \(\bullet\) \(Y\) real variable (continuous or dichotomous).
 
   \(\bullet\) \(X(t)\) second order stochastic process with trajectories in \(L^2[0, 1]\).
@@ -160,14 +164,14 @@ extendedchars=true
 \end{block}
 \begin{block}{Logistic \(\bm{L^2}\)-model}
     \[
-    \mathbb P (Y=1\mid X) = \frac{1}{\exp\{-\alpha_0 - \maroon{\langle X, \beta\rangle_2}\}} = \frac{1}{\exp\{-\alpha_0 - \int_0^1 X(t)\beta(t)\, dt\}}.
+    \mathbb P (Y=1\mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \maroon{\langle X, \beta\rangle_2}\}} = \frac{1}{1 + \exp\{-\alpha_0 - \int_0^1 X\beta\}}.
   \]
 \end{block}
   \(\alpha_0\in\mathbb R\), \ \(\varepsilon \sim \mathcal N(0, \sigma^2), \ \mathbb E[\varepsilon]=0, \ X \bot \varepsilon\).
 \end{frame}
 
 
-\begin{frame}{Some shortcomings of the \(\bm{L^2}\)-models}
+\begin{frame}{Shortcomings of the \(\bm{L^2}\)-models}
   \begin{itemize}
     \item \(L^2[0, 1]\) is a extremely wide space, which also contains very ill-behaved functions.
     \item The usual least-squares theory cannot be applied directly; some regularization or dimensionality reduction techniques are required.
@@ -196,7 +200,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 \end{frame}
 
 
-\begin{frame}{RKHS essentials}
+\begin{frame}{RKHS reminder}
   \begin{definition}
     Let \(K\) be continuous, and define the preliminary space
     \[
@@ -211,22 +215,22 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 \end{frame}
 
 
-\begin{frame}{Un repaso muy breve de los RKHS's (cont.)}
-Se pueden dar otras definiciones equivalentes de \(\Hcal(K)\), basadas en el \textit{operador de covarianzas}
-\[
-\mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f\in L^2[0, 1].
-\]
-
-\begin{definition}
-\begin{enumerate}
-  \item  \(\Hcal(K) = \mathcal K^{1/2}(L^2[0, 1])\), con \(\dotprod{f}{g}_K = \dotprod{\mathcal K^{-1/2}(f)}{\mathcal K^{-1/2}(g)}_2\).
-  \item \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), con \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}_2\). En este caso, \(\lambda_j\) y \(\phi_j\) son los autovalores y autofunciones de \(\mathcal K\).
-\end{enumerate}
-\end{definition}
-
-La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hcal(K)\) son ``simples'', en el sentido de que sus componentes en una base ortonormal tienden a \(0\) rápidamente.
-
-\end{frame}
+% \begin{frame}{Un repaso muy breve de los RKHS's (cont.)}
+% Se pueden dar otras definiciones equivalentes de \(\Hcal(K)\), basadas en el \textit{operador de covarianzas}
+% \[
+% \mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f\in L^2[0, 1].
+% \]
+%
+% \begin{definition}
+% \begin{enumerate}
+%   \item  \(\Hcal(K) = \mathcal K^{1/2}(L^2[0, 1])\), con \(\dotprod{f}{g}_K = \dotprod{\mathcal K^{-1/2}(f)}{\mathcal K^{-1/2}(g)}_2\).
+%   \item \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), con \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}_2\). En este caso, \(\lambda_j\) y \(\phi_j\) son los autovalores y autofunciones de \(\mathcal K\).
+% \end{enumerate}
+% \end{definition}
+%
+% La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hcal(K)\) son ``simples'', en el sentido de que sus componentes en una base ortonormal tienden a \(0\) rápidamente.
+%
+% \end{frame}
 
 \begin{frame}{A small subtlety}
 
@@ -266,28 +270,23 @@ La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hc
 
   \vspace{1em}
 
-  \begin{block}{Linear RKHS model}
+  \begin{block}{Linear RKHS model (Berrendero et al., 2019)}
   \[
     Y_i = \alpha_0 + \maroon{\langle X_i, \beta \rangle_K} + \varepsilon = \alpha_0 + \sum_{j=1}^p \beta_j X_i(t_j) + \varepsilon.
   \]
 \end{block}
-\begin{block}{Logistic RKHS model}
+\vspace{1em}
+\begin{block}{Logistic RKHS model (Berrendero et al., 2018)}
     \[
     \mathbb P (Y_i=1\mid X_i) = \frac{1}{\exp\{-\alpha_0 - \maroon{\langle X_i, \beta\rangle_K}\}} = \frac{1}{\exp\{-\alpha_0 - \sum_{j=1}^p \beta_j X_i(t_j)\}}.
   \]
 \end{block}
+
 \end{frame}
 
-\begin{frame}{Benefits of the RKHS models}
-  \begin{itemize}
-    \item MLE existe..
-    \item El modelo es verdadero en algunos casos...
-  \end{itemize}
-\end{frame}
+\section{A bayesian approach to parameter estimation}
 
-\section{A bayesian approach}
-
-\begin{frame}{Parameter estimation}
+\begin{frame}{Parameter estimation overview}
 
   We have a parameter vector \(\theta = (p, \beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2)\), on which we impose a prior distribution \(\pi(\theta)\). In practice, we are establishing a prior distribution on the functional space \(\Hcal(K)\) via a density argument.
 
@@ -308,7 +307,7 @@ La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hc
 
 \begin{frame}{Prior distributions}
   Same prior scenario for both linear and logistic models.
-  \begin{block}{Prior de los parámetros}
+  \begin{block}{Prior for the parameters involved}
     \vspace{-1em}
   \begin{align*}
     p &\sim \text{Categorical}(p_{\text{max}}),\\
@@ -316,7 +315,7 @@ La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hc
   \tau                     & \sim \mathcal U([0, 1]^p),                                              \\
   \beta\mid \tau, \sigma^2 & \sim \mathcal N\big(b_0, g\sigma^2{\underbrace{\left[\mathcal X_\tau' \mathcal X_\tau + \eta I\right]}_{G_\tau}}^{-1}\big),
 \end{align*}
-where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and \(b_0\in \R^p, \ g \in \R\) and \(\eta \in \R^+\) are hyperparameters.
+where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and \(b_0\in \R^p, \ g \in \R, \ p_{\text{max}}\in \N\) and \(\eta \in \R^+\) are hyperparameters.
 \end{block}
 
 \metroset{block=transparent}
@@ -356,7 +355,7 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
 
   \begin{figure}
     \includegraphics[width=.7\textwidth]{img/posterior}
-    \caption{Estimated posterior distribution \(\theta|\mathcal D_n\).}
+    \caption{Example of an approximated posterior distribution \(\theta|\mathcal D_n\).}
   \end{figure}
 \end{frame}
 
@@ -390,13 +389,11 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
     At any rate, all the above predictors can be obtained after a single run of the MCMC algorithm.
 \end{frame}
 
-\subsection{Validación de modelos}
-
 \begin{frame}{Model checking}
   \begin{itemize}
-    \item Análisis de la traza de las cadenas y de la distribución a posteriori de los parámetros. Se obtienen directamente \maroon{intervalos creíbles } para los parámetros.
-    \item \textit{Bayesian p-values}: \(\tilde p=P(T(Y^*)\leq T(Y)\mid Y)\) para ciertas elecciones de \(T\): mínimo, máximo, mediana, media, etc. Se calcula contando la proporción de muestras aproximadas que cumplen la desigualdad, y se espera que esté en torno a \(0.5\).
-    \item Análisis descriptivo y visual de la distribución a posteriori predictiva, tanto con los datos de entrenamiento como con nuevos datos de validación.
+    \item Analysis of the trace and posterior distribution of the parameters, for example through credible intervals.
+    \item \textit{Bayesian p-values}: \(\tilde p=P(T(Y^*)\leq T(Y)\mid Y)\) for any choice of \(T\): min, max, mean, median, mode, etc. They are computed by simply measuring the proportion of the approximate posterior samples that fall below the real value of the statistic, and are expected to be around \(0.5\) when the fit is good.
+    \item Descriptive and visual analysis of the posterior predictive distribution, both with training and validation data.
   \end{itemize}
 
 \end{frame}
@@ -404,7 +401,7 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
 \begin{frame}{Model checking (cont.)}
   \begin{figure}
     \includegraphics[width=\textwidth]{img/ppc_linear}
-    \caption{\textit{Posterior predictive checks} para regresión lineal.}
+    \caption{\textit{Posterior predictive checks} for linear regression.}
   \end{figure}
 \end{frame}
 
@@ -412,212 +409,85 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
   \begin{figure}
     \includegraphics[width=\textwidth]{img/ppc_logistic1}
     \includegraphics[width=\textwidth]{img/ppc_logistic2}
-    \caption{\textit{Posterior predictive checks} para regresión logística.}
+    \caption{\textit{Posterior predictive checks} for logistic regression.}
   \end{figure}
 \end{frame}
 
-\section{Experimentos}
+\section{Experiments}
 
-\begin{frame}{Metodología}
+\begin{frame}{Methodology}
   \begin{itemize}
-    \item Por motivos prácticos, consideramos la posibilidad de fijar el valor de \(p\) de antemano, considerándolo como un hiperparámetro más del modelo (equivalente a una distribución a priori degenerada).
+    \item Experiments on simulated data, with \(150\) samples of different Gaussian processes on a regular grid of \(100\) points. Also on real data sets.
+    \item We perform 10 random train/test partitions to account for the stochasticity of the model, along with \(5\)-fold cross-validation to select the best hyperparameters on the training set.
+    \item For practical and computational reasons, \textbf{we allow the value of \(\bm{p}\) to be fixed beforehand}, treating it as an hyperparameter (equivalent to a degenerate prior distribution). {\color{red} problema de indentificabilidad de coeficientes!!}
+    \item Several functional reference algorithms for comparison, along with variable selection techniques, functional or otherwise.
+
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Datos sintéticos}
-  Se consideran 150 ejemplos de \(X \sim GP(0, K(s, t))\) y tres posibles variantes de \(K\): movimiento browniano fraccional (\(H=0.8\)), Ornstein-Uhlenbeck y kernel RBF.
-
-  Se genera la respuesta \(Y\) acorde a dos modelos, RKHS y \(L^2\). Concretamente, se elige
-  \[
-    Y_i \sim \mathcal N\big(5 -5X_i(0.1) + 10X_i(0.8), \ 0.5\big)
-  \]
-  ó
-  \[
-    Y_i \sim \mathcal N\left(5 + \int_0^1 \log(1+4t)X_i(t)\, dt, \ 0.5\right).
-  \]
-
-Consideramos una malla regular de \(N=100\) puntos en \([0, 1]\), y un reparto de 100 ejemplos para entrenamiento y 50 para evaluación.
-\end{frame}
-
-\begin{frame}{Datos reales}
-  Se consideran dos conjuntos de datos reales.
-  \begin{itemize}
-    \item \textbf{Tecator:} Contiene 215 ejemplos de mediciones de \textit{absorbancia} en muestras de carne para intentar predecir su contenido en grasa.
-    \item \textbf{Aemet}: Contiene 73 ejemplos de curvas de temperatura, a partir de las cuales se intenta predecir la precipitación total.
-  \end{itemize}
-
-  En ambos casos hacemos una división \(80\%-20\%\) para entrenamiento y \textit{test}.
-\end{frame}
-
-\begin{frame}{Preprocesado de los datos}
-  \begin{itemize}
-    \item Se centran los regresores para que tengan media \(0\). Opcionalmente, se pueden estandarizar en cada punto de la malla.
-    \item Se permite \textbf{sustituir los datos \(\boldsymbol{X_i}\) por su desarrollo en una base} de Fourier, con un número determinado de coeficientes. De esta forma realizamos un suavizado de las curvas.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Algoritmos de comparación}
-  \textbf{Regresión lineal multivariante:} Regresión Lineal estándar, Lasso (\(L^1\)), Ridge (\(L^2\)).
-
-  \textbf{Regresión no lineal multivariante}: SVM con kernel RBF.
-
-  \textbf{Regresión lineal funcional}: Modelo \(L^2\), KNN Funcional.
-
-  \textbf{Reducción de dimensión:} PCA Funcional (proyección sobre coeficientes).
-
-  \textbf{Selección de variables:} Aleatoria.
-
+\begin{frame}{Linear regression: simulated data}
   \vspace{1em}
-
-  Se entrenan todos ellos sobre el conjunto de entrenamiento, haciendo \textit{5-fold cross validation} para escoger los mejores hiperparámetros en cada caso (valor de regularización, número de componentes, ...).
-\end{frame}
-
-\begin{frame}{Metodología experimental}
-  \begin{itemize}
-  \item Para cada conjunto de datos consideramos tres posibles valores de \(p\) y cuatro posibles valores de \(\eta\):
-  \begin{itemize}
-    \item[--] \(p\in \{2,3,4\}\) para los datos sintéticos y \(p\in \{3, 4, 5\}\) para los datos reales.
-      \item[--] \(\eta \in \{0.01, 0.1, 1.0, 10.0\}\).
-  \end{itemize}
-
-  \item Para aumentar la estabilidad hacemos 5 repeticiones de cada modelo. Es decir, entrenamos un total de 60 modelos sobre el conjunto de entrenamiento
-
-  \item Con el \textbf{mejor modelo obtenido} se realiza también una selección de variables basada en los valores de \(\tau\) estimados mediante los distintos estimadores puntuales.
-\end{itemize}
-
-Además, repetimos este proceso con los datos suavizados en una base de Fourier con 11 elementos (también con los algoritmos de comparación).
-\end{frame}
-
-\begin{frame}{Metodología experimental (cont.)}
-  Fijamos algunos hiperparámetros:
-  \begin{itemize}
-    \item Número de cadenas: 64.
-    \item Número de pasos: 100 + 1000.
-    \item Movimientos: elección aleatoria (ponderada) entre dos de los recomendados, \textit{stretch} y \textit{walk}.
-    \item Inicialización: Entorno aleatorio del MLE + muestras de las distribuciones a priori.
-    \item Prior de \(\beta\): \(b_0\) se elige como el MLE de \(\beta\), y fijamos \(g=5\) (recomendado en \textit{Grollemund et al. (2019)}).
-  \end{itemize}
-  \vspace{1em}
-
-  \textit{Nota:} El valor de \(g\) no parece afectar al resultado, por lo que podríamos eliminar este parámetro.
-\end{frame}
-
-\begin{frame}{Resultados L2}
   \begin{figure}
     \includegraphics[width=\textwidth]{img/reg_emcee_l2}
-    \caption{caption.}
+    \caption{Mean MSE of predictors for simulated data that has an underlying \(L^2\)-model.}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Algunas observaciones}
-\begin{itemize}
-  \item Por cada modelo entrenado obtenemos 4 estimadores y 3 estrategias de selección de variables.
-  \item En general, se obtienen mejores resultados con el uso de la base.
-  \item El tiempo medio de entrenamiento de cada modelo es de unos 20-30 segundos.
-  \item En ocasiones, nuestro algoritmo supera con holgura a todos los algoritmos de comparación. Cuando pierde, suele ser frente a uno o dos de ellos (y por poco), pero sigue superando al resto.
-  \item Se puede considerar como algoritmo de comparación el estimador de máxima verosimilitud de los parámetros. En casi todas las pruebas experimentales, el desempeño de nuestro algoritmo supera al del MLE.
-\end{itemize}
+\begin{frame}{Linear regression: simulated data}
+    \vspace{1em}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/reg_emcee_l2}
+    \caption{Mean MSE of predictors for real data sets.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Logistic regression: simulated data}
+    \vspace{1em}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/clf_emcee_l2}
+    \caption{Mean accuracy of classifiers for simulated data that has an underlying logistic \(L^2\)-model.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Logistic regression: real data}
+    \vspace{1em}
+  \begin{figure}
+    \includegraphics[width=\textwidth]{img/clf_emcee_real}
+    \caption{Mean accuracy of classifiers for real data sets.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Conclusions and future work}
+
+  \metroset{block=transparent}
+  \begin{alertblock}{Our proposal}
+    \begin{itemize}
+      \item Simple model for functional regression, with a solid mathematical background thanks to the theory of RKHS's.
+      \item Computationally feasible Bayesian approach to parameter estimation within the model.
+      \item Competitive with usual alternatives in both simulated and real data sets.
+    \end{itemize}
+  \end{alertblock}
+
+  \begin{exampleblock}{The road ahead}
+    \begin{itemize}
+      \item Choose other prior distributions.
+      \item Package the algorithm and make it compatible with standard libraries (e.g. \textit{sklearn}).
+      \item Reduce the variance in predictions, possibly by tackling the \textit{label switching} problem.
+    \end{itemize}
+  \end{exampleblock}
+
 
 \end{frame}
 
-\begin{frame}{Dificultades}
-  \begin{itemize}
-
-
-  \item Hay multitud de grados de libertad: estandarización de regresores y/o variable respuesta, elección o no de una base (¿cuál?,) algoritmo de estimación del MLE, número, longitud y movimientos de las cadenas MCMC, elección de distribuciones a priori, elección de \(g, b_0\) y \(\eta\), etc.
-  \item El algoritmo MCMC es costoso, y en conjuntos de datos grandes las estrategias de \textit{cross-validation} para seleccionar parámetros pueden no ser viables.
-  \item Es necesario un procedimiento para seleccionar el valor de \(p\) (BIC, WAIC, WBIC, \textit{cross-validation}, ...).
-  \item Debido a la aleatoriedad del algoritmo, los resultados pueden variar sustancialmente de una ejecución a otra.
-  \item La distribución a priori para \(\beta\) depende en gran medida del valor de \(b_0\) escogido. Si su estimación inicial no es buena, el algoritmo no funciona demasiado bien.
-\end{itemize}
+\begin{frame}[allowframebreaks]
+    \frametitle{References}
+    \nocite{*}
+    \printbibliography[heading=none]
 \end{frame}
 
-\begin{frame}{Dificultades (cont.)}
-  \begin{itemize}
-    \item Hay un problema de \textit{identificabilidad} de los coeficientes (son intercambiables), que se agudiza especialmente al usar varias cadenas.
-    \item En el caso en el que el modelo subyacente es RKHS, es posible que no se recuperen los verdaderos valores de los parámetros debido a interacciones entre los coeficientes (si \(p\) es mayor que el número real de componentes).
-    \item El uso de distribuciones a priori impropias implica comprobar que \(\int_{\Theta} \pi(Y\mid \theta)\pi(\theta)\, d\theta < \infty\).
-  \end{itemize}
+\begin{frame}[standout]
+  Thank you!
 \end{frame}
 
-\begin{frame}{Alternativas}
-  \begin{itemize}
-    \item Explorar el concepto de \textit{online learning} aplicado a esta situación, por ejemplo usando como priori de nuevos datos la posteriori aprendida. Estudiar la \textbf{consistencia} de la distribución a posteriori.
-    \item Utilizar otras herramientas de suavizado en lugar de bases de Fourier.
-    \item Sustitutir la distribución a priori de \(\beta\) por otra que requiera menos hiperparámetros.
-    \item Sustituir las distribuciones impropias por otras propias.
-  \end{itemize}
-
-\end{frame}
-
-\section{Regresión Logística Funcional Bayesiana}
-
-\subsection{Marco teórico}
-
-\begin{frame}{Planteamiento Bayesiano}
-\textbf{Modelo}: Cada \(Y_i\) se puede ver como una variable aleatoria de Bernoulli \(\mathcal B(p(x_i))\), con
-\[
-p_i \equiv p(x_i)=\mathbb P(Y_i=1\mid X_i=x_i) = \frac{1}{1 + \exp\left\{-\alpha_0-\displaystyle\sum_{j=1}^p \beta_jx_i(\tau_j)\right\}}.
-\]
-
-\end{frame}
-
-\begin{frame}{Predicciones}
-
-\begin{itemize}
-  \item Fijamos un umbral en \(0.5\) para establecer la pertenencia a las clases.
-   \item Los estimadores puntuales y la selección de variables son análogos al caso de regresión lineal.
-   \item Tenemos ahora dos estimadores basados en la distribución a posteriori (similares a los \textit{ensembles} de clasificadores):
-   \begin{itemize}
-     \item[--] Basado en el voto mayoritario de las muestras \(Y^*\) generadas.
-     \item[--] Basado en la media de las probabilidades \(p_i^*\) generadas (con aplicación posterior del umbral).
-   \end{itemize}
-  \item Se usa el \textit{accuracy} (precisión) para evaluar los modelos.
-\end{itemize}
-\end{frame}
-
-\subsection{Experimentos}
-
-\begin{frame}{Datos sintéticos}
-Seguimos la misma estrategia de generación de datos antes. Se consideran las mismas tres funciones de covarianza y se genera la respuesta tanto con un modelo RKHS como L2, i.e.:
-  \[
-    Y_i \sim \mathcal B\left(\frac{1}{1 + \exp\left\{0.5 + 5X_i(0.1) - 10X_i(0.8)\right\}}\right)
-  \]
-  ó
-  \[
-    Y_i \sim \mathcal B\left(\frac{1}{1 + \exp\left\{0.5 -\int_0^1 \log(1+4t)X_i(t)\, dt\right\}}\right).
-  \]
-
-  \vspace{1em}
-
-  Se introduce un pequeño ruido aleatorio en las etiquetas, y además se intenta que ambas clases estén balanceadas.
-
-\end{frame}
-
-\begin{frame}{Datos reales}
-  Se consideran dos conjuntos de datos reales.
-  \begin{itemize}
-    \item \textbf{Medflies:} Contiene 534 ejemplos de mediciones del número de huevos diario puesto por una serie de moscas, para intentar predecir si viven mucho o poco.
-    \item \textbf{Growth}: Contiene 93 ejemplos de curvas de altura en niños y niñas.
-  \end{itemize}
-
-  En ambos casos hacemos una división \(80\%-20\%\) para entrenamiento y \textit{test}.
-\end{frame}
-
-\begin{frame}{Algoritmos de comparación}
-  \textbf{Clasificación lineal multivariante:} Regresión Logística, SVM lineal.
-
-  \textbf{Clasificación no lineal multivariante}: SVM con kernel RBF.
-
-  \textbf{Clasificación funcional}: \textit{Maximum Depth}, \textit{Nearest Centroid} Funcional, KNN Funcional.
-
-  \textbf{Reducción de dimensión:} PCA Funcional (proyección sobre coeficientes).
-
-  \textbf{Selección de variables:} Aleatoria, \textit{Recursive Maxima Hunting}, \textit{RKVS} (Mahalanobis).
-
-  \vspace{1em}
-
-  Mismo preprocesado y metodología experimental que en el caso de regresión lineal, utilizando esta vez 9 coeficientes de Fourier.
-\end{frame}
 
 \end{document}
