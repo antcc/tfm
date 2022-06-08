@@ -202,7 +202,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 
 \begin{frame}{RKHS reminder}
   \begin{definition}
-    Let \(K\) be continuous, and define the preliminary space
+    Let the covariance function \(K\) be continuous, and define the preliminary space
     \[
     \Hcal_0(K) = \left\{ f \in L^2[0,1]: \ f(\cdot) = \sum_{i=1}^p a_i K(t_i, \cdot),  p \in \N,  a_i \in \R,  t_i \in [0, 1] \right\},
     \]
@@ -211,7 +211,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 
   \vspace{1em}
 
-  Note that \(\Hcal(K)\subset L^2[0, 1]\), but the elements of \(\Hcal(K)\) are simpler and more manageable in general. Plus, the latter is a space of \maroon{functions}, and not of equivalence classes.
+  Note that \(\Hcal(K)\subset L^2[0, 1]\) as subsets, but the elements of \(\Hcal(K)\) are simpler and more manageable in general. Plus, the latter is a space of \maroon{functions}, and not of equivalence classes.
 \end{frame}
 
 
@@ -254,7 +254,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
     \item The initial idea was to suppose \(\beta \in \Hcal(K)\).
     \item To further simplify the model, we will assume \(\beta \in \Hcal_0(K)\), which is dense in \(\Hcal(K)\) by construction. That is,
     \[
-      \beta(\cdot) = \sum_{j=1}^p \beta_j K(t_j, \cdot).
+      \beta(\cdot) = \sum_{j=1}^p \beta_j K(t_j, \cdot), \quad \beta_j \in \R, \ t_j \in [0, 1], \ p \in \N.
     \]
     \item When evaluating \(\dotprod{x}{\beta}_K\) for a trajectory \(x=X(\omega)\), we resort to Loève's isometry:
     \[
@@ -266,7 +266,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 
 
 \begin{frame}{...and two new models}
-  Given a data set \(\mathcal D_n = \{(X_i, Y_i): i=1,\dots, n\}\) composed of i.i.d. samples of \((X, Y)\), we consider:
+  Given a data set \(\mathcal D_n = \{(X_i, Y_i): i=1,\dots, n\}\) composed of i.i.d. samples of \((X, Y)\), for \(\beta \in \Hcal_0(K)\) we consider:
 
   \vspace{1em}
 
@@ -348,16 +348,16 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
   \end{block}
 \end{frame}
 
-\begin{frame}{Posterior approximation}
-  % We use the Python library \maroon{emcee}, which implements an MCMC algorithm consisting on multiple chains that interact with each other to advance on each step (\textit{Affine-invariant ensemble sampler}).
-
-  \vspace{1em}
-
-  \begin{figure}
-    \includegraphics[width=.9\textwidth]{img/posterior}
-    \caption{Example of an approximated posterior distribution \(\theta|\mathcal D_n\).}
-  \end{figure}
-\end{frame}
+% \begin{frame}{Posterior approximation}
+%  We use the Python library \maroon{emcee}, which implements an MCMC algorithm consisting on multiple chains that interact with each other to advance on each step (\textit{Affine-invariant ensemble sampler}).
+%
+%   \vspace{1em}
+%
+%   \begin{figure}
+%     \includegraphics[width=.9\textwidth]{img/posterior}
+%     \caption{Example of an approximated posterior distribution \(\theta|\mathcal D_n\).}
+%   \end{figure}
+% \end{frame}
 
 \begin{frame}{Predictions}
   \textbf{Summarize-then-predict}. A summary of the posterior distribution \(\theta| \mathcal D_n\) is obtained via a point-estimate statistic (mean, median, mode), and then predictions are made according to the assumed model, e.g.:
@@ -377,6 +377,14 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
 \end{frame}
 
 \begin{frame}{Predictions (cont.)}
+    \vspace{1em}
+  \begin{figure}
+    \includegraphics[width=.75\textwidth]{img/ppc_lin_standalone}
+    \caption{Example of \textit{posterior predictive distribution} in linear regression.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Predictions (cont.)}
     \textbf{Variable selection}. We select \(p\) variables using only a point estimator of \(\tau=(t_1,\dots, t_p)|\mathcal D_n\) (so-called \textit{impact points}), and then we can apply any multiple regression algorithm to the reduced data set.
     \vspace{1em}
 
@@ -384,6 +392,8 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
       \includegraphics[width=\textwidth]{img/tau_posterior}
       \caption{Approximate posterior distribution for the impact points.}
     \end{figure}
+
+    At any rate, all the above predictors can be obtained after a single run of the MCMC algorithm.
 \end{frame}
 
 % \begin{frame}{Model checking}
@@ -394,14 +404,6 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
 %   \end{itemize}
 %
 % \end{frame}
-
-\begin{frame}{Predictions (cont.)}
-    At any rate, all the above predictors can be obtained after a single run of the MCMC algorithm.
-  \begin{figure}
-    \includegraphics[width=.75\textwidth]{img/ppc_lin_standalone}
-    \caption{Example of \textit{posterior predictive distribution} in linear regression.}
-  \end{figure}
-\end{frame}
 
 % \begin{frame}{Model checking (cont.)}
 %   \begin{figure}
