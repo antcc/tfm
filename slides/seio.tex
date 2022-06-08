@@ -107,7 +107,7 @@ extendedchars=true
 \title{Bayesian RKHS-based methods in functional regression}
 \providecommand{\subtitle}[1]{}
 \subtitle{Theoretical framework and experiments}
-\date{SEIO Congress Granada\\ 8th May 2022\\}
+\date{SEIO Conference, Granada\\ 8th May 2022\\}
 \author{José R. Berrendero \\ Antonio Coín  \\ Antonio Cuevas\\}
 \institute{Universidad Autónoma de Madrid \\ \textit{Departamento de Matemáticas}}
 
@@ -133,7 +133,7 @@ extendedchars=true
 
 \begin{figure}
     \includegraphics[width=\textwidth]{img/data_lin}
-    \caption{Linear regression data set simulated from a fractional brownian motion.}
+    \caption{Linear regression data set simulated from a fractional Brownian motion.}
   \end{figure}
   \vspace{-1em}
 \end{frame}
@@ -143,7 +143,7 @@ extendedchars=true
 
 \begin{figure}
     \includegraphics[width=\textwidth]{img/data_log}
-    \caption{Logistic regression data set simulated from a fractional brownian motion.}
+    \caption{Logistic regression data set simulated from a fractional Brownian motion.}
   \end{figure}
   \vspace{-1em}
 \end{frame}
@@ -256,7 +256,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
     \[
       \beta(\cdot) = \sum_{j=1}^p \beta_j K(t_j, \cdot).
     \]
-    \item When evaluating \(\dotprod{x}{\beta}_K\) for a trajectory \(x=X(\omega)\), we resort to Loeve's isometry:
+    \item When evaluating \(\dotprod{x}{\beta}_K\) for a trajectory \(x=X(\omega)\), we resort to Loève's isometry:
     \[
       \dotprod{x}{\beta}_K = \Psi_x(\beta) = \sum_{j=1}^p \beta_j X(t_j).
     \]
@@ -278,7 +278,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 \vspace{1em}
 \begin{block}{Logistic RKHS model (Berrendero et al., 2018)}
     \[
-    \mathbb P (Y_i=1\mid X_i) = \frac{1}{\exp\{-\alpha_0 - \maroon{\langle X_i, \beta\rangle_K}\}} = \frac{1}{\exp\{-\alpha_0 - \sum_{j=1}^p \beta_j X_i(t_j)\}}.
+    \mathbb P (Y_i=1| X_i) = \frac{1}{1 + \exp\{-\alpha_0 - \maroon{\langle X_i, \beta\rangle_K}\}} = \frac{1}{1 + \exp\{-\alpha_0 - \sum_j \beta_j X_i(t_j)\}}.
   \]
 \end{block}
 
@@ -292,7 +292,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 
   \vspace{1em}
 
-  Afterwards we apply \textit{Bayes'}  theorem in the usual way to obtain the posterior distribution of the parameters given the data.
+  Afterwards we apply \textit{Bayes'} theorem in the usual way to obtain the posterior distribution of the parameters given the data.
 
   \begin{block}{Bayes's theorem}
       \[
@@ -349,12 +349,12 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
 \end{frame}
 
 \begin{frame}{Posterior approximation}
-  We use the Python library \maroon{emcee}, which implements an MCMC algorithm consisting on multiple chains that interact with each other to advance on each step (\textit{Affine-invariant ensemble sampler}).
+  % We use the Python library \maroon{emcee}, which implements an MCMC algorithm consisting on multiple chains that interact with each other to advance on each step (\textit{Affine-invariant ensemble sampler}).
 
   \vspace{1em}
 
   \begin{figure}
-    \includegraphics[width=.7\textwidth]{img/posterior}
+    \includegraphics[width=.9\textwidth]{img/posterior}
     \caption{Example of an approximated posterior distribution \(\theta|\mathcal D_n\).}
   \end{figure}
 \end{frame}
@@ -362,14 +362,13 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
 \begin{frame}{Predictions}
   \textbf{Summarize-then-predict}. A summary of the posterior distribution \(\theta| \mathcal D_n\) is obtained via a point-estimate statistic (mean, median, mode), and then predictions are made according to the assumed model, e.g.:
   \[
-  \hat Y_i =\hat \alpha_0 + \sum_{j=1}^p \hat \beta_j X_i(\hat \tau_j), \quad i=1,\dots, n.
+  \hat Y_i =\hat \alpha_0 + \sum_{j=1}^p \hat \beta_j X_i(\hat t_j), \quad i=1,\dots, n.
   \]
 
-  \textbf{Predict-then-summarize}. For each MCMC iteration we get a sample \(\theta^{(m)*}\) of the approximate posterior. We first construct predictions on each step following our model, i.e.:
+  \textbf{Predict-then-summarize}. We first construct predictions on each step of the MCMC algorithm following our model, i.e.:
   \[
     Y_i^{(m)*} \equiv Y_i \mid X_i, \theta^{(m)*}, \quad m=1,\dots,M, \quad i=1,\dots, n.
   \]
-
   Then, the mean of all such intermediate predictions (\textit{posterior predictive distribution}) is used as a proxy for the response variable:
   \[
     \hat Y_i = \frac{1}{M}\sum_{m=1}^M Y_i^{(m)*}, \quad i=1,\dots, n.
@@ -385,58 +384,57 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
       \includegraphics[width=\textwidth]{img/tau_posterior}
       \caption{Approximate posterior distribution for the impact points.}
     \end{figure}
+\end{frame}
 
+% \begin{frame}{Model checking}
+%   \begin{itemize}
+%     \item Analysis of the trace and posterior distribution of the parameters, for example through credible intervals.
+%     \item \textit{Bayesian p-values}: \(\tilde p=P(T(Y^*)\leq T(Y)\mid Y)\) for any choice of \(T\): min, max, mean, median, mode, etc. They are computed by simply measuring the proportion of the approximate posterior samples that fall below the real value of the statistic, and are expected to be around \(0.5\) when the fit is good.
+%     \item Descriptive and visual analysis of the posterior predictive distribution, both with training and validation data.
+%   \end{itemize}
+%
+% \end{frame}
+
+\begin{frame}{Predictions (cont.)}
     At any rate, all the above predictors can be obtained after a single run of the MCMC algorithm.
-\end{frame}
-
-\begin{frame}{Model checking}
-  \begin{itemize}
-    \item Analysis of the trace and posterior distribution of the parameters, for example through credible intervals.
-    \item \textit{Bayesian p-values}: \(\tilde p=P(T(Y^*)\leq T(Y)\mid Y)\) for any choice of \(T\): min, max, mean, median, mode, etc. They are computed by simply measuring the proportion of the approximate posterior samples that fall below the real value of the statistic, and are expected to be around \(0.5\) when the fit is good.
-    \item Descriptive and visual analysis of the posterior predictive distribution, both with training and validation data.
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Model checking (cont.)}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/ppc_linear}
-    \caption{\textit{Posterior predictive checks} for linear regression.}
+    \includegraphics[width=.75\textwidth]{img/ppc_lin_standalone}
+    \caption{Example of \textit{posterior predictive distribution} in linear regression.}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Model checking (cont.)}
-  \begin{figure}
-    \includegraphics[width=\textwidth]{img/ppc_logistic1}
-    \includegraphics[width=\textwidth]{img/ppc_logistic2}
-    \caption{\textit{Posterior predictive checks} for logistic regression.}
-  \end{figure}
-\end{frame}
+% \begin{frame}{Model checking (cont.)}
+%   \begin{figure}
+%     \includegraphics[width=\textwidth]{img/ppc_logistic1}
+%     \includegraphics[width=\textwidth]{img/ppc_logistic2}
+%     \caption{\textit{Posterior predictive checks} for logistic regression.}
+%   \end{figure}
+% \end{frame}
 
 \section{Experiments}
 
-\begin{frame}{Methodology}
-  \begin{itemize}
-    \item Experiments on simulated data, with \(150\) samples of different Gaussian processes on a regular grid of \(100\) points. Also on real data sets.
-    \item We perform 10 random train/test partitions to account for the stochasticity of the model, along with \(5\)-fold cross-validation to select the best hyperparameters on the training set.
-    \item For practical and computational reasons, \textbf{we allow the value of \(\bm{p}\) to be fixed beforehand}, treating it as an hyperparameter (equivalent to a degenerate prior distribution). {\color{red} problema de indentificabilidad de coeficientes!!}
-    \item Several functional reference algorithms for comparison, along with variable selection techniques, functional or otherwise.
-
-  \end{itemize}
-\end{frame}
+% \begin{frame}{Methodology}
+%   \begin{itemize}
+%     \item Experiments on simulated data, with \(150\) samples of different Gaussian processes on a regular grid of \(100\) points. Also on real data sets.
+%     \item We perform 10 random train/test partitions to account for the stochasticity of the model, along with \(5\)-fold cross-validation to select the best hyperparameters on the training set.
+%     \item For practical and computational reasons, \textbf{we allow the value of \(\bm{p}\) to be fixed beforehand}, treating it as an hyperparameter (equivalent to a degenerate prior distribution). {\color{red} problema de indentificabilidad de coeficientes!!}
+%     \item Several functional reference algorithms for comparison, along with variable selection techniques, functional or otherwise.
+%
+%   \end{itemize}
+% \end{frame}
 
 \begin{frame}{Linear regression: simulated data}
   \vspace{1em}
   \begin{figure}
     \includegraphics[width=\textwidth]{img/reg_emcee_l2}
-    \caption{Mean MSE of predictors for simulated data that has an underlying \(L^2\)-model.}
+    \caption{Mean MSE of predictors for simulated GP data that obeys an underlying \(L^2\)-model.}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Linear regression: simulated data}
+\begin{frame}{Linear regression: real data}
     \vspace{1em}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/reg_emcee_l2}
+    \includegraphics[width=\textwidth]{img/reg_emcee_real}
     \caption{Mean MSE of predictors for real data sets.}
   \end{figure}
 \end{frame}
@@ -445,7 +443,7 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
     \vspace{1em}
   \begin{figure}
     \includegraphics[width=\textwidth]{img/clf_emcee_l2}
-    \caption{Mean accuracy of classifiers for simulated data that has an underlying logistic \(L^2\)-model.}
+    \caption{Mean accuracy of classifiers for simulated GP data that obeys an underlying logistic \(L^2\)-model.}
   \end{figure}
 \end{frame}
 
@@ -456,6 +454,9 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
     \caption{Mean accuracy of classifiers for real data sets.}
   \end{figure}
 \end{frame}
+
+
+\section{Conclusions}
 
 \begin{frame}{Conclusions and future work}
 
@@ -470,9 +471,9 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
 
   \begin{exampleblock}{The road ahead}
     \begin{itemize}
-      \item Choose other prior distributions.
-      \item Package the algorithm and make it compatible with standard libraries (e.g. \textit{sklearn}).
-      \item Reduce the variance in predictions, possibly by tackling the \textit{label switching} problem.
+      \item Reduce the variance in predictions.
+      \item Experiment with other prior distributions.
+      \item Package the Python algorithm and make it compatible with standard libraries (e.g. \textit{sklearn}, \textit{scikit-fda}).
     \end{itemize}
   \end{exampleblock}
 
