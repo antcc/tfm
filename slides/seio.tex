@@ -121,9 +121,9 @@ extendedchars=true
 \begin{document}
 \maketitle
 
-\begin{frame}{Table of contents}
-  \tableofcontents
-\end{frame}
+% \begin{frame}{Table of contents}
+%   \tableofcontents
+% \end{frame}
 
 \section{Introduction}
 
@@ -196,7 +196,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 \end{alertblock}
 
 \vspace{1em}
-  Instead of assuming \(\beta \in L^2[0, 1]\), we consider \maroon{\(\beta \in \mathcal H(K)\)}, the RKHS associated with the covariance function \(K(t, s)=\mathbb E[X(t)X(s)]\) of the centered process \(X\). Moreover, we substitute \(\dotprod{X}{\beta}_2\) for \maroon{\(\dotprod{X}{\beta}_K\)}.
+  Instead of assuming \(\beta \in L^2[0, 1]\), we consider \maroon{\(\beta \in \mathcal H(K)\)}, the RKHS associated with the covariance function \(K(t, s)=\mathbb E[X(t)X(s)]\) of the centered process \(X\) (i.e. \(\E [X(t)]=0\) for all \(t\)). Moreover, we substitute \(\dotprod{X}{\beta}_2\) for \maroon{\(\dotprod{X}{\beta}_K\)}.
 \end{frame}
 
 
@@ -286,24 +286,24 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 
 \section{A bayesian approach to parameter estimation}
 
-\begin{frame}{Parameter estimation overview}
-
-  We have a parameter vector \(\theta = (p, \beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2)\), on which we impose a prior distribution \(\pi(\theta)\). In practice, we are establishing a prior distribution on the functional space \(\Hcal(K)\) via a density argument.
-
-  \vspace{1em}
-
-  Afterwards we apply \textit{Bayes'} theorem in the usual way to obtain the posterior distribution of the parameters given the data.
-
-  \begin{block}{Bayes's theorem}
-      \[
-      \pi(\theta \mid \mathcal D_n) \propto \left( \prod_{i=1}^n \pi(Y_i\mid X_i, \theta) \right)\pi(\theta).
-      \]
-  \end{block}
-  \vspace{1em}
-
-  Finally, we obtain samples of the approximate posterior distribution using an algorithm of the family of \textit{Markov chain Monte Carlo} (MCMC) methods.
-
-\end{frame}
+% \begin{frame}{Parameter estimation overview}
+%
+%   We have a parameter vector \(\theta = (p, \beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2)\), on which we impose a prior distribution \(\pi(\theta)\). In practice, we are establishing a prior distribution on the functional space \(\Hcal(K)\) via a density argument.
+%
+%   \vspace{1em}
+%
+%   Afterwards we apply \textit{Bayes'} theorem in the usual way to obtain the posterior distribution of the parameters given the data.
+%
+%   \begin{block}{Bayes's theorem}
+%       \[
+%       \pi(\theta \mid \mathcal D_n) \propto \left( \prod_{i=1}^n \pi(Y_i\mid X_i, \theta) \right)\pi(\theta).
+%       \]
+%   \end{block}
+%   \vspace{1em}
+%
+%   Finally, we obtain samples of the approximate posterior distribution using an algorithm of the family of \textit{Markov chain Monte Carlo} (MCMC) methods.
+%
+% \end{frame}
 
 \begin{frame}{Prior distributions}
   Same prior scenario for both linear and logistic models.
@@ -320,6 +320,7 @@ where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and 
 
 \metroset{block=transparent}
 
+\vspace{1em}
 \begin{alertblock}{Hyperparameter selection}
   \vspace{0.1em}
   For \(b_0\) we use a computational approximation of the MLE; the rest of hyperparameters are set via \textit{cross-validation}.
@@ -337,15 +338,14 @@ where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and 
 where \(\bm Y=(Y_1,\dots,Y_n)'\) y \(\bm{1}\) is an \(n\)-dimensional vector of ones.
   \end{block}
 
-\vspace{1em}
   \begin{block}{Logistic log-posterior}
       \vspace{-1em}
     \begin{align*}
   \log \pi(\theta \mid \mathcal D_n) \propto {} & \sum_{i=1}^n \left[ \left(\alpha_0 + \Psi_{X_i}(\alpha)\right)Y_i - \log\left(1 + \exp\left\{\alpha_0 + \Psi_{X_i}(\alpha)\right\}\right)\right]\\
   \quad &+ \frac{1}{2}\log |G_\tau| - p\log \sigma -\frac{1}{2g\sigma^2} (b - b_0)'G_\tau(b - b_0).
 \end{align*}
-Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
   \end{block}
+  They are approximated through \textit{Markov chain Monte Carlo} (MCMC).
 \end{frame}
 
 % \begin{frame}{Posterior approximation}
@@ -474,7 +474,7 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
   \begin{exampleblock}{The road ahead}
     \begin{itemize}
       \item Reduce the variance in predictions.
-      \item Experiment with other prior distributions.
+      \item Derive theoretical properties of the predictors.
       \item Package the Python algorithm and make it compatible with standard libraries (e.g. \textit{sklearn}, \textit{scikit-fda}).
     \end{itemize}
   \end{exampleblock}
