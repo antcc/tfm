@@ -107,7 +107,8 @@ extendedchars=true
 \title{Bayesian RKHS-based methods in functional regression}
 \providecommand{\subtitle}[1]{}
 \subtitle{Theoretical framework and experiments}
-\date{SEIO Conference, Granada\\ 8th May 2022\\}
+%\date{SEIO Conference, Granada\\ \today\\}
+\date{\today\\ \\}
 \author{José R. Berrendero \\ Antonio Coín  \\ Antonio Cuevas\\}
 \institute{Universidad Autónoma de Madrid \\ \textit{Departamento de Matemáticas}}
 
@@ -121,14 +122,14 @@ extendedchars=true
 \begin{document}
 \maketitle
 
-% \begin{frame}{Table of contents}
-%   \tableofcontents
-% \end{frame}
+\begin{frame}{Table of contents}
+   \tableofcontents
+\end{frame}
 
 \section{Introduction}
 
 \begin{frame}{FDA: linear regression}
-  \textbf{First problem}: \maroon{Linear } regression with functional data.
+  \textbf{First problem}: \maroon{linear } regression with functional data.
   \vspace{1em}
 
 \begin{figure}
@@ -138,7 +139,7 @@ extendedchars=true
   \vspace{-1em}
 \end{frame}
 \begin{frame}{FDA: logistic regression}
-  \textbf{Second problem}: \maroon{Logistic } regression with functional data.
+  \textbf{Second problem}: \maroon{logistic } regression with functional data.
 \vspace{1em}
 
 \begin{figure}
@@ -162,12 +163,14 @@ extendedchars=true
     Y = \alpha_0 + \maroon{\langle X, \beta \rangle_2} + \varepsilon = \alpha_0 + \int_0^1 X(t)\beta(t)\, dt + \varepsilon.
   \]
 \end{block}
+\setbeamerfont{block body}{size=\small}
 \begin{block}{Logistic \(\bm{L^2}\)-model}
     \[
-    \mathbb P (Y=1\mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \maroon{\langle X, \beta\rangle_2}\}} = \frac{1}{1 + \exp\{-\alpha_0 - \int_0^1 X\beta\}}.
+    \mathbb P (Y=1\mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \maroon{\langle X, \beta\rangle_2}\}} = \frac{1}{1 + \exp\{-\alpha_0 - \int_0^1 X(t)\beta(t)\, dt\}}.
   \]
 \end{block}
-  \(\alpha_0\in\mathbb R\), \ \(\varepsilon \sim \mathcal N(0, \sigma^2), \ \mathbb E[\varepsilon]=0, \ X \bot \varepsilon\).
+  \(\alpha_0\in\mathbb R\), \ \(\varepsilon \sim \mathcal N(0, \sigma^2), \ X \bot \varepsilon\).
+  \setbeamerfont{block body}{size=\normalsize}
 \end{frame}
 
 
@@ -215,22 +218,22 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 \end{frame}
 
 
-% \begin{frame}{Un repaso muy breve de los RKHS's (cont.)}
-% Se pueden dar otras definiciones equivalentes de \(\Hcal(K)\), basadas en el \textit{operador de covarianzas}
-% \[
-% \mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f\in L^2[0, 1].
-% \]
-%
-% \begin{definition}
-% \begin{enumerate}
-%   \item  \(\Hcal(K) = \mathcal K^{1/2}(L^2[0, 1])\), con \(\dotprod{f}{g}_K = \dotprod{\mathcal K^{-1/2}(f)}{\mathcal K^{-1/2}(g)}_2\).
-%   \item \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), con \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}_2\). En este caso, \(\lambda_j\) y \(\phi_j\) son los autovalores y autofunciones de \(\mathcal K\).
-% \end{enumerate}
-% \end{definition}
-%
-% La segunda de estas definiciones enfatiza el hecho de que las funciones de \(\Hcal(K)\) son ``simples'', en el sentido de que sus componentes en una base ortonormal tienden a \(0\) rápidamente.
-%
-% \end{frame}
+\begin{frame}{RKHS reminder (cont.)}
+  There are other equivalent definitions of \(\Hcal(K)\), mainly based on the \textit{covariance operator}
+\[
+\mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f\in L^2[0, 1].
+\]
+
+\begin{definition}
+\begin{enumerate}
+  \item  \(\Hcal(K) = \mathcal K^{1/2}(L^2[0, 1])\), with \(\dotprod{f}{g}_K = \dotprod{\mathcal K^{-1/2}(f)}{\mathcal K^{-1/2}(g)}_2\).
+  \item \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), with \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}_2\). Here, \(\lambda_j\) and \(\phi_j\) are the eigenvalues and (orthonormal) eigenfunctions of \(\mathcal K\).
+\end{enumerate}
+\end{definition}
+
+The second definition emphasizes the fact that functions in \(\Hcal(K)\) are ``simple'', in the sense that their components in an orthonormal basis need to vanish quickly.
+
+\end{frame}
 
 \begin{frame}{A small subtlety}
 
@@ -245,7 +248,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
     \]
     Formally, \(\Psi^{-1}_X(U)(t) := \E[U X(t)]\) for \(U \in \mathcal L(X)\).
   \end{block}
-  With a slight abuse of notation, we will write \maroon{\(\dotprod{x}{\beta}_k \equiv \Psi_x(\beta)\)}. This correspondence will allow us to still call our models ``linear''.
+  With a slight abuse of notation, we will write \maroon{\(\dotprod{x}{\beta}_K \equiv [\Psi_X(\beta)](\omega) := \Psi_x(\beta)\)}\ for \(x=X(\omega)\). This correspondence will allow us to still call our models ``linear''.
 \end{frame}
 
 
@@ -276,46 +279,62 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
   \]
 \end{block}
 \vspace{1em}
+
+\setbeamerfont{block body}{size=\small}
 \begin{block}{Logistic RKHS model (Berrendero et al., 2018)}
     \[
-    \mathbb P (Y_i=1| X_i) = \frac{1}{1 + \exp\{-\alpha_0 - \maroon{\langle X_i, \beta\rangle_K}\}} = \frac{1}{1 + \exp\{-\alpha_0 - \sum_j \beta_j X_i(t_j)\}}.
+    \mathbb P (Y_i=1| X_i) = \frac{1}{1 + \exp\{-\alpha_0 - \maroon{\langle X_i, \beta\rangle_K}\}} = \frac{1}{1 + \exp\{-\alpha_0 - \sum_{j=1}^p \beta_j X_i(t_j)\}}.
   \]
 \end{block}
+\setbeamerfont{block body}{size=\normalsize}
 
+\end{frame}
+
+\begin{frame}{Advantages of RKHS models}
+  \begin{itemize}
+    \item They are finite-dimensional approximations with a functional interpretaion, which simplifies their understanding and handling.
+    \item Under mild conditions, the general RKHS models include the \(L^2\)-models as particular cases.
+    \item The problem of non-existence of the MLE is mitigated in the logistic model.
+    \item They are particularly suited as a basis for variable selection methods.
+  \end{itemize}
 \end{frame}
 
 \section{A bayesian approach to parameter estimation}
 
-% \begin{frame}{Parameter estimation overview}
-%
-%   We have a parameter vector \(\theta = (p, \beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2)\), on which we impose a prior distribution \(\pi(\theta)\). In practice, we are establishing a prior distribution on the functional space \(\Hcal(K)\) via a density argument.
-%
-%   \vspace{1em}
-%
-%   Afterwards we apply \textit{Bayes'} theorem in the usual way to obtain the posterior distribution of the parameters given the data.
-%
-%   \begin{block}{Bayes's theorem}
-%       \[
-%       \pi(\theta \mid \mathcal D_n) \propto \left( \prod_{i=1}^n \pi(Y_i\mid X_i, \theta) \right)\pi(\theta).
-%       \]
-%   \end{block}
-%   \vspace{1em}
-%
-%   Finally, we obtain samples of the approximate posterior distribution using an algorithm of the family of \textit{Markov chain Monte Carlo} (MCMC) methods.
-%
-% \end{frame}
+\begin{frame}{Parameter estimation overview}
+
+  We have a parameter vector
+  \[
+  \theta = (p, \beta_1,\dots, \beta_p, t_1,\dots, t_p, \alpha_0, \sigma^2)' \equiv (p, b, \tau, \alpha_0, \sigma^2)',
+  \]
+  on which we impose a prior distribution \(\pi(\theta)\). In practice, we are establishing a prior distribution on the functional space \(\Hcal(K)\) via a density argument.
+
+  \vspace{1em}
+
+  Afterwards we apply \textit{Bayes'} theorem in the usual way to obtain the posterior distribution of the parameters given the data.
+
+  \begin{block}{Bayes's theorem}
+      \[
+      \pi(\theta \mid \mathcal D_n) \propto \left( \prod_{i=1}^n \pi(Y_i\mid X_i, \theta) \right)\pi(\theta).
+      \]
+  \end{block}
+
+\end{frame}
 
 \begin{frame}{Prior distributions}
   Same prior scenario for both linear and logistic models.
+  \vspace{.5em}
   \begin{block}{Prior for the parameters involved}
     \vspace{-1em}
   \begin{align*}
     p &\sim \text{Categorical}(p_{\text{max}}),\\
   \pi(\alpha_0, \sigma^2)              & \propto 1/\sigma^2,                                                     \\
   \tau                     & \sim \mathcal U([0, 1]^p),                                              \\
-  \beta\mid \tau, \sigma^2 & \sim \mathcal N\big(b_0, g\sigma^2{\underbrace{\left[\mathcal X_\tau' \mathcal X_\tau + \eta I\right]}_{G_\tau}}^{-1}\big),
+  b\mid \tau, \sigma^2 & \sim \mathcal N_p\big(b_0, g\sigma^2{\underbrace{\left[\mathcal X_\tau' \mathcal X_\tau + \eta I\right]}_{G_\tau}}^{-1}\big),
 \end{align*}
-where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and \(b_0\in \R^p, \ g \in \R, \ p_{\text{max}}\in \N\) and \(\eta \in \R^+\) are hyperparameters.
+
+\vspace{-1em}
+where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\) is the data matrix, and \(b_0\in \R^p, \ g \in \R, \ p_{\text{max}}\in \N\) and \(\eta \in \R^+\) are hyperparameters.
 \end{block}
 
 \metroset{block=transparent}
@@ -329,35 +348,38 @@ where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\), and 
 \end{frame}
 
 \begin{frame}{Posterior distributions}
+  \setbeamerfont{block body}{size=\small}
   \begin{block}{Linear log-posterior}
     \vspace{-1em}
     \begin{align*}
   \log \pi(\theta\mid \mathcal D_n) &\propto \frac{1}{2}\log |G_\tau| - (p+n)\log \sigma\\
   &-\frac{1}{2\sigma^2} \left(\|\boldsymbol{Y}-\alpha_0\boldsymbol{1} - \mathcal X_\tau\beta\|^2 + \frac{1}{g}(\beta - b_0)'G_\tau(\beta - b_0) \right),
 \end{align*}
-where \(\bm Y=(Y_1,\dots,Y_n)'\) y \(\bm{1}\) is an \(n\)-dimensional vector of ones.
+where \(\bm Y=(Y_1,\dots,Y_n)'\) and \(\bm{1}\) is an \(n\)-dimensional vector of ones.
   \end{block}
-
+  \vspace{1em}
   \begin{block}{Logistic log-posterior}
       \vspace{-1em}
     \begin{align*}
   \log \pi(\theta \mid \mathcal D_n) \propto {} & \sum_{i=1}^n \left[ \left(\alpha_0 + \Psi_{X_i}(\alpha)\right)Y_i - \log\left(1 + \exp\left\{\alpha_0 + \Psi_{X_i}(\alpha)\right\}\right)\right]\\
   \quad &+ \frac{1}{2}\log |G_\tau| - p\log \sigma -\frac{1}{2g\sigma^2} (b - b_0)'G_\tau(b - b_0).
 \end{align*}
+Remember that \(\Psi_{X_i}(\alpha) = \sum_j \beta_j X_i(t_j)\).
   \end{block}
+  \setbeamerfont{block body}{size=\normalsize}
   They are approximated through \textit{Markov chain Monte Carlo} (MCMC).
 \end{frame}
 
-% \begin{frame}{Posterior approximation}
-%  We use the Python library \maroon{emcee}, which implements an MCMC algorithm consisting on multiple chains that interact with each other to advance on each step (\textit{Affine-invariant ensemble sampler}).
-%
-%   \vspace{1em}
-%
-%   \begin{figure}
-%     \includegraphics[width=.9\textwidth]{img/posterior}
-%     \caption{Example of an approximated posterior distribution \(\theta|\mathcal D_n\).}
-%   \end{figure}
-% \end{frame}
+\begin{frame}{Posterior approximation}
+ We use the Python library \maroon{emcee}, which implements an MCMC algorithm consisting on multiple chains that interact with each other to advance on each step (\textit{Affine-invariant ensemble sampler}).
+
+  \vspace{1em}
+
+  \begin{figure}
+    \includegraphics[width=.7\textwidth]{img/posterior}
+    \caption{Example of an approximated posterior distribution \(\theta|\mathcal D_n\).}
+  \end{figure}
+\end{frame}
 
 \begin{frame}{Predictions}
   \textbf{Summarize-then-predict}. A summary of the posterior distribution \(\theta| \mathcal D_n\) is obtained via a point-estimate statistic (mean, median, mode), and then predictions are made according to the assumed model, e.g.:
@@ -385,7 +407,7 @@ where \(\bm Y=(Y_1,\dots,Y_n)'\) y \(\bm{1}\) is an \(n\)-dimensional vector of 
 \end{frame}
 
 \begin{frame}{Predictions (cont.)}
-    \textbf{Variable selection}. We select \(p\) variables using only a point estimator of \(\tau=(t_1,\dots, t_p)|\mathcal D_n\) (so-called \textit{impact points}), and then we can apply any multiple regression algorithm to the reduced data set.
+    \textbf{Variable selection}. We select \(p\) variables using only a point estimator of \(\tau|\mathcal D_n\) (so-called \textit{impact points}), and then we can apply any multiple regression algorithm to the reduced data set.
     \vspace{1em}
 
     \begin{figure}
@@ -396,64 +418,73 @@ where \(\bm Y=(Y_1,\dots,Y_n)'\) y \(\bm{1}\) is an \(n\)-dimensional vector of 
     At any rate, all the above predictors can be obtained after a single run of the MCMC algorithm.
 \end{frame}
 
-% \begin{frame}{Model checking}
-%   \begin{itemize}
-%     \item Analysis of the trace and posterior distribution of the parameters, for example through credible intervals.
-%     \item \textit{Bayesian p-values}: \(\tilde p=P(T(Y^*)\leq T(Y)\mid Y)\) for any choice of \(T\): min, max, mean, median, mode, etc. They are computed by simply measuring the proportion of the approximate posterior samples that fall below the real value of the statistic, and are expected to be around \(0.5\) when the fit is good.
-%     \item Descriptive and visual analysis of the posterior predictive distribution, both with training and validation data.
-%   \end{itemize}
-%
-% \end{frame}
+\begin{frame}{Bayesian model checking}
+  \begin{itemize}
+    \item It is possible to incorporate existing information through the prior distributions.
+    \item Analysis of the trace and posterior distribution of the parameters, for example through credible intervals.
+    \item \textit{Bayesian p-values}: \(\tilde p=P(T(Y^*)\leq T(Y)\mid Y)\) for any choice of \(T\) (min, max, mean, median, mode, etc.). They are computed by simply measuring the proportion of the approximate posterior samples that fall below the real value of the statistic, and are expected to be around \(0.5\) when the fit is good.
+    \item Descriptive and visual analysis of the posterior predictive distribution, both with training and validation data.
+  \end{itemize}
 
-% \begin{frame}{Model checking (cont.)}
-%   \begin{figure}
-%     \includegraphics[width=\textwidth]{img/ppc_logistic1}
-%     \includegraphics[width=\textwidth]{img/ppc_logistic2}
-%     \caption{\textit{Posterior predictive checks} for logistic regression.}
-%   \end{figure}
-% \end{frame}
+\end{frame}
 
 \section{Experiments}
 
-% \begin{frame}{Methodology}
-%   \begin{itemize}
-%     \item Experiments on simulated data, with \(150\) samples of different Gaussian processes on a regular grid of \(100\) points. Also on real data sets.
-%     \item We perform 10 random train/test partitions to account for the stochasticity of the model, along with \(5\)-fold cross-validation to select the best hyperparameters on the training set.
-%     \item For practical and computational reasons, \textbf{we allow the value of \(\bm{p}\) to be fixed beforehand}, treating it as an hyperparameter (equivalent to a degenerate prior distribution). {\color{red} problema de indentificabilidad de coeficientes!!}
-%     \item Several functional reference algorithms for comparison, along with variable selection techniques, functional or otherwise.
-%
-%   \end{itemize}
-% \end{frame}
+\begin{frame}{Methodology}
+  \begin{itemize}
+    \item Experiments on simulated data, with \(300\) samples of different Gaussian processes on a regular grid of \(100\) points. Also experiments on real data sets.
+    \item We perform 10 random train/test partitions (67\%/33\%) to account for the stochasticity of the model, along with \(5\)-fold cross-validation to select the best hyperparameters on the training set.
+    \item For practical and computational reasons, \textbf{we allow the value of \(\bm{p}\) to be fixed beforehand}, treating it as an hyperparameter (equivalent to a degenerate prior distribution).
+    \item Several reference methods are considered for comparison, along with variable selection techniques, functional or otherwise.
 
-\begin{frame}{Linear regression: simulated data}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Linear regression: simulated RKHS data}
   \vspace{1em}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/reg_emcee_l2}
-    \caption{Mean MSE of predictors for simulated GP data that obeys an underlying \(L^2\)-model.}
+    \includegraphics[width=.75\textwidth]{img/reg_emcee_rkhs}
+    \caption{Mean MSE of predictors for simulated GP data that obeys an underlying RKHS model (left is better).}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Linear regression: simulated \(\bm{L^2}\) data}
+  \vspace{1em}
+  \begin{figure}
+    \includegraphics[width=.75\textwidth]{img/reg_emcee_l2}
+    \caption{Mean MSE of predictors for simulated GP data that obeys an underlying \(L^2\)-model (left is better).}
   \end{figure}
 \end{frame}
 
 \begin{frame}{Linear regression: real data}
     \vspace{1em}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/reg_emcee_real}
-    \caption{Mean MSE of predictors for real data sets.}
+    \includegraphics[width=.75\textwidth]{img/reg_emcee_real}
+    \caption{Mean MSE of predictors for real data sets (left is better).}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Logistic regression: simulated data}
+\begin{frame}{Logistic regression: simulated RKHS data}
     \vspace{1em}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/clf_emcee_l2}
-    \caption{Mean accuracy of classifiers for simulated GP data that obeys an underlying logistic \(L^2\)-model.}
+    \includegraphics[width=.75\textwidth]{img/clf_emcee_rkhs}
+    \caption{Mean accuracy of classifiers for simulated GP data that obeys an underlying logistic RKHS model (right is better).}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Logistic regression: simulated \(\bm{L^2}\) data}
+    \vspace{1em}
+  \begin{figure}
+    \includegraphics[width=.75\textwidth]{img/clf_emcee_l2}
+    \caption{Mean accuracy of classifiers for simulated GP data that obeys an underlying logistic \(L^2\)-model (right is better).}
   \end{figure}
 \end{frame}
 
 \begin{frame}{Logistic regression: real data}
     \vspace{1em}
   \begin{figure}
-    \includegraphics[width=\textwidth]{img/clf_emcee_real}
-    \caption{Mean accuracy of classifiers for real data sets.}
+    \includegraphics[width=.75\textwidth]{img/clf_emcee_real}
+    \caption{Mean accuracy of classifiers for real data sets (right is better).}
   \end{figure}
 \end{frame}
 
@@ -465,7 +496,7 @@ where \(\bm Y=(Y_1,\dots,Y_n)'\) y \(\bm{1}\) is an \(n\)-dimensional vector of 
   \metroset{block=transparent}
   \begin{alertblock}{Our proposal}
     \begin{itemize}
-      \item Simple model for functional regression, with a solid mathematical background thanks to the theory of RKHS's.
+      \item Simple and very interpretable functional regression model, with a solid mathematical background thanks to the theory of RKHS's.
       \item Computationally feasible Bayesian approach to parameter estimation within the model.
       \item Competitive with usual alternatives in both simulated and real data sets.
     \end{itemize}
@@ -473,7 +504,7 @@ where \(\bm Y=(Y_1,\dots,Y_n)'\) y \(\bm{1}\) is an \(n\)-dimensional vector of 
 
   \begin{exampleblock}{The road ahead}
     \begin{itemize}
-      \item Reduce the variance in predictions.
+      \item Experiment with different prior distributions.
       \item Derive theoretical properties of the predictors.
       \item Package the Python algorithm and make it compatible with standard libraries (e.g. \textit{sklearn}, \textit{scikit-fda}).
     \end{itemize}

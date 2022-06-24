@@ -1,5 +1,5 @@
 #`-file-line-error` is similar to `--interaction nonstopmode`, but shows the concrete line number
-$pdflatex = 'xelatex -shell-escape -file-line-error -interaction=nonstopmode -quiet -synctex=1 %O %S';
+$pdflatex = 'pdflatex -shell-escape -file-line-error -interaction=nonstopmode -quiet -synctex=1 %O %S';
 $pdf_previewer = 'sioyek';
 
 #automatically call lualatex/pdflatex (instead of latex)
