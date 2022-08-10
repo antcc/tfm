@@ -1,9 +1,6 @@
 # Latex configuration
 .latexcfg
 
-# Documentation (temporarily)
-doc/
-
 # Notes
 _*.txt
 _*.md

@@ -1,0 +1,35 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Copyright (c) 2022 Antonio Coín Castro
+%
+% This work is licensed under a
+% Creative Commons Attribution-ShareAlike 4.0 International License.
+%
+% You should have received a copy of the license along with this
+% work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{center}
+%   \begin{minipage}{0.5\textwidth}
+%     \begin{small}
+%       \emph{In which the reasons for creating this package are laid bare for the
+%       whole world to see and we encounter some usage guidelines.}
+%     \end{small}
+%   \end{minipage}
+%   \vspace{0.5cm}
+% \end{center}
+
+The problem of predicting a scalar response from a functional covariate is one that has gained traction over the last few decades, as more and more data is being generated with an ever-increasing level of granularity in the measurements. While in principle the functional data could be simply regarded as a discretized vector in a very high dimension, there are often many advantages in taking into account the functional nature of the data, ranging from modeling the possibly high correlation among points that are close in the domain, to extracting information that may be hidden in the derivatives of the function in question. As a consequence, numerous proposals have arisen on how to suitably deal with functional data, all of them encompassed under the term Functional Data Analysis (FDA), which essentially explores statistical techniques to process, model and make inference on data varying over a continuum. A partial survey on such techniques and methods is \citet{cuevas2014partial}, while a more detailed exposition of the theory and applications can be found for example in \citet{hsing2015theoretical} or the book by \citet{horvath2012inference}.
+
+FDA is undoubtedly an active area of research, which finds applications in a wide variety of fields, such as biomedicine, finance, meteorology or chemistry \citep[see for example][]{ullah2013applications}. Accordingly, there are many recent contributions on how to tackle functional data problems, both from a theoretical and practical standpoint. Chief among them is the approach of reducing the problem to a finite-dimensional one, for example using a truncated basis expansion or spline interpolation methods \citep[e.g.][]{muller2005generalized, aguilera2013comparative}. At the same time, much effort has also been put into the opposite task: generalizing different concepts to the infinite-dimensional framework. Examples of this endeavor include a functional Mahalanobis distance \citep{berrendero2020mahalanobis} or a functional partial least squares algorithm \citep{delaigle2012methodology}. Another technique found in the related literature is the use of Gaussian processes to model the functional behavior of the data \citep[see for instance][]{shi2011gaussian}. These ideas extend the theory of Gaussian process regression in classical finite-dimensional settings \citep{rasmussen2004gaussian}, providing an alternative Bayesian approach to functional inference and prediction problems. Additional non-parametric methods for functional prediction and classification were notably explored in \citet{ferraty2006nonparametric}.
+
+In this work we are concerned with functional linear and logistic regression models, that is, situations where the goal is to predict a continuous or dichotomous variable from functional observations. Even though these problems can be formally stated with almost no differences from their finite-dimensional counterparts, there are some fundamental challenges as well as some subtle drawbacks that emerge as a result of working in infinite dimensions. To set a common framework, throughout this work we will consider a scalar response variable \(Y\) (either continuous or binary) which has some dependence on a stochastic \(L^2\)-process \(X=X(t)=X(t, \omega)\) with trajectories in \(L^2[0, 1]\). We will further suppose without loss of generality that \(X\) is centered, that is to say, its mean function \(m(t)=\E[X(t)]\) vanishes for all \(t\in[0,1]\). In addition, we will tacitly assume the existence of a \textit{labeled} data set \(\mathcal D_n =\{(X_i, Y_i): i=1,\dots, n\}\) of independent observations from \((X, Y)\), and our aim will be to accurately predict the response corresponding to unlabeled samples from \(X\).
+
+\section{Objectives and scope}
+
+\section{Structure overview}
+
+In Section~\ref{sec:rkhs} we review the basics of the theory of RKHS's from a probabilistic point of view. Section~\ref{sec:methodology} is devoted to explaining the Bayesian methodology and the functional regression models we propose. The empirical results of the experimentation are contained in Section~\ref{sec:results}, which also includes a short discussion of computational details. Lastly, the conclusions drawn from this work are presented in Section~\ref{sec:conclusion}.
