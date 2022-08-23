@@ -21,6 +21,8 @@
 \usepackage{metalogo}
 \usepackage{etoolbox}
 \usepackage{tocloft}
+\usepackage{cancel}
+\usepackage{bbding}
 
 % Licensing
 \usepackage[
@@ -87,19 +89,24 @@
   autocite     = plain,
   backend      = biber,
   natbib       = true,
-  doi          = true,
-  url          = true,
-  isbn         = true,
+  doi          = false,
+  url          = false,
+  isbn         = false,
   giveninits   = true,
   hyperref     = true,
   maxbibnames  = 99,
   maxcitenames = 2,
   mincitenames = 1,
   uniquelist   = false,
+  dashed       = false,
   sortcites    = true,
   style        = authoryear-comp,
   backref      = true
   ]{biblatex}
+
+
+% Format references as {last-name}, {first-name-initials}
+\DeclareNameAlias{sortname}{last-first}
 
 \addbibresource{bibliography.bib}
 
@@ -135,24 +142,21 @@
 \counterwithout{footnote}{chapter}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Fonts and acronyms
+% Fonts
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \ifxetexorluatex
   \usepackage{unicode-math}
   \setmainfont{EB Garamond}
-  %\setmathfont[Scale=MatchLowercase]{Garamond-Math.otf}
+  \setmathfont{latinmodern-math.otf}
+  \setmathfont[range={\mathcal,\mathbfcal}]{Garamond-Math.otf}
+  %\setmathfont{Garamond-Math.otf}
   \setmonofont[Scale=MatchLowercase]{Source Code Pro}
 \else
   \usepackage[lf]{ebgaramond}
   \usepackage[oldstyle,scale=0.7]{sourcecodepro}
   \singlespacing
 \fi
-
-\input{\thesisPath/acronyms.tex}
-
-\makeindex
-%\makeglossaries
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Incipit
@@ -174,6 +178,9 @@
 \include{\thesisPath/introduction}
 \include{\thesisPath/background-related-work}
 \include{\thesisPath/bayesian-functional-regression}
+\include{\thesisPath/model-choice}
+\include{\thesisPath/experiments}
+\include{\thesisPath/conclusions}
 
   % \part[A good part]{%
   %   A good part\\
@@ -201,13 +208,6 @@
 \bookmarksetup{startatroot}
 \backmatter
 
-  \begingroup
-    \let\clearpage\relax
-    \glsaddall
-    \printglossary[type=\acronymtype]
-  \endgroup
-
-  \printindex
   \printbibliography
 
 \end{document}

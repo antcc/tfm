@@ -1,3 +1,4 @@
+% Mimosis LaTeX template with minor modifications
 % https://github.com/Pseudomanifold/latex-mimosis
 
 \NeedsTeXFormat{LaTeX2e}
