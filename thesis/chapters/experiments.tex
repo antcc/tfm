@@ -24,4 +24,6 @@
   - Ejemplo en RKHS con p=3 y 2 componentes subyacentes: mostrar todas las gráficas (+ppc).
 
   - Ejemplo dejando todo constante y aumentando \(p\). Quizás también otro variando el tamaño del grid y/o el número de ejemplos de entrenamiento? Bidimensional en ntrain/ngrid?
+
+  - Sobre experimentos con p-free: Por otro lado, en algunas cadenas el sigma2 es más grande de la cuenta, ya que tiende a "compensar" la falta de flexibilidad del modelo (e.j. si el valor de p es más bajo). Esto hace que los estimadores basados en la media y en el posterior mean sean ligeramente peores (sobre todo el de la media puntual, donde la varianza estimada sí se ve notablemente afectada). Quizás para contrarrestar esto habría que tener un modelo con un $\sigma^2_p$ para cada valor de p?
 \end{outcomment}

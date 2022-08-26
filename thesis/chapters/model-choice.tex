@@ -12,40 +12,17 @@
 \chapter{Model choice, implementation and validation}\label{ch:model-choice}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In this section we gather together several remarks on the main choices made throughout the design of our model, as well as some validation strategies that attempt to measure the goodness-of-fit of the model given the observed data.
+In this chapter we gather together several remarks on the main choices made throughout the design of our model, as well as some validation strategies that attempt to measure the goodness-of-fit of the model given the observed data.\incomment{completar}
 
-\section{Hyperparameter selection}
+\section{Hyperparameter selection \incomment{cambiar}}
 
 \subsection*{Label switching and the choice of \(p\)}
 
-One of the key decisions in our Bayesian modeling scheme was whether to consider the number of components \(p\) as a member of the parameter space and integrate it into the model. While theoretically we could impose a prior distribution on \(p\) as well (e.g. a categorical distribution with a fixed maximum value), we found that it would have some unwanted practical implications. For instance, it would make the implementation more complex, since the dimensionality of the parameters \(b\) and \(\tau\) would need to be fixed at a certain maximum value beforehand, but the working value of \(p\) within the MCMC algorithm would vary from one iteration to the next. In this case we would face a label switching issue \citep[c.f.][Sec.~2.3]{grollemund2019bayesian}, as we would have no way of knowing which set of parameters is ``active'' at any given time. Another possibility would be to adapt a purely Bayesian model selection technique \citep[e.g.][Ch.~7]{piironen2017comparison, gelman2013bayesian} to our framework, or even derive some model aggregation methods to combine the posterior distributions obtained for different-sized models. In the end, for the sake of simplicity we decided to let \(p\) be an hyperparameter, so that we could use any model selection criteria (e.g. BIC, DIC, cross-validation, \ldots) to select its optimal value. This is equivalent to imposing a degenerate prior distribution on \(p\). Moreover, the experiments carried out indicate that even low values of \(p\) provide sufficient flexibility in most scenarios (see Section~\ref{sec:results}). \incomment{Reversible MCMC}
+A phenomenon found in  label switching, ... leads to non-identifiability of the components. This happens because the likelihood is symmetric with respect to the ordering of the parameters \(b\) and \(\tau\). For this reason, since the components are arbitrarily ordered, they may be exchanged from one iteration to the next in any MCMC algorithm. This can cause nonsensical answers when using the marginal posterior distributions to perform inference, as different labelings might be mixed on each component.
 
-%Reversible-jump MCMC
-% Estos métodos permiten variar la dimensionalidad subyacente del espacio muestral en cada propuesta (\sidecite[*0]{green1995reversible}). Teóricamente son útiles para muestrear de mixturas de gaussianas, procesos de Dirichlet o, en general, de cualquier distribución donde haya una variable latente que represente la dimensión del espacio. Sin embargo, no hay una implementación de referencia establecida.
+However, this occurrence is a condition for the convergence: no switching indicates that not all modes of the posterior distribution are being explored by the sampler, as pointed out by many authors \citep[see for example][]{celeux2000computational}. For this reason, many ad-hoc solutions revolve around post-processing or relabeling the samples to eliminate the switching effect.
 
 \begin{outcomment}
-Reescribir label switching (nos pasa; lo que pasa que con p free se acentua).
-
-Ocurre porque el likelihood es simetrico: L(theta mid y) = L(thetaperm mid y) para cualquier permutacion (hay p! posibles) --> no-identificabilidad.
-
-"In these situations, parameter estimates and other output are inevitably aggregated
-across numerous replications, and because the labels of the enumerated classes are
-arbitrarily assigned, there is no guarantee that the same class would have the same
-label from replication to replication."
-
-From a Bayesian pointof view, this amounts to truncating the original prior distribution... (to verify the constraints)
-
-As a result, in any MCMC algorithm, labels of the
-components can permute multiple times between iterations of the sampler.
-Paradoxically, as noted by Celeux, Hurn and Robert (2000), Fruhwirth-Schnatter (2001),
-Jasra, Holmes and Stephens (2005) and Papastamoulis and Iliopoulos (2010), among others,
-label switching is a prerequisite for MCMC convergence. If there is no label switching it
-means that the sampler is not exploring all the modes of the posterior distribution of (1)
-
-"When sampling from the unconstrained posterior via MCMC methods, which component of the sampled parameter corresponds to which state is unknown due to potential label switching." Si usamos la marginal para haacer inferencia --> nonsensical answers (Stephens, 2000)
-
-Solución: añadir constraints de identificabilidad artificiales (ej relabeling, mantener ordenados, posprocesado).
-
 Imposing an identifiability constraint on the parameters breaks the sym-
 metry of the posterior distribution of the parameters, and so we might hope that it would allow us to perform sensible inference for the individual components of the mixture. Inference conditional on such a constraint may be performed by post-processing the sample (proposition 3.1 in Stephens 1997 phD thesis).
 
@@ -59,11 +36,14 @@ This step forces the posterior sample to look as unimodal as possible.
 Citas: Stephens (2000), Papastamoulis \& Iliopoulos, 2010; Rodriguez \& Walker, 2014
 \end{outcomment}
 
-Aunque se puede tener en cuenta solo las primeras 'p' posiciones, en el propio algoritmo de MCMC no se puede 'apagar' fácilmente el valor de los betas que no se usan, por lo que crecen indefinidamente y generan problemas (lo mismo ocurre con los 'tau', que incluso se pueden salir de rango). Aunque una posible solución es limitar todos los taus y no solo los p primeros, esto solo retrasa el problema (con cadenas más largas vuelve a ocurrir, además de ocasionar el problema "RuntimeWarning:covariance is not positive-semidefinite." con el WalkMove), ya que los betas no están limitados. Podríamos intentar limitarlos a un valor razonable.
+\incomment{conector} one of the key decisions in our Bayesian modeling scheme was whether to consider the number of components \(p\) as a member of the parameter space and integrate it into the model. While theoretically we can impose a prior distribution on \(p\) as well (e.g. a categorical distribution with a fixed maximum value), we found that it would have some unwanted practical implications. For instance, it would make the implementation more complex, since the dimensionality of the parameters \(b\) and \(\tau\) would need to be fixed at a certain maximum value beforehand, but the working value of \(p\) within the MCMC algorithm would vary from one iteration to the next. In this case we would have no immediate way of tracking down which set of parameters is ``active'' at any given time. A simple approach would be to always consider the first \(p\) parameters and ignore the rest, and we did indeed try this technique, but it gave rise to new difficulties and the results obtained were not good. In fact, the label switching issue is accentuated when \(p\) is allowed to vary \citep[c.f.][Sec.~2.3]{grollemund2019bayesian}, and on top of that, the interpretation of, say, the first coefficient \(\beta_1\) in a model with \(3\) components is different than the interpretation of the same coefficient in a model with only \(2\).
 
-Por otro lado, en algunas cadenas el sigma2 es más grande de la cuenta, ya que tiende a "compensar" la falta de flexibilidad del modelo (e.j. si el valor de p es más bajo). Esto hace que los estimadores basados en la media y en el posterior mean sean ligeramente peores (sobre todo el de la media puntual, donde la varianza estimada sí se ve notablemente afectada). Quizás para contrarrestar esto habría que tener un modelo con un $\sigma^2_p$ para cada valor de p?
+\incomment{Reversible MCMC}
 
-Además, aunque todo esto funcionase, si por ejemplo en una iteración el modelo elige p=2, está optimizando beta1 y beta2 para ese caso; si luego miramos solo la marginal de beta1, se habrán mezclado los casos en los que p=1 y beta1 debe valer una cosa, y en los que p=2 y beta1 vale otra cosa potencialmente distinta (se puede compensar con beta2, hay más grados de libertad).
+% Estos métodos permiten variar la dimensionalidad subyacente del espacio muestral en cada propuesta (\sidecite[*0]{green1995reversible}). Teóricamente son útiles para muestrear de mixturas de gaussianas, procesos de Dirichlet o, en general, de cualquier distribución donde haya una variable latente que represente la dimensión del espacio. Sin embargo, no hay una implementación de referencia establecida.
+
+
+Another possibility would be to adapt a purely Bayesian model selection technique to our framework \citep[see][]{piironen2017comparison, gelman2013bayesian}, \incomment{más detalles?} or even derive some model aggregation methods to combine the posterior distributions obtained for different-sized models. In the end, for the sake of simplicity we decided to let \(p\) be an hyperparameter, so that we could use any model selection criteria (e.g. BIC, DIC, cross-validation, \ldots) to select its optimal value. Moreover, the experiments carried out indicate that even low values of \(p\) provide sufficient flexibility in most scenarios (see Chapter~\ref{ch:experiments}).
 
 \subsection*{Other hyperparameters}
 
@@ -86,6 +66,8 @@ As for the default values of the rest of hyperparameters in~\eqref{eq:prior-line
 
 \begin{outcomment}
   Sección para inicialización.
+
+  Sección para autocorrelation times.
 
   También en el artículo citado se aconseja inicializar las cadenas en una bola gaussiana alrededor de un punto que se espere que tenga alta probabilidad según \(p(x)\).
 \end{outcomment}
