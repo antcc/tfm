@@ -15,7 +15,7 @@
 \documentclass{mimosis}
 
 % Relative paths
-\newcommand{\thesisPath}{src}
+\newcommand{\thesisPath}{chapters}
 
 % Misc. packages
 \usepackage{metalogo}
@@ -33,9 +33,6 @@
 
 % Make chapter number show in arabic
 \renewcommand\cftchappresnum{\normalfont}
-
-% Custom commands
-\input{\thesisPath/commands}
 
 %% Primary color
 \newcommand{\titlecolor}{teal}
@@ -65,6 +62,37 @@
 \renewcommand*{\subsubsectionformat}{%
   \textcolor{\titlecolor}{\(\thesubsubsection\)}\autodot\enskip%
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Math operators
+\DeclareMathOperator*\argmin{arg\,min}
+\DeclareMathOperator\supp{supp}
+\DeclareMathOperator\Cov{Cov}
+\DeclareMathOperator\Var{Var}
+
+%% Math symbols
+\newcommand{\N} {\ensuremath{\mathds{N}}}
+\newcommand{\R} {\ensuremath{\mathds{R}}}
+\newcommand{\E} {\ensuremath{\mathds{E}}}
+\newcommand{\I} {\ensuremath{\mathds{I}}}
+\renewcommand{\P} {\ensuremath{\mathds{P}}}
+
+\newcommand{\D} {\ensuremath{\mathcal{D}}}
+\newcommand{\X} {\ensuremath{\mathcal{X}}}
+\newcommand{\K} {\ensuremath{\mathcal{K}}}
+\newcommand{\T} {\ensuremath{\mathcal{T}}}
+\newcommand{\U} {\ensuremath{\mathcal{U}}}
+\newcommand{\Lcal} {\ensuremath{\mathcal{L}}}
+\newcommand{\Hcal} {\ensuremath\mathcal{H}}
+
+%% Better overline
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+%% Scalar product
+\newcommand\dotprod[2]{\left\langle #1, #2 \right\rangle}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Hyperlinks & bookmarks
@@ -106,7 +134,7 @@
 
 
 % Format references as {last-name}, {first-name-initials}
-\DeclareNameAlias{sortname}{last-first}
+\DeclareNameAlias{sortname}{family-given}
 
 \addbibresource{bibliography.bib}
 
@@ -138,8 +166,9 @@
 \setlist[1]{labelindent=\parindent} % < Usually a good idea
 \setlist[enumerate,1]{label=\((\roman*)\)}
 
-% Continuous counter for footnotes
+% Continuous counter for footnotes and figures
 \counterwithout{footnote}{chapter}
+\counterwithout{figure}{chapter}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonts
