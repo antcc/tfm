@@ -24,7 +24,7 @@ We consider \(n=150\) training samples and \(n'=100\) testing samples on an equi
 
 Because of execution time constraints, the hyperparameters of the MCMC method are not part of the CV process, and are selected manually based on an initial set of experiments, as well as recommendations from the original article. We use 64 chains and run them for 900 iterations in total, discarding the first 500 iterations as burn-in. Moreover, we use a weighted mixture of walk and stretch moves in the \textit{emcee} sampler to advance the chains at each iteration, selecting the stretch move (the default) with probability \(0.7\), or the walk move with probability \(0.3\).
 
-Lastly, since the use of MCMC algorithms introduces a source of stochasticity in the prediction procedure, we independently repeat the whole process 10 times (each with a different train/test configuration), and average the results across these executions. The metrics used to evaluate the perfomance of the models are the RMSE for linear regression and the accuracy for logistic regression. Recall that
+Lastly, since the use of MCMC algorithms introduces a source of stochasticity in the prediction procedure, we independently repeat the whole process 10 times (each with a different train/test configuration), and average the results across these executions. The metrics used to evaluate the performance of the models are the RMSE for linear regression and the accuracy for logistic regression. Recall that
 \[
 \operatorname{RMSE}(\{\hat y_i\}) = \sqrt{\frac{1}{n'}\sum_{i=1}^{n'} (y_i - \hat y_i)^2}
 \]
@@ -38,7 +38,7 @@ and
 We consider a set of functional regressors common to linear and logistic regression problems. They are 4 Gaussian processes (GP's), each with a different kernel function:
 \begin{enumerate}
   \item A Brownian motion \(K_1(t,s)=\min\{t,s\}\).
-  \item A fractional Browmian motion \(K_2(t,s)=1/2(s^{2H} + t^{2H} - |t-s|^{2H})\), with Hurst parameter \(H=0.8\).
+  \item A fractional Brownian motion \(K_2(t,s)=1/2(s^{2H} + t^{2H} - |t-s|^{2H})\), with Hurst parameter \(H=0.8\).
   \item An Ornstein-Uhlenbeck process \(K_3(t,s)=e^{-|t-s|}\).
   \item A Gaussian kernel \(K_4(t,s)=e^{-(t-s)^2/2\nu^2}\), with \(\nu=0.2\).
 \end{enumerate}
@@ -59,41 +59,41 @@ As for the real data sets, we use the (twice-differentiated) Tecator data set in
   \P(Y=1\mid X) = \frac{1}{e^{0.5 +5X(0.1) - X(0.4) - 10X(0.8)}}.
   \]
   \item Four logistic \(L^2\)-models with the same coefficient function as in the linear regression case.
-  \item A ``mixture'' model based on non-GP regressors, in which we mix regressors from two different GP's and label them according to their origin. Firstly, we consider a homoscedastic case to distinguish between a standard Browmian motion and a Brownian motion with a mean function that is zero until \(t=0.5\), and then becomes \(m(t)=0.75t\). Secondly, we consider a heteroscedastic case to distinguish between a standard Brownian motion and a Brownian motion with variance \(2\), that is, with kernel \(K(t,s)=2\min\{t,s\}\).
+  \item A ``mixture'' model based on non-GP regressors, in which we mix regressors from two different GP's and label them according to their origin. Firstly, we consider a homoscedastic case to distinguish between a standard Brownian motion and a Brownian motion with a mean function that is zero until \(t=0.5\), and then becomes \(m(t)=0.75t\). Secondly, we consider a heteroscedastic case to distinguish between a standard Brownian motion and a Brownian motion with variance \(2\), that is, with kernel \(K(t,s)=2\min\{t,s\}\).
 \end{itemize}
 In this case there are again three real data sets. The first one is a subset of the Medflies data set \citep{carey1998relationship}, consisting on samples of the number of eggs laid daily by 534 flies over 30 days, trying to predict if their longevity is high or low. The second one is the Berkeley Growth Study data set \citep{tuddenham1954physical}, which records the height of 54 girls and 39 boys over 31 different points in their lives. Finally, we have selected a subset of the Phoneme data set \citep{hastie1995penalized}, based on 200 digitized speech frames over 128 equispaced points to predict the phonemes ``aa'' and ``ao''.
 
 \subsection*{Comparison algorithms}
 
-We have included a fairly comprehensive suite of comparison algorithms, chosen among the most common methods used in machine learning and FDA. There are finite-dimensional models that work on the discretized data, variable selection/dimension reduction procedures and purley functional methods.
+We have included a fairly comprehensive suite of comparison algorithms, chosen among the most common methods used in machine learning and FDA. There are finite-dimensional models that work on the discretized data, variable selection/dimension reduction procedures and purely functional methods.
 
 \paragraph{Linear regression comparison algorithms.} We consider the following methods.
 \begin{itemize}
-  \item Manual. Dummy variable selection method with a pre-specified number of components (equispaced on \([0, 1]\)).
-  \item Lasso. Linear least squares with \(l^1\) regularization.
-  \item Ridge. Linear least squares with \(l^2\) regularization.
-  \item PLS. Partial least squares for dimension reduction.
-  \item PCA. Principal component analysis for dimension reduction.
-  \item PLS1. Partial least squares regression \citep[e.g.][]{wegelin2000survey}.
-  \item APLS. Functional partial least squares regression proposed by \citet{delaigle2012methodology}.
-  \item RMH. Recursive maxima hunting variable selection method proposed by \citet{torrecilla2016feature}.
-  \item FLin. Functional \(L^2\) linear regression model with fixed basis expansion.
-  \item FPLS1. Functional PLS regression through basis expansion, implemented as in \citet{aguilera2010using}.
-  \item FPCA. Functional principal component analysis.
+  \item Manual.\hspace{.3em} Dummy variable selection method with a pre-specified number of components (equispaced on \([0, 1]\)).
+  \item Lasso.\hspace{.3em} Linear least squares with \(l^1\) regularization.
+  \item Ridge.\hspace{.3em} Linear least squares with \(l^2\) regularization.
+  \item PLS.\hspace{.3em} Partial least squares for dimension reduction.
+  \item PCA.\hspace{.3em} Principal component analysis for dimension reduction.
+  \item PLS1.\hspace{.3em} Partial least squares regression \citep[e.g.][]{wegelin2000survey}.
+  \item APLS.\hspace{.3em} Functional partial least squares regression proposed by \citet{delaigle2012methodology}.
+  \item RMH.\hspace{.3em} Recursive maxima hunting variable selection method proposed by \citet{torrecilla2016feature}.
+  \item FLin.\hspace{.3em} Functional \(L^2\) linear regression model with fixed basis expansion.
+  \item FPLS1.\hspace{.3em} Functional PLS regression through basis expansion, implemented as in \citet{aguilera2010using}.
+  \item FPCA.\hspace{.3em} Functional principal component analysis.
 \end{itemize}
 
 \paragraph{Logistic regression comparison algorithms.} All the variable selection and dimension reduction algorithms from above are also considered in this case.
 \begin{itemize}
-  \item Log. Standard multiple logistic regression with \(l^2\) regularization.
-  \item LDA. Linear discriminant analysis.
-  \item QDA. Quadratic discriminant analysis.
-  \item RKVS. RKHS-based variable selection method proposed in \citet{berrendero2018use}.
-  \item APLS. Functional PLS used as a dimension reduction method, as proposed in \citet{delaigle2012achieving} in combination with the nearest centroid algorithm.
-  \item FLog. Functional RKHS-based logistic regression algorithm proposed in \citet{berrendero2018functional}.
-  \item FLDA. Implementation of the so-called functional linear discriminant analysis in \citet{preda2007pls}.
-  \item MDC. Maximum depth classifier \citep[e.g.][]{ghosh2005maximum}.
-  \item FKNN. Functional K-nearest neighbors classifier with the \(L^2\)-distance.
-  \item FNC. Functional nearest centroid classifier with the \(L^2\)-distance.
+  \item Log.\hspace{.3em} Standard multiple logistic regression with \(l^2\) regularization.
+  \item LDA.\hspace{.3em} Linear discriminant analysis.
+  \item QDA.\hspace{.3em} Quadratic discriminant analysis.
+  \item RKVS.\hspace{.3em} RKHS-based variable selection method proposed in \citet{berrendero2018use}.
+  \item APLS.\hspace{.3em} Functional PLS used as a dimension reduction method, as proposed in \citet{delaigle2012achieving} in combination with the nearest centroid algorithm.
+  \item FLog.\hspace{.3em} Functional RKHS-based logistic regression algorithm proposed in \citet{berrendero2018functional}.
+  \item FLDA.\hspace{.3em} Implementation of the so-called functional linear discriminant analysis in \citet{preda2007pls}.
+  \item MDC.\hspace{.3em} Maximum depth classifier \citep[e.g.][]{ghosh2005maximum}.
+  \item FKNN.\hspace{.3em} Functional K-nearest neighbors classifier with the \(L^2\)-distance.
+  \item FNC.\hspace{.3em} Functional nearest centroid classifier with the \(L^2\)-distance.
 \end{itemize}
 
 The main parameters of all these algorithms are selected by cross-validation, using the same 5 folds as our proposed models so that the comparisons are fair. In particular, the regularization parameter is searched among 20 values in the logarithmic space \([10^{-4}, 10^4]\), the number of manually selected variables is one of \(\{5, 10, 15, 20, 25, 50\}\), the number of components for dimension reduction and variable selection techniques is in the set \(\{2, 3, 4, 5, 7, 10, 15, 20\}\), the number of basis elements for quadratic spline bases is in \(\{8,10,12,14,16\}\), the number of basis elements for Fourier bases is in \(\{3,5,7,9,11\}\), and the number of neighbors in the KNN classifier is in \(\{3,5,7,11\}\).
@@ -120,7 +120,7 @@ In Figure~\ref{fig:reg_emcee_rkhs} we see the results for the four GP regressors
   \caption{RMSE of predictors for simulated GP data that obeys an underlying RKHS model (lower is better).}\label{fig:reg_emcee_rkhs}
 \end{figure}
 
-In Figure~\ref{fig:reg_emcee_l2} we see the results for the case with an underlying \(L^2\)-model, which would be our most direct competitor. In this case the outcome is satisfactory, since for the most part our models are on a par with the rest, even beating other methods that were designed with the \(L^2\)-model in mind. Moreover, whenever one of our models has a higher RMSE, the difference is pretty small in general.
+In Figure~\ref{fig:reg_emcee_l2} we see the results for the case with an underlying \(L^2\)-model, which would be our most direct competitor. In this case the outcome is satisfactory, since for the most part our models are on a par with the rest, even beating other methods that were designed with the \(L^2\)-model in mind. Moreover, whenever one of our models has a higher RMSE, the difference is pretty small in comparison.
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=\textwidth]{reg_emcee_l2}
@@ -139,7 +139,7 @@ Lastly, the results for the non-GP case can be seen in Figure~\ref{fig:reg_emcee
 
 \subsection*{Real data}
 
-Figure~\ref{fig:reg_emcee_real} shows the results for the real data sets. In these data sets there is a substantial difference in perfomance between some of our methods and the reference algorithms. However, the predict-then-summarize approach (represented as \textit{posterior\_mean}) seems to work quite well, always near the mean RMSE of all the comparison algorithms. Moreover, our two-stage methods seem to perform better than our other methods in these cases, scoring again very close to the mean of the reference methods.
+Figure~\ref{fig:reg_emcee_real} shows the results for the real data sets. In these data sets there is a substantial difference in performance between some of our methods and the reference algorithms. However, the predict-then-summarize approach (represented as \textit{posterior\_mean}) seems to work quite well, always scoring near the mean RMSE of all the comparison algorithms. Moreover, our two-stage methods seem to perform better than our other methods in these cases, scoring again very close to the mean of the reference methods.
 
 We have to bear in mind that real data is more complex and noisy than simulated data, and it is possible that after a suitable pre-preprocessing we could obtain better results with our methods. However, our goal was to perform a general comparison without exploring too much to the specifics of any particular data set.
 
@@ -204,9 +204,9 @@ Take for example a data set generated according to the formula \(Y=-5X(0.1) + 10
   \caption{Posterior distribution in a linear model with \(p=3\).}\label{fig:beta_trace_3}
 \end{figure}
 
-As we can see, one of the coefficients has gone to zero to account for the overspecification of the model, while the other two have stabilized very close to the true parameters. The same goes for the time instants, except that in this case there is no default value to represent that a component is unused, so the time corresponding to the null coefficient oscillates back and forth. The estimated function, based for example in the mode of the posterior distributions, will not perfect, essentially because of the noise in the response. But it should be close to the true parameter function \(\alpha(t)=-5K(t, 0.1) + 10K(t, 0.8)\), providing a good predictive performance.
+As we can see, one of the coefficients has gone to zero to account for the overspecification of the model, while the other two have stabilized very close to the true parameters. The same goes for the time instants, except that in this case there is no default value to represent that a component is unused, so the time corresponding to the null coefficient oscillates back and forth. The estimated function (based for example in the mode of the posterior distributions) will not be perfect, essentially because of the noise in the response. But it should be close to the true parameter function \(\alpha(t)=-5K(t, 0.1) + 10K(t, 0.8)\), providing a good predictive performance.
 
-In contrast, if we consider now a model with \(p=4\) with the same data, we might obtain posterior distributions such as the ones in Figure~\ref{fig:beta_trace_4}. In this situation two components should go to zero, but that is no longer the case. For example, while the green component has a high density around 0, it also has a considerable mass around 10, effectively ``competing'' with the red component. This is a manifestation of the label switching issue, caused in this case by an excessive number of degrees of freedom in the model.
+In contrast, if we consider now a model with \(p=4\) with the same data, we might obtain posterior distributions such as the ones in Figure~\ref{fig:beta_trace_4}. In this situation two coefficients should go to zero, but that is no longer the case. For example, while the green component has a high density around 0, it also has a considerable mass around 10, effectively ``competing'' with the red component. This is a manifestation of the label switching issue, caused in this case by an excessive number of degrees of freedom in the model.
 
 \begin{figure}[ht!]
   \centering
@@ -221,9 +221,9 @@ There is still another possible situation, one in which there is no label switch
 
 \subsection*{Non-reported experiments}
 
-Apart from all the experiments described above, we performed several tests with different configurations and alternatives. Although these trials did not produce better results in general, we mention here some of them to show how the model could be easily extended. In fact, many of these modifications, if not all, are still available in the provided code and can be enabled through specific parameters.
+Apart from all the experiments described above, we performed several tests with different configurations and alternatives. Although these trials did not produce better results in general, we mention some of them here to show how the model could be easily extended. In fact, many of these modifications, if not all, are still available in the provided code and can be enabled through specific parameters.
 
-The first thing tried were cases in which the parameter \(p\) was part of the Bayesian model, with a categorical prior distribution. As explained in Chapter~\ref{ch:model-choice} this approach led to many complications and generally poor results. However, the idea of letting the model select how many components it needs to have based on the data is an interesting one.
+The first thing we tried was to make the parameter \(p\) part of the Bayesian model, imposing a categorical prior distribution on it. As explained in Chapter~\ref{ch:model-choice} this approach led to many complications and generally poor results. However, the idea of letting the model select how many components it should have based on the data is an interesting one, and in some situations this could greatly improve the results of variable selection procedures based on other model selection criteria.
 
 We also tried changing some prior distributions. For instance, we swapped the improper prior distribution on \(\sigma^2\) for a Cauchy distribution on \(\R^+\). The results were similar, but we ultimately discarded this approach because it introduced yet another hyperparameter into the model with no clear benefit. In addition, we tried to impose a \(\beta\) distribution on each of the time instants \(t_j\), selecting the hyperparameters in a semi-automatic way so that most of the density fell in the areas where the variance of the process was higher (and thus the effect of individual trajectories was more noticeable). This approach does work, but in our estimation the computational overhead introduced by the beta density function (about 1.5x increase in execution time) is not worth the mild improvements, if any.
 

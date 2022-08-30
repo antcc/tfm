@@ -12,15 +12,6 @@
 \chapter{Introduction}\label{ch:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \begin{center}
-%   \begin{minipage}{0.5\textwidth}
-%     \begin{small}
-%       \emph{Quote}
-%     \end{small}
-%   \end{minipage}
-%   \vspace{0.5cm}
-% \end{center}
-
 Over the last few decades, situations involving data in the form of functions have become commonplace in many statistical scenarios, as more and more information is available worldwide with an ever-increasing level of granularity in the measurements. In particular, functional data problems are far from unheard of in the data science an machine learning community, since they have attracted the attention of researchers and practitioners equally. Medical data, weather indicators or stock exchange indices are examples of elements that benefit from a functional treatment, where the observations are regarded as single entities rather than as a conglomerate of individual points.
 
 Under a functional framework, the objects of interest are \textit{random functions} instead of random points in a finite-dimensional space. While in principle the functional data could be simply regarded as a discretized vector in a very high dimension (an indeed such a discretization is performed in practice), there are often many advantages in taking into account the functional nature of the data, ranging from modeling the possibly high correlation among points that are close in the domain, to extracting information that may be hidden in the derivatives of the function in question. Thus, the general idea is to assume the existence of an underlying sufficiently smooth function that generates each (possibly noisy) functional observation, even though we only record it on a finite grid of points.
@@ -61,8 +52,8 @@ We list below the main objectives of this work in no particular order.
 
 \begin{enumerate}[1.]
   \item To perform a brief but thorough literature review that contextualizes functional linear and logistic regression in statistics and machine learning, exploring the predominant models and techniques.
-  \item To propose a novel functional model for linear and logistic regression that builds on existing work and focuses on simplicity, both in terms of interpretation and implementation.
-  \item To describe a general Bayesian approach for parameter estimation within the suggested model.
+  \item To propose a novel RKHS-based functional model for linear and logistic regression that builds on existing work and focuses on simplicity, both in terms of interpretation and implementation.
+  \item To describe and implement a general Bayesian approach for parameter estimation within the suggested model.
   \item To introduce the tools needed to specify and implement the proposed model, mainly reproducing kernel Hilbert spaces and Markov chain Monte Carlo methods.
   \item To carry out a comprehensive experimental study to test these new models and compare them to existing methods, both in simulations and in real-world scenarios.
 \end{enumerate}

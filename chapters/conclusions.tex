@@ -13,20 +13,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{outcomment}
-  - Destacar también las ventajas de lo bayesiano: flexibilidad, incorporación de información con distintas priors, etc. En la introducción, conclusiones, experimentos, ..
-- Destacar interpretabilidad en los experimentos: e.g. un valor de beta=3.4 se puede interpretar fácilmente en un caso concreto. En general, nuestros modelos tienen menor dimensión.
-- Logistic un poco mejor que linear?
-- Tiempo de ejecución alto (característico de los algoritmos MCMC), a cambio mucha sencillez.
-- CV ha sido pequeño. Con más parámetros, probablemente mejores resultados. También flexibilidad para cambiar las prioris.
-- We do not advise to use the mean as a summary statistic.
+  Algo que no he comentado en ninguna parte es que el tiempo de ejecución de nuestros modelos es bastante alto (del orden de 30-40 segundos por ejecución) frente al de los algoritmos de comparación (unos pocos segundos en general). Como es algo negativo, no sé muy bien cómo ponerlo, si comentarlo de pasada aquí en las conclusiones, o dedicarle un poco más de espacio en el capítulo de experimentos.\\
+\end{outcomment}
+
+\begin{outcomment}
+  Algunos comentarios generales:
+  \begin{itemize}
+    \item Destacar las ventajas de lo bayesiano: flexibilidad, incorporación de información con distintas priors, etc.
+    \item Destacar la interpretabilidad y sencillez de nuestro modelo. En general, conseguimos resultados competitivos usando modelos con baja dimensión.
+    \item Los resultados en regresión logística parecen en media un poco mejores que en regresión lineal.
+    \item No se recomienda usar la media como estadístico de resumen de la distribución a posteriori.
+    \item La búsqueda de hiperparámetros en CV no ha sido demasiado grande. Probablemente con más recursos computacionales se podrían conseguir mejores resultados.
+  \end{itemize}
 \end{outcomment}
 
 \section{Future work}
 
-
 \begin{outcomment}
-  - Mejorar pymc.
-  - consistencia de la posteriori, robustez de la priori
-  - Otras prioris
-
+  \begin{itemize}
+    \item Ahondar en la relación entre RKHS y regresión funcional.
+    \item Experimentar con otros algoritmos de MCMC (en particular, reversible-jump MCMC), y con otros paquetes (pymc).
+    \item Considerar otras distribuciones a priori.
+    \item Derivar algunos resultados de consistencia y/o robustez de la posteriori.
+    \item Extender el modelo lineal a un modelo GLM.
+  \end{itemize}
 \end{outcomment}
