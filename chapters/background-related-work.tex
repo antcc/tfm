@@ -63,7 +63,7 @@ The term Bayesian inference usually refers to a wide class of methods that to so
 
 One difficulty found in almost all Bayesian methods is that the posterior distribution, the main object of interest, is usually intractable due to the integral that appears as the normalizing constant in Bayes' rule. A way to bypass this limitation is to use conjugate distributions, where it can be rigorously proven that a certain combination of likelihood and prior distributions produces a posterior distribution in the same family as the prior. However, unless conjugate priors are used, a closed-form expression is generally unattainable and some type of approximation is required. Apart from basic numerical integration, some well-performing methods in this regard are variational inference approaches \citep[e.g.][]{blei2017variational} and MCMC methods \citep[e.g.][]{brooks2011handbook}. The former are based on approximating the posterior by another distribution restricted to a certain parametric family so that the Kullback-Leibler divergence between them is minimized, whereas the latter are iterative methods that directly provide approximate samples of the posterior distribution.
 
-As a comment, there are some recent works that tackle Bayesian inference from a functional perspective, mostly in relation to the distribution over functions induced by Bayesian neural networks. Some examples are the functional Bayesian neural networks proposed by~\citet{sun2019functional}, variational implicit processes \citep{ma2019variational} and their deep variants \citep{ortega2022deep}, or the functional variational inference approach suggested in~\citet{ma2021functional}.
+On a separate note, there are some recent works that tackle Bayesian inference from a functional perspective, mostly in relation to the distribution over functions induced by Bayesian neural networks. Some examples are the functional Bayesian neural networks proposed by~\citet{sun2019functional}, variational implicit processes \citep{ma2019variational} and their deep variants \citep{ortega2022deep}, or the functional variational inference approach suggested in~\citet{ma2021functional}. Moreover, there are approaches to functional regression from a Bayesian perspective that impose a Gaussian process prior on the functional parameter \(\beta\) \citep[e.g][]{lian2016posterior}, and it turns out that the RKHS's corresponding to these Gaussian processes, described for example in~\citet{van2008reproducing}, are useful when studying contraction rates of the posterior distribution.
 
 \section{Reproducing kernel Hilbert spaces}\label{sec:rkhs}
 
@@ -295,8 +295,7 @@ Generally speaking, a MCMC algorithm can be described at time \(t+1\) as \(\Lamb
 
 To maintain the affine invariance and the joint distribution of the ensemble, the walkers are advanced one by one following a Metropolis-Hastings acceptance scheme. There are mainly two types of moves.
 
-\begin{itemize}
-  \item \textit{Stretch move}. For each walker \(1\leq l \leq L\) another walker \(\Lambda_j \in \Lambda_{-l}(t)\) is chosen at random, and the proposal is constructed as
+  \paragraph{Stretch move.} For each walker \(1\leq l \leq L\) another walker \(\Lambda_j \in \Lambda_{-l}(t)\) is chosen at random, and the proposal is constructed as
   \[
     \Lambda_l(t) \to \Gamma = \Lambda_j + Z(\Lambda_l(t) - \Lambda_j),
   \]
@@ -307,18 +306,16 @@ To maintain the affine invariance and the joint distribution of the ensemble, th
     0, & \text{otherwise.}
 \end{cases}, \quad a > 1.
   \]
-
 Supposing \(\R^p\) is the sample space, the corresponding acceptance probability (chosen so that the detailed balance equations are satisfied) is:
   \[
     \alpha = \min\left\{1, \ Z^{p-1}\frac{\pi(\Gamma)}{\pi(\Lambda_l(t))}\right\}.
   \]
 
-  \item \textit{Walk move}. For each walker \(1\leq l \leq L\) a random subset \(S_l \subseteq \Lambda_{-l}(t)\) with \(|S_l| \geq 2\) is chosen, and the proposed move is
+  \paragraph{Walk move.} For each walker \(1\leq l \leq L\) a random subset \(S_l \subseteq \Lambda_{-l}(t)\) with \(|S_l| \geq 2\) is chosen, and the proposed move is
 \[
 \Lambda_l(t) \to \Gamma = \Lambda_l(t) + W,
 \]
-where \(W\) is a normal distribution with mean \(0\) and the same covariance as the sample covariance of all walkers in \(S_l\). The acceptance probability in this case is just the Metropolis ratio, i.e., \(\alpha=\min\{1, \pi(\Gamma)/\pi(\Lambda_l(t))\}\).
-\end{itemize}
+where \(W\) is a normal distribution with mean \(0\) and the same covariance as the sample covariance of all walkers in \(S_l\). The acceptance probability in this case is just the Metropolis ratio, i.e., \(\alpha=\min\{1, \pi(\Gamma)/\pi(\Lambda_l(t))\}\).\\
 
 From a computational perspective, the Python library \textit{emcee} \footnote{\url{https://emcee.readthedocs.io/en/stable/}} \citep{foreman2013emcee} provides a parallel implementation of this algorithm. The idea is to divide the ensemble \(\Lambda\) into two equally-sized subsets \(\Lambda^{(0)}\) and \(\Lambda^{(1)}\), and then proceed on each iteration in the following alternate fashion:
 
