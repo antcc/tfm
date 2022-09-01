@@ -18,7 +18,7 @@ In this chapter we present the results of the experiments carried out to test th
 
 \subsection*{Experimental setting}
 
-First and foremost, we consider \(T=\{\text{mean, median, mode}\}\) for the summarize-then-predict approach to prediction. In this way in linear regression we have 4 prediction methods (one for each statistic and one for the predict-then-summarize approach, which will we call ``\textit{posterior\_mean}'' for short) and 3 variable selection methods (one for each statistic), while in logistic regression there are 5 prediction methods and 3 variable selection procedures. In each case, after variable selection is performed, we use a penalized multiple linear/logistic regression method to generate the corresponding predictions. All in all, we are looking at 7 (8 in the case of logistic regression) prediction methods, and although all of them are derived from a single MCMC run, we will treat them as separate for the purposes of experimentation. In what follows we relax the notation and use the expressions ``model'', ``prediction method'' and ``algorithm'' almost interchangeably when referring to these 7 (or 8) cases.
+First and foremost, we consider \(T=\{\text{mean, median, mode}\}\) for the summarize-then-predict approach to prediction. In this way in linear regression we have 4 prediction methods (one for each statistic and one for the predict-then-summarize approach, which will we call ``\textit{posterior\_mean}'' for short) and 3 variable selection methods (one for each statistic), while in logistic regression there are similarly 5 prediction methods and 3 variable selection procedures. In each case, after variable selection is performed, we use a penalized multiple linear/logistic regression method to generate the corresponding predictions. All in all, we are looking at 7 (8 in the case of logistic regression) prediction methods, and although all of them are derived from a single MCMC run, we will treat them as separate for the purposes of the experimentation. In what follows we relax the notation and use the expressions ``model'', ``prediction method'' and ``algorithm'' almost interchangeably when referring to these 7 (or 8) cases.
 
 We consider \(n=150\) training samples and \(n'=100\) testing samples on an equispaced grid of \(N=100\) points on \([0, 1]\) for the simulated data sets, and we do a 66\%/33\% train/test split on the real data sets. We then perform \(5\)-fold cross validation (CV) on the training set to select the best values of \(p\) and \(\eta\) for each model, and after refitting the best model in each case on the whole training set, we evaluate it and measure the predictive performance on the test set. We look for \(p\) in the set \(\{1,2,\dots,10\}\), while the possible values of \(\eta\) are \(\{10^{-4}, 10^{-3}, \dots, 10^2\}\).
 
@@ -37,10 +37,10 @@ and
 
 We consider a set of functional regressors common to linear and logistic regression problems. They are 4 Gaussian processes (GP's), each with a different kernel function:
 \begin{enumerate}
-  \item A Brownian motion \(K_1(t,s)=\min\{t,s\}\).
-  \item A fractional Brownian motion \(K_2(t,s)=1/2(s^{2H} + t^{2H} - |t-s|^{2H})\), with Hurst parameter \(H=0.8\).
-  \item An Ornstein-Uhlenbeck process \(K_3(t,s)=e^{-|t-s|}\).
-  \item A Gaussian kernel \(K_4(t,s)=e^{-(t-s)^2/2\nu^2}\), with \(\nu=0.2\).
+  \item BM.\hspace{0.3em} A Brownian motion \(K_1(t,s)=\min\{t,s\}\).
+  \item fBM.\hspace{0.3em} A fractional Brownian motion \(K_2(t,s)=1/2(s^{2H} + t^{2H} - |t-s|^{2H})\), with Hurst parameter \(H=0.8\).
+  \item O-U.\hspace{0.3em} An Ornstein-Uhlenbeck process \(K_3(t,s)=e^{-|t-s|}\).
+  \item Gaussian.\hspace{0.3em} A Gaussian kernel \(K_4(t,s)=e^{-(t-s)^2/2\nu^2}\), with \(\nu=0.2\).
 \end{enumerate}
 Also, when applicable, we fix a variance \(\sigma^2=0.5\) for the error terms \(\epsilon\).
 
@@ -52,7 +52,7 @@ Also, when applicable, we fix a variance \(\sigma^2=0.5\) for the error terms \(
 \end{itemize}
 As for the real data sets, we use the (twice-differentiated) Tecator data set introduced in Chapter~\ref{ch:introduction} to predict fat content of 193 meat samples, as well as what we call the Moisture \citep{kalivas1997two} and Sugar \citep{bro1999exploratory} data sets. The first consists of near-infrared spectra of 100 wheat samples and the objective is to predict the samples' moisture content, whereas the second contains 268 samples of sugar fluorescence data in order to predict ash content. The three data sets are measured on a grid of 100, 101 and 115 equispaced points in \([0, 1]\), respectively.
 
-\paragraph{Logistic regression data sets.} Again we consider three different types of data sets,  with a common value of \(\alpha_0=-0.5\).
+\paragraph{Logistic regression data sets.} Again we consider three different types of data sets,  with a common value of \(\alpha_0=-0.5\). In this case we randomly permute 10\% of the labels to introduce some noise in the simulations.
 \begin{itemize}
   \item Four logistic RKHS models with the same functional parameter as in the linear regression case (one for each GP). Specifically,
   \[
@@ -102,13 +102,13 @@ Most algorithms have been taken from the libraries \textit{scikit-learn}\footnot
 
 \subsection*{Results display}
 
-We have adopted a visual approach to presenting the experimentation results, using colored graphs to help visualize them. Alternatively, tables representing these results can be consulted instead in Appendix~\ref{ch:tables}.
+We have adopted a visual approach to presenting the experimentation results, using colored graphs to help visualize them. We felt that this was a better way of summarizing a large empirical study such as the one we have carried out. Alternatively, tables representing these results can be consulted in Appendix~\ref{ch:tables}.
 
-We show the mean and standard deviation of the RMSE obtained across the 10 random runs, depicting our models in orange and the comparison algorithms in blue. We also show the global mean of all the comparison algorithms with a dashed vertical line, and we exclude extreme negative results from this mean to avoid distortion. Moreover, we separate complete prediction algorithms from two-stage methods, the latter being the ones that perform variable selection or dimension reduction prior to a multiple linear/logistic regression method.
+We show the mean and standard deviation of the score obtained in each case across the 10 random runs, depicting our models in orange and the comparison algorithms in blue. We also show the global mean of all the comparison algorithms with a dashed vertical line, and we exclude extreme negative results from this mean to avoid distortion. Moreover, we separate complete prediction algorithms from two-stage methods, the latter being the ones that perform variable selection or dimension reduction prior to a multiple linear/logistic regression method.
 
-We do not expect our models to defeat all the comparison algorithms in all cases (and indeed they do not), but we intend to show that they are competitive methods that on average match or improve other usual alternatives. After all, \textit{there is no such thing as a free lunch}\footnote{The phrase alludes to the No Free Lunch theorem, which loosely speaking asserts that all machine learning methods are equivalent when their performance is averaged across all possible problems. However, the practical implications of this statement are questionable \citep[see e.g.][]{giraud2005toward}.}!
+We do not expect our models to defeat all the comparison algorithms in all cases (and indeed they do not), but we intend to show that they are competitive methods that on average match or improve the performance of other usual alternatives. After all, \textit{there is no such thing as a free lunch}\footnote{The phrase alludes to the No Free Lunch theorem, which loosely speaking asserts that all machine learning methods are equivalent when their performance is averaged across all possible problems. However, the practical implications of this statement are questionable \citep[see e.g.][]{giraud2005toward}.}!
 
-\section{Functional linear regression}
+\section{Functional linear regression}\label{sec:experiments-linear}
 
 \subsection*{Simulated data sets}
 
@@ -127,7 +127,7 @@ In Figure~\ref{fig:reg_emcee_l2} we see the results for the case with an underly
   \caption{RMSE of predictors for simulated GP data that obeys an underlying \(L^2\) model (lower is better).}\label{fig:reg_emcee_l2}
 \end{figure}
 
-Note that our Bayesian models have a higher standard deviation, partly because there is an intrinsic randomness in the methods (apart from the train/test splits), and it can be the cause of the occasional worse performance. In relation to this, we observe that the methods that use the mean as a summary statistic tend to perform much worse. This is because the mean is very sensitive to outliers, so if at some point there is a chain that randomly deviates from the rest, the mean of the posterior distribution will be greatly impacted. In particular, very high values of the parameter \(\sigma^2\) were reported sometimes, producing misleading results when averaged with the rest of the values.
+Note that some of our Bayesian models have a higher standard deviation, partly because there is an intrinsic randomness in the methods (apart from the train/test splits), and it can be the cause of the occasional worse performance. In relation to this, we observe that the methods that use the mean as a summary statistic tend to perform much worse. This is because the mean is very sensitive to outliers, so if at some point there is a chain that randomly deviates from the rest, the mean of the posterior distribution will be greatly impacted. In particular, very high values of the parameter \(\sigma^2\) were reported sometimes, producing misleading results when averaged with the rest of the values.
 
 Lastly, the results for the non-GP case can be seen in Figure~\ref{fig:reg_emcee_nongp}, in which the regressors are realizations of a GBM. In this case we still get better results under the RKHS model, while the results under the \(L^2\)-model are slightly worse. However, as before, the difference is small (except for the \textit{emcee\_mean} methods).
 
@@ -149,7 +149,7 @@ We have to bear in mind that real data is more complex and noisy than simulated 
   \caption{RMSE of predictors for real data sets (lower is better).}\label{fig:reg_emcee_real}
 \end{figure}
 
-\section{Functional logistic regression}
+\section{Functional logistic regression}\label{sec:experiments-logistic}
 
 \subsection*{Simulated data sets}
 
@@ -161,7 +161,7 @@ In Figure~\ref{fig:clf_emcee_rkhs} we see the results for the GP regressors in t
   \caption{Accuracy of classifiers for simulated GP data that obeys an underlying logistic RKHS model (higher is better).}\label{fig:clf_emcee_rkhs}
 \end{figure}
 
-Continuing with Figure~\ref{fig:clf_emcee_l2}, we see that in the \(L^2\) case the results are again promising, since our models score consistently on or above the mean of the reference models, and in many cases surpassing most of them. Moreover, the overall accuracy of all methods is low (below 60\%), so this is indeed a difficult problem in which even small increases in accuracy are relevant.
+Continuing with Figure~\ref{fig:clf_emcee_l2}, we see that in the \(L^2\) case the results are again promising, since our models score consistently on or above the mean of the reference models, and in many cases surpassing most of them. The predict-then-summarize approaches (\textit{emcee\_posterior\_mean} and \textit{emcee\_posterior\_vote}) are particularly good in this case, and in general have low standard errors. Moreover, the overall accuracy of all methods is low (below 60\%), so this is indeed a difficult problem in which even small increases in accuracy are relevant.
 
 \begin{figure}[ht!]
   \centering
@@ -179,7 +179,7 @@ Finally, Figure~\ref{fig:clf_emcee_nongp} shows that our classifiers perform bet
 
 \subsection*{Real data}
 
-As for the real data sets, in Figure~\ref{fig:clf_emcee_real} we see positive results in general, obtaining in most cases accuracies well above the mean of the reference models, and sometimes above most of them. However, our variable selection methods seem to be a bit worse in this case. Again, the models that use \textit{emcee\_mean} are the exception, and in all these data sets they perform steadily worse than the rest of our models.
+As for the real data sets, in Figure~\ref{fig:clf_emcee_real} we see positive results in general, obtaining in most cases accuracies well above the mean of the reference models, and sometimes above most of them. In particular, the predict-then-summarize tend to have a good performance and achieve a lower standard error across executions, which is a trend that we also saw in the simulated data sets. However, our variable selection methods seem to be a bit worse in this case. Again, the models that use \textit{emcee\_mean} are the exception, and in all these data sets they perform steadily worse than the rest of our Bayesian models.
 
 \begin{figure}[ht!]
   \centering
@@ -190,41 +190,77 @@ As for the real data sets, in Figure~\ref{fig:clf_emcee_real} we see positive re
 
 \section{Additional experiments}
 
-In this section we present some experiments that are not directly related to measuring the prediction performance relative to other methods.
+In this section we present some experiments that are not directly related to measuring the prediction performance of our models relative to other methods.
 
 \subsection*{Model misspecification}
 
-One requirement that our model should satisfy is that it be able to recover the true parameter function when the underlying model is a RKHS model. This is generally true when the value of \(p\) in our model and the true value of \(p\) coincide, but what happens when we change the value of \(p\) in the model?
+One requirement that our model should satisfy is that it be able to recover the true parameter function when the underlying model is a RKHS model. This is generally the case when the value of \(p\) in our model and the true value of \(p\) coincide, but what happens when we change the value of \(p\) in the model?
 
-Take for example a data set generated according to the formula \(Y=-5X(0.1) + 10X(0.8) + \epsilon\), with \(\epsilon\sim \mathcal N(0, 0.5)\). Figure~\ref{fig:beta_trace_3} shows the resulting posterior distribution of the parameters \(b=(\beta_1, \beta_2, \beta_3)\) and \(\tau=(\tau_1, \tau_2, \tau_3)\) for a model with 3 components.
+Take for example a data set generated according to the formula \(Y=-5X(0.1) + 10X(0.8) + \epsilon\), with \(\epsilon\sim \mathcal N(0, 0.5)\). Figure~\ref{fig:beta_trace_3} shows the resulting posterior distribution of the parameters \(b=(\beta_1, \beta_2, \beta_3)\) and \(\tau=(\tau_1, \tau_2, \tau_3)\) for a model with 3 components. As we can see, one of the coefficients has gone to zero to account for the overspecification of the model, while the other two have stabilized very close to the true parameters. The same goes for the time instants, except that in this case there is no default value to represent that a component is unused, so the time corresponding to the null coefficient oscillates back and forth. The estimated function (based for example in the mode of the posterior distributions) will not be perfect, essentially because of the noise in the response. But it should be close to the true parameter function \(\alpha(t)=-5K(t, 0.1) + 10K(t, 0.8)\), providing a good predictive performance.
 
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=.8\textwidth]{beta_trace_3}
-  \caption{Posterior distribution in a linear model with \(p=3\).}\label{fig:beta_trace_3}
+  \caption{Estimated posterior distribution for \(\beta\) and \(\tau\) in a linear model with \(p=3\) (left) and the corresponding trace evolution for 700 iterations in the MCMC sampler (right).}\label{fig:beta_trace_3}
 \end{figure}
 
-As we can see, one of the coefficients has gone to zero to account for the overspecification of the model, while the other two have stabilized very close to the true parameters. The same goes for the time instants, except that in this case there is no default value to represent that a component is unused, so the time corresponding to the null coefficient oscillates back and forth. The estimated function (based for example in the mode of the posterior distributions) will not be perfect, essentially because of the noise in the response. But it should be close to the true parameter function \(\alpha(t)=-5K(t, 0.1) + 10K(t, 0.8)\), providing a good predictive performance.
-
-In contrast, if we consider now a model with \(p=4\) with the same data, we might obtain posterior distributions such as the ones in Figure~\ref{fig:beta_trace_4}. In this situation two coefficients should go to zero, but that is no longer the case. For example, while the green component has a high density around 0, it also has a considerable mass around 10, effectively ``competing'' with the red component. This is a manifestation of the label switching issue, caused in this case by an excessive number of degrees of freedom in the model.
+In contrast, if we consider now a model with \(p=4\) with the same data, we might obtain posterior distributions like the ones in Figure~\ref{fig:beta_trace_4}. In this situation two coefficients should go to zero, but that is no longer the case. For example, while the green component has a high density around 0, it also has a considerable mass around 10, effectively ``competing'' with the red component. This is a manifestation of the label switching issue, caused in this case by an excessive number of degrees of freedom in the model.
 
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=.8\textwidth]{beta_trace_4}
-  \caption{Posterior distribution in a linear model with \(p=4\).}\label{fig:beta_trace_4}
+  \caption{Estimated posterior distribution for \(\beta\) and \(\tau\) in a linear model with \(p=4\) (left) and the corresponding trace evolution for 700 iterations in the MCMC sampler (right).}\label{fig:beta_trace_4}
 \end{figure}
 
-There is still another possible situation, one in which there is no label switching but the four components are non-negligible in the estimated function. This can happen because the components exploit the additional freedom and ``work together'', so to speak. In this way we could obtain an estimate that might not resemble the true coefficient function, but that could have a very low prediction error. However, this could also work to our detriment and cause the estimated function to be worse prediction-wise than simpler alternatives. This phenomenon is expected to strengthen as the difference between the true and assumed value of \(p\) grows larger.
+There is still another possible situation, one in which there is no label switching but the estimated function has four non-negligible components. This can happen because the different components exploit the additional freedom and ``work together'', so to speak. In this way we might obtain an estimate that does not resemble the true coefficient function, but that has a very low prediction error. However, this could also work to our detriment and cause the estimated function to be worse prediction-wise than simpler alternatives. This phenomenon is expected to strengthen as the difference between the true and assumed value of \(p\) grows larger.
 
-\incomment{Me gustaría añadir aquí un último experimento en el que se muestran gráficas de evolución del RMSE o del Accuracy según va variando alguno de los hiperparámetros (especialmente el valor de p y el número de ejemplos de entrenamiento).}
+\subsection*{Dependence on \(p\)}
 
+Another thing we wanted to look at was the dependence of the final prediction result on the chosen value of \(p\), especially when there is no concept of ``components'' in the underlying model. We can take for example the homoscedastic mixture data set in the logistic regression problem, and fix the parameter \(\eta=0.01\). Then the corresponding mean accuracies (in 10 repetitions) for RKHS models with \(p=1,2,\dots 10\) components are shown in Figure~\ref{fig:dependence_acc_p}, along with their standard errors (which are arguably not very informative).
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{mixture_dependence_acc_p}
+  \caption{Mean accuracy in 10 repetitions for our logistic RKHS methods as a function of \(p\), using \(\eta=0.01\) and the homoscedastic mixture data set. The corresponding standard errors are shown in faded colors.}\label{fig:dependence_acc_p}
+\end{figure}
+
+It would appear that in the methods that use the whole posterior distribution are more stable and somewhat independent of the value of \(p>1\). The other methods show a slight downward trend as \(p\) increases (although not so much in the variable selection methods), and in general their best results are obtained at \(p=2\) and \(p=8\). We expect that this effect or some small variation of it will remain valid in other situations; however, a profound study of this would be the subject of a different experiment altogether.
+
+\subsection*{Execution times}
+
+We summarize below the mean execution time for each independent run of our CV experiment, grouping the simulated data sets by the underlying data generation strategy (since the results within these groups were very similar).
+
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{lcccccc}
+\toprule
+  &            RKHS &           \(L^2\) &           GBM &        Tecator & Moisture & Sugar \\
+\midrule
+Linear regression & 260 & 245 & 264 & 230 & 264 & 285\\
+\bottomrule
+
+  &            RKHS &           \(L^2\) &           Mixture &        Medflies & Growth & Phoneme \\
+\toprule
+Logistic regression & 277 & 263 & 246 & 250 & 218 & 277\\
+\bottomrule
+\end{tabular}
+  \caption{Mean execution times (in minutes) for the independent runs of the CV experiments in Sections~\ref{sec:experiments-linear} and~\ref{sec:experiments-logistic}, grouped when possible by the underlying data generation strategy.}
+\end{table}
+
+The reference algorithms used were all fast methods that can complete their whole CV loop in just a few seconds, so any comparison with them in this regard is uninteresting. However, this outcome was to be expected, since in general the MCMC methods are known to have a high computational cost in exchange for the simplicity in modeling they provide. An individual MCMC run is not that expensive time-wise, but even for a modest 5-fold cross-validation loop the effects add up quickly to a considerable amount of time. In Figure~\ref{fig:dependence_time_n_train} we show the evolution of the execution time versus the number of training samples in a generic case, which not surprisingly has a more or less linear behavior.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.6\textwidth]{l2_dependence_time_n_train}
+  \caption{Mean training times of a logistic RKHS model, averaged across 10 independent runs, as a function of the number of training samples. The values are surrounded by the corresponding standard deviations. }\label{fig:dependence_time_n_train}
+\end{figure}
 
 \subsection*{Non-reported experiments}
 
 Apart from all the experiments described above, we performed several tests with different configurations and alternatives. Although these trials did not produce better results in general, we mention some of them here to show how the model could be easily extended. In fact, many of these modifications, if not all, are still available in the provided code and can be enabled through specific parameters.
 
-The first thing we tried was to make the parameter \(p\) part of the Bayesian model, imposing a categorical prior distribution on it. As explained in Chapter~\ref{ch:model-choice} this approach led to many complications and generally poor results. However, the idea of letting the model select how many components it should have based on the data is an interesting one, and in some situations this could greatly improve the results of variable selection procedures based on other model selection criteria.
+The first thing we tried was to make the parameter \(p\) part of the Bayesian model, imposing a categorical prior distribution on it. As explained in Chapter~\ref{ch:model-choice}, this approach led to many complications and generally poor results. However, the idea of letting the model select how many components it should have based on the data is an interesting one, and in some situations this could greatly improve the results of variable selection procedures based on other model selection criteria.
 
-We also tried changing some prior distributions. For instance, we swapped the improper prior distribution on \(\sigma^2\) for a Cauchy distribution on \(\R^+\). The results were similar, but we ultimately discarded this approach because it introduced yet another hyperparameter into the model with no clear benefit. In addition, we tried to impose a \(\beta\) distribution on each of the time instants \(t_j\), selecting the hyperparameters in a semi-automatic way so that most of the density fell in the areas where the variance of the process was higher (and thus the effect of individual trajectories was more noticeable). This approach does work, but in our estimation the computational overhead introduced by the beta density function (about 1.5x increase in execution time) is not worth the mild improvements, if any.
+We also tried changing some prior distributions. For instance, we swapped the improper prior distribution on \(\sigma^2\) for a Cauchy distribution on \(\R^+\). The results were similar, but we ultimately discarded this approach because it introduced yet another hyperparameter into the model with no clear benefit. In addition, we tried to impose a \(\beta\) distribution on each of the time instants \(t_j\), selecting the hyperparameters in a semi-automatic way so that most of the density fell in the areas where the variance of the process was higher (and thus the effect of individual trajectories was more noticeable). This approach does work, but in our estimation the computational overhead introduced by the beta density function (sometimes resulting in a 1.5x increase in execution time) is not worth the mild improvements, if any.
 
 A lot of minor things were tried, such as standardizing the regressors and/or the responses, smoothing the functional data, or transforming the values of \(\tau\) during sampling so that the domain was unconstrained. It is likely that some of these strategies would lead to better results in specific cases, but overall they did not improve the general performance of the prediction procedure.

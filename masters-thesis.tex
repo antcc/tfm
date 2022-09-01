@@ -21,7 +21,7 @@
 \usepackage{metalogo}
 \usepackage{etoolbox}
 \usepackage{tocloft}
-%\usepackage{geometry}
+\usepackage{xcolor}
 \usepackage{cancel}
 \usepackage{bbding}
 
@@ -96,7 +96,7 @@
 \newcommand\dotprod[2]{\left\langle #1, #2 \right\rangle}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Hyperlinks & bookmarks
+% Hyperlinks, bookmarks and tables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \definecolor{webgreen}{rgb}{0,0.5,0}
@@ -109,6 +109,9 @@
   ]{hyperref}
 
 \usepackage{bookmark}
+
+% Space between rows in tables
+\renewcommand{\arraystretch}{1.2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
@@ -212,6 +215,7 @@
   \include{\thesisPath/abstract}
 
   %\newgeometry{top=1.75cm, bottom=5cm}
+  \vspace*{-1.8cm}
   \tableofcontents
   %\restoregeometry
 

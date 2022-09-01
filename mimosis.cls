@@ -48,7 +48,7 @@
 % Fonts & colours
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[table,usenames,dvipsnames]{xcolor}
 \definecolor{comment-red}{RGB}{240,30,70}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

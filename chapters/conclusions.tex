@@ -13,16 +13,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{outcomment}
-  Algo que no he comentado en ninguna parte es que el tiempo de ejecución de nuestros modelos es bastante alto (del orden de 30-40 segundos por ejecución) frente al de los algoritmos de comparación (unos pocos segundos en general). Como es algo negativo, no sé muy bien cómo ponerlo, si comentarlo de pasada aquí en las conclusiones, o dedicarle un poco más de espacio en el capítulo de experimentos.\\
-\end{outcomment}
-
-\begin{outcomment}
   Algunos comentarios generales:
   \begin{itemize}
-    \item Destacar las ventajas de lo bayesiano: flexibilidad, incorporación de información con distintas priors, etc.
-    \item Destacar la interpretabilidad y sencillez de nuestro modelo. En general, conseguimos resultados competitivos usando modelos con baja dimensión.
+    \item Destacar las ventajas de lo bayesiano: flexibilidad, incorporación de información con distintas priors, etc. Computationally feasible model.
+    \item Destacar la interpretabilidad y sencillez de nuestro modelo. En general, conseguimos resultados competitivos usando modelos con baja dimensión. Aunque el modelo final es simple, la teoría subyacente no lo es. Modelo simple útil para practitioners. También se presta a post-interpretación (ej. si salen dos modas)
+    \item Algo del tiempo de ejecución. Se podría aproximar mejor el error medio con más repeticiones aleatorias (en lugar de 10), pero sería muy costoso computacionalmente.
     \item Los resultados en regresión logística parecen en media un poco mejores que en regresión lineal.
-    \item No se recomienda usar la media como estadístico de resumen de la distribución a posteriori.
+    \item No se recomienda usar la media como estadístico de resumen de la distribución a posteriori. En general, los que usan la posteriori entera son más estables.
     \item La búsqueda de hiperparámetros en CV no ha sido demasiado grande. Probablemente con más recursos computacionales se podrían conseguir mejores resultados.
   \end{itemize}
 \end{outcomment}
