@@ -119,7 +119,7 @@ In much the same way as the linear regression model described above, this RKHS-b
 
 \subsection*{The Bayesian approach: prior and posterior}
 
-As far as prior distributions go, we propose to use the same ones as we did in~\eqref{eq:prior-linear} for the linear regression model. However, in this case the parameter \(\sigma^2\) is a nuisance parameter and can be safely ignored at the end, since it does not appear in the final model. The posterior distribution is then derived after a routine calculation.
+As far as prior distributions go, we propose to use the same ones as we did in~\eqref{eq:prior-linear} for the linear regression model. However, in this case the nuisance parameter \(\sigma^2\) only appears as part of the hierarchical prior distribution, and not in the final model. The posterior distribution is then derived after a routine calculation.
 
 \begin{proposition}
 Under the logistic model~\eqref{eq:rkhs-model-logistic-2}, the prior distribution implied in~\eqref{eq:prior-linear} produces the log-posterior distribution

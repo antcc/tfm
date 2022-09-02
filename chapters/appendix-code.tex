@@ -12,13 +12,12 @@
 \chapter{On the code developed}\label{ch:code}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{outcomment}
-  Aquí irá un pequeño resumen de la estructura del código y los archivos, y un mini-tutorial de cómo usarlo para reproducir los experimentos.
+The Python source code developed for this work is available at the GitHub repository \url{https://github.com/antcc/rk-bfr}. The code is adequately documented and is structured in several directories as follows:
 
-  \begin{itemize}
-    \item Características de la máquina donde se ejecuta. Se usan 4 cores.
-    \item  Comentar cómo usar el código, las versiones de los paquetes, y los notebooks (decir que hay más gráficas y análisis y cosas así).
-    \item Contar que son clases a la sklearn y compatibles con ska-fda. Enlazar al github.
-    \item El proceso es reproducible (semilla 2022).
-  \end{itemize}
-\end{outcomment}
+\begin{itemize}
+  \item In the \texttt{rkbfr} folder we find the files responsible for the implementation of our models, separated according to the functionality they provide.
+  \item The \texttt{reference\_methods} folder contains the implementation of the functional comparison algorithms that were not available through a standard Python library.
+  \item At the root folder we have files for executing our experiments, which accept many user-specified parameters (e.g. number of iterations, type of data set, \ldots), along with some utility files. In particular, the script \texttt{results\_cv.py} contains the code for our comparison experiments, while script the \texttt{results\_all.py} allows the execution of our models without a cross-validation loop.
+\end{itemize}
+
+When possible, the code was implemented in a generic way that would allow for easy extensions or derivations, and also with efficiency in mind, so many functions and methods exploit the vectorization capabilities of the \textit{numpy} and \textit{scipy} libraries. Moreover, we followed closely the style of the \textit{scikit-learn} and \textit{scikit-fda} libraries, so our methods are fully compatible and could be integrated (after some minor tweaking) with both of them. The code for the experiments was executed in a machine with 4 cores, and a random seed with value 2022 was set for reproducibility. We provide a script file \texttt{launch.sh} that illustrates a typical execution. Lastly, there are also Jupyter notebooks that demonstrate the use of our methods in a more visual way. Inside these notebooks there is a step-by-step guide on how one might execute our algorithms, accompanied by many graphical representations, and offering the possibility of changing multiple parameters to experiment with the code. In addition, there is also a notebook that can be used to generate all the tables and figures of this document pertaining to the experimental results.

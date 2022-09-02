@@ -56,10 +56,10 @@ As for the real data sets, we use the (twice-differentiated) Tecator data set in
 \begin{itemize}
   \item Four logistic RKHS models with the same functional parameter as in the linear regression case (one for each GP). Specifically,
   \[
-  \P(Y=1\mid X) = \frac{1}{e^{0.5 +5X(0.1) - X(0.4) - 10X(0.8)}}.
+  \P(Y=1\mid X) = \frac{1}{1 + e^{0.5 +5X(0.1) - X(0.4) - 10X(0.8)}}.
   \]
   \item Four logistic \(L^2\)-models with the same coefficient function as in the linear regression case.
-  \item A ``mixture'' model based on non-GP regressors, in which we mix regressors from two different GP's and label them according to their origin. Firstly, we consider a homoscedastic case to distinguish between a standard Brownian motion and a Brownian motion with a mean function that is zero until \(t=0.5\), and then becomes \(m(t)=0.75t\). Secondly, we consider a heteroscedastic case to distinguish between a standard Brownian motion and a Brownian motion with variance \(2\), that is, with kernel \(K(t,s)=2\min\{t,s\}\).
+  \item A ``mixture'' model based on non-GP regressors, in which we mix regressors from two different GP's (with equal probability \(p=1/2\)) and label them according to their origin. Firstly, we consider a homoscedastic case to distinguish between a standard Brownian motion and a Brownian motion with a mean function that is zero until \(t=0.5\), and then becomes \(m(t)=0.75t\). Secondly, we consider a heteroscedastic case to distinguish between a standard Brownian motion and a Brownian motion with variance \(2\), that is, with kernel \(K(t,s)=2\min\{t,s\}\).
 \end{itemize}
 In this case there are again three real data sets. The first one is a subset of the Medflies data set \citep{carey1998relationship}, consisting on samples of the number of eggs laid daily by 534 flies over 30 days, trying to predict if their longevity is high or low. The second one is the Berkeley Growth Study data set \citep{tuddenham1954physical}, which records the height of 54 girls and 39 boys over 31 different points in their lives. Finally, we have selected a subset of the Phoneme data set \citep{hastie1995penalized}, based on 200 digitized speech frames over 128 equispaced points to predict the phonemes ``aa'' and ``ao''.
 
@@ -96,7 +96,7 @@ We have included a fairly comprehensive suite of comparison algorithms, chosen a
   \item FNC.\hspace{.3em} Functional nearest centroid classifier with the \(L^2\)-distance.
 \end{itemize}
 
-The main parameters of all these algorithms are selected by cross-validation, using the same 5 folds as our proposed models so that the comparisons are fair. In particular, the regularization parameter is searched among 20 values in the logarithmic space \([10^{-4}, 10^4]\), the number of manually selected variables is one of \(\{5, 10, 15, 20, 25, 50\}\), the number of components for dimension reduction and variable selection techniques is in the set \(\{2, 3, 4, 5, 7, 10, 15, 20\}\), the number of basis elements for quadratic spline bases is in \(\{8,10,12,14,16\}\), the number of basis elements for Fourier bases is in \(\{3,5,7,9,11\}\), and the number of neighbors in the KNN classifier is in \(\{3,5,7,11\}\).
+The main parameters of all these algorithms are selected by cross-validation, using the same 5 folds as our proposed models so that the comparisons are fair. In particular, the regularization parameter is searched among 20 values in the logarithmic space \([10^{-4}, 10^4]\), the number of manually selected variables is one of \(\{5, 10, 15, 20, 25, 50\}\), the number of components for dimension reduction and variable selection techniques is in the set \(\{2, 3, 4, 5, 7, 10, 15, 20\}\), the number of basis elements for quadratic spline bases is in \(\{8,10,12,14,16\}\), the number of basis elements for Fourier bases is one of \(\{3,5,7,9,11\}\), and the number of neighbors in the KNN classifier is in \(\{3,5,7,9,11\}\).
 
 Most algorithms have been taken from the libraries \textit{scikit-learn}\footnote{\url{https://scikit-learn.org/stable/}} and \textit{scikit-fda}\footnote{\url{https://fda.readthedocs.io/en/latest/}}, the first oriented to machine learning in general and the second to functional data analysis in particular. However, some methods were not found in these packages and had to be implemented from scratch. This is the case of the FLDA, FPLS and APLS methods, which we coded following the corresponding articles.
 
@@ -169,7 +169,7 @@ Continuing with Figure~\ref{fig:clf_emcee_l2}, we see that in the \(L^2\) case t
   \caption{Accuracy of classifiers for simulated GP data that obeys an underlying logistic \(L^2\)-model (higher is better).}\label{fig:clf_emcee_l2}
 \end{figure}
 
-Finally, Figure~\ref{fig:clf_emcee_nongp} shows that our classifiers perform better than most comparison algorithms when separating two homoscedastic processes, but they struggle in the heteroscedastic case. Our variable selection methods are close to the global mean accuracy in both cases.
+Finally, Figure~\ref{fig:clf_emcee_nongp} shows that our classifiers perform better than most comparison algorithms when separating two homoscedastic processes, but they struggle in the heteroscedastic case. Incidentally, this heteroscedastic case of two zero-mean Brownian motions has a special interest, since it can be shown that the Bayes error is zero in the limit of dense monitoring (i.e. with an arbitrarily fine measurement grid), a manifestation of the ``near-perfect'' classification phenomenon analyzed for example in \citet{torrecilla2020optimal}. Our results are in line with the empirical studies of said article, where the authors conclude that even though the asymptotic theoretical error is zero, most methods are suboptimal in practice (possibly due to the high collinearity of the data), with the notable exception of PCA+QDA.
 
 \begin{figure}[ht!]
   \centering
@@ -194,7 +194,7 @@ In this section we present some experiments that are not directly related to mea
 
 \subsection*{Model misspecification}
 
-One requirement that our model should satisfy is that it be able to recover the true parameter function when the underlying model is a RKHS model. This is generally the case when the value of \(p\) in our model and the true value of \(p\) coincide, but what happens when we change the value of \(p\) in the model?
+One requirement that our model should satisfy is that it should be able to recover the true parameter function when the underlying model is a RKHS model. This is generally the case when the value of \(p\) in our model and the true value of \(p\) coincide, but what happens when we change the value of \(p\) in the model?
 
 Take for example a data set generated according to the formula \(Y=-5X(0.1) + 10X(0.8) + \epsilon\), with \(\epsilon\sim \mathcal N(0, 0.5)\). Figure~\ref{fig:beta_trace_3} shows the resulting posterior distribution of the parameters \(b=(\beta_1, \beta_2, \beta_3)\) and \(\tau=(\tau_1, \tau_2, \tau_3)\) for a model with 3 components. As we can see, one of the coefficients has gone to zero to account for the overspecification of the model, while the other two have stabilized very close to the true parameters. The same goes for the time instants, except that in this case there is no default value to represent that a component is unused, so the time corresponding to the null coefficient oscillates back and forth. The estimated function (based for example in the mode of the posterior distributions) will not be perfect, essentially because of the noise in the response. But it should be close to the true parameter function \(\alpha(t)=-5K(t, 0.1) + 10K(t, 0.8)\), providing a good predictive performance.
 
