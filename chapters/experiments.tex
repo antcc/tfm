@@ -18,7 +18,7 @@ In this chapter we present the results of the experiments carried out to test th
 
 \subsection*{Experimental setting}
 
-First and foremost, we consider \(T=\{\text{mean, median, mode}\}\) for the summarize-then-predict approach to prediction. In this way in linear regression we have 4 prediction methods (one for each statistic and one for the predict-then-summarize approach, which will we call ``\textit{posterior\_mean}'' for short) and 3 variable selection methods (one for each statistic), while in logistic regression there are similarly 5 prediction methods and 3 variable selection procedures. In each case, after variable selection is performed, we use a penalized multiple linear/logistic regression method to generate the corresponding predictions. All in all, we are looking at 7 (8 in the case of logistic regression) prediction methods, and although all of them are derived from a single MCMC run, we will treat them as separate for the purposes of the experimentation. In what follows we relax the notation and use the expressions ``model'', ``prediction method'' and ``algorithm'' almost interchangeably when referring to these 7 (or 8) cases.
+First and foremost, we consider \(T=\{\text{mean, median, mode}\}\) for our summarize-then-predict approach to prediction (see~\eqref{eq:summarize-predict-linear} and~\eqref{eq:summarize-predict-logistic}). As a result, in linear regression we have 4 prediction methods (one for each statistic and one for the predict-then-summarize approach) and 3 variable selection methods (one for each statistic), while in logistic regression there are similarly 5 prediction methods and 3 variable selection procedures. In each case, after variable selection is performed, we use a \(l^2\)-penalized multiple linear/logistic regression method to generate the corresponding predictions. All in all, we are looking at 7 (8 in the case of logistic regression) prediction methods, and although all of them are derived from a single MCMC run, we will treat them as separate for the purposes of the experimentation. In what follows we relax the notation and use the expressions ``model'', ``prediction method'' and ``algorithm'' almost interchangeably when referring to these 7 (or 8) cases.
 
 We consider \(n=150\) training samples and \(n'=100\) testing samples on an equispaced grid of \(N=100\) points on \([0, 1]\) for the simulated data sets, and we do a 66\%/33\% train/test split on the real data sets. We then perform \(5\)-fold cross validation (CV) on the training set to select the best values of \(p\) and \(\eta\) for each model, and after refitting the best model in each case on the whole training set, we evaluate it and measure the predictive performance on the test set. We look for \(p\) in the set \(\{1,2,\dots,10\}\), while the possible values of \(\eta\) are \(\{10^{-4}, 10^{-3}, \dots, 10^2\}\).
 
@@ -35,12 +35,12 @@ and
 
 \subsection*{Data sets}
 
-We consider a set of functional regressors common to linear and logistic regression problems. They are 4 Gaussian processes (GP's), each with a different kernel function:
+We consider a set of functional regressors common to linear and logistic regression problems. They are 4 Gaussian processes (GP's), each with a different covariance function:
 \begin{enumerate}
   \item BM.\hspace{0.3em} A Brownian motion \(K_1(t,s)=\min\{t,s\}\).
   \item fBM.\hspace{0.3em} A fractional Brownian motion \(K_2(t,s)=1/2(s^{2H} + t^{2H} - |t-s|^{2H})\), with Hurst parameter \(H=0.8\).
   \item O-U.\hspace{0.3em} An Ornstein-Uhlenbeck process \(K_3(t,s)=e^{-|t-s|}\).
-  \item Gaussian.\hspace{0.3em} A Gaussian kernel \(K_4(t,s)=e^{-(t-s)^2/2\nu^2}\), with \(\nu=0.2\).
+  \item Gaussian.\hspace{0.3em} A Gaussian process with Gaussian kernel \(K_4(t,s)=e^{-(t-s)^2/2\nu^2}\), where \(\nu=0.2\).
 \end{enumerate}
 Also, when applicable, we fix a variance \(\sigma^2=0.5\) for the error terms \(\epsilon\).
 
@@ -247,7 +247,7 @@ Logistic regression & 277 & 263 & 246 & 250 & 218 & 277\\
   \caption{Mean execution times (in minutes) for the independent runs of the CV experiments in Sections~\ref{sec:experiments-linear} and~\ref{sec:experiments-logistic}, grouped when possible by the underlying data generation strategy.}
 \end{table}
 
-The reference algorithms used were all fast methods that can complete their whole CV loop in just a few seconds, so any comparison with them in this regard is uninteresting. However, this outcome was to be expected, since in general the MCMC methods are known to have a high computational cost in exchange for the simplicity in modeling they provide. An individual MCMC run is not that expensive time-wise, but even for a modest 5-fold cross-validation loop the effects add up quickly to a considerable amount of time. In Figure~\ref{fig:dependence_time_n_train} we show the evolution of the execution time versus the number of training samples in a generic case, which not surprisingly has a more or less linear behavior.
+The reference algorithms used were all fast methods that can complete their whole CV loop in just a few seconds, so any comparison with them in this regard is uninteresting. However, this outcome was to be expected, since in general the MCMC methods are known to have a high computational cost in exchange for the simplicity in modeling they provide. An individual MCMC run is not that expensive time-wise, but even for a modest 5-fold cross-validation loop the effects add up quickly to a considerable amount of time. In Figure~\ref{fig:dependence_time_n_train} we show the evolution of the execution time versus the number of training samples in a generic case, which not surprisingly has a more or less linear behavior. This, however, is not an impediment for using our methods in practice.
 
 \begin{figure}[ht!]
   \centering

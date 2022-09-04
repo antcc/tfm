@@ -79,9 +79,9 @@ where \(\symbf Y=(Y_1,\dots,Y_n)'\) and \(\symbf{1}\) is an \(n\)-dimensional ve
 In order to generate predictions, let us recall that when performing the empirical posterior approximation, on each of the \(M\) steps of the iterative MCMC algorithm we get an approximate sample \(\theta^{(m)*}=(b^{(m)*}, \tau^{(m)*}, \alpha_0^{(m)*}, (\sigma^2)^{(m)*})\) of the posterior distribution \(\pi(\theta| \D_n)\). Assuming now a previously unseen test set \(\D'_{n'}\) in the same conditions as \(\D_n\), we propose to construct three different kinds of predictors based on the MCMC samples, each of them following a different strategy.
 
   \paragraph{Summarize-then-predict.} If we consider a point-estimate statistic \(T\) that acts as a summary of the marginal posterior distributions, we can get the corresponding estimates \(\hat{\theta}=(\hat b, \hat \tau, \hat{\alpha}_0, \hat{\sigma}^2) = T\{\theta^{(m)*}\} \equiv (T\{b^{(m)*}\}, T\{\tau^{(m)*}\}, T\{\alpha_0^{(m)*}\}, T\{(\sigma^2)^{(m)*}\})\), and then predict the responses in the usual way following model~\eqref{eq:rkhs-model-linear}, i.e.:
-  \[
+  \begin{equation}\label{eq:summarize-predict-linear}
     \hat Y_i = \hat{\alpha}_0 + \sum_{j=1}^p \hat{\beta}_j X_i(\hat{t}_j), \quad i=1,\dots, n'.
-  \]
+  \end{equation}
   Note that in this case the variance \(\sigma^2\) is treated as a nuisance parameter. Although it contributes to measure the uncertainty in the approximations, its estimates are discarded in the final prediction.
 
   \paragraph{Predict-then-summarize.} Alternatively, we can  look at the approximate posterior distribution as a whole and compute the predictive distribution of the simulated responses at each step of the chain following model~\eqref{eq:rkhs-model-linear-2}:
@@ -135,12 +135,12 @@ Remember that \(\Psi_{X_i}(\alpha) = \sum_{j=1}^p \beta_j X_i(t_j)\).
 Bear in mind that in this case we are essentially approximating the probabilities \(p_i\) in~\eqref{eq:rkhs-model-logistic-2-parameter}, so before producing a response we need to transform the predicted values to a binary output in \(\{0, 1\}\). According to the usual criterion of minimizing the misclassification probability, it is known that the Bayes optimal rule is recovered by predicting \(\hat Y=1\) whenever \(\P(Y=1|X) \geq 1/2\). Nevertheless, for a more general cost function one could consider other criteria that would lead to evaluating whether \(\P(Y=1|X) \geq \gamma\) for some threshold \(\gamma\in[0, 1]\).
 
 With this last strategy in mind, the summarize-then-predict approach on the approximate posterior distribution is analogous to the linear regression case:
-\[
+\begin{equation}\label{eq:summarize-predict-logistic}
 \hat Y_i = \I \left( \left[\displaystyle 1 + \exp\left\{-\hat\alpha_0 - \sum_{j=1}^p \hat\beta_j X_i(\hat t_j)\right\}\right]^{-1} \geq \gamma \right), \quad i=1,\dots,n',
-\]
+\end{equation}
 where \(\I\) is the indicator function (\(\I(P)\) is \(1\) if \(P\) is true and \(0\) otherwise). The hat estimates are obtained once again through a summary statistic \(T\) of the corresponding marginal posterior distributions.
 
-On the other hand, the prediction method that takes into account the entire posterior approximation (i.e. the predict-then-summarize approach) is somewhat different now, since there is the question of which response (the Bernoulli variables in~\eqref{eq:rkhs-model-logistic-2} or the raw probabilities in~\eqref{eq:rkhs-model-logistic-2-parameter}) to consider when averaging the posterior samples. Hence, there are primarily two possible outcomes.
+On the other hand, the prediction method that takes into account the entire posterior approximation (that is, the predict-then-summarize approach) is somewhat different now, since there is the question of which response (the Bernoulli variables in~\eqref{eq:rkhs-model-logistic-2} or the raw probabilities in~\eqref{eq:rkhs-model-logistic-2-parameter}) to consider when averaging the posterior samples. Hence, there are primarily two possible outcomes.
 
   \paragraph{Average sampled probability.} If we choose to average the approximate probabilities \(p_i^{(m)*} = \P(Y_i =1 | X_i,\theta^{(m)*})\) computed following~\eqref{eq:rkhs-model-logistic-2-parameter}, the resulting predictor is
   \[

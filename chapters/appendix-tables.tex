@@ -8,11 +8,17 @@
 % work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Modify geometry of first page
+\setlength{\voffset}{-.5cm}
+\setlength{\footskip}{80pt}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Tables of experimental results}\label{ch:tables}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Here we present the tables corresponding to the empirical CV study described in Sections~\ref{sec:experiments-linear} and~\ref{sec:experiments-logistic}.
+\enlargethispage{10\baselineskip}
+
+Here we present the tables corresponding to the empirical studies in Sections~\ref{sec:experiments-linear} and~\ref{sec:experiments-logistic}.
 
 \section*{Functional linear regression}
 
@@ -54,6 +60,10 @@ emcee\_median+ridge & 0.759 (0.063) & 0.741 (0.041) & 0.751 (0.065) & 0.755 (0.0
 %%
 \newpage
 %%
+
+% Restore geometry
+\setlength{\voffset}{0cm}
+\setlength{\footskip}{50.75pt}
 
 \begin{table}[htbp!]
   \centering
