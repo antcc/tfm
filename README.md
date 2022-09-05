@@ -16,7 +16,7 @@ We propose a novel Bayesian approach for functional linear and logistic regressi
 
 Berrendero, J. R., Bueno-Larraz, B., and Cuevas, A. (2019). "An RKHS model for variable selection in functional linear regression". In: *Journal of Multivariate Analysis* 170, pp. 25–45 ([preprint](https://verso.mat.uam.es/~joser.berrendero/papers/2018-jmva-pre.pdf) | [doi](https://doi.org/10.1016/j.jmva.2018.04.008)).
 
-Berrendero, J. R., Cholaquidis, A., and Cuevas, A. (2020b). "On a general definition of the functional linear model". In: *arXiv preprint arXiv:2011.05441* ([preprint](https://arxiv.org/abs/2011.05441)).
+Berrendero, J. R., Cholaquidis, A., and Cuevas, A. (2020). "On a general definition of the functional linear model". In: *arXiv preprint arXiv:2011.05441* ([preprint](https://arxiv.org/abs/2011.05441)).
 
 Berrendero, J. R., Bueno-Larraz, B., and Cuevas, A. (2022). "On functional logistic regression: some conceptual issues". In: *arXiv preprint arXiv:1812.00721* ([preprint](https://arxiv.org/abs/1812.00721)).
 
