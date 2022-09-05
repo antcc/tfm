@@ -1,5 +1,6 @@
 % Mimosis LaTeX template with minor modifications
 % https://github.com/Pseudomanifold/latex-mimosis
+% Copyright (c) 2018 Bastian Rieck
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{mimosis}[2017/08/01 Minimal modern thesis class]
