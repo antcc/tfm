@@ -106,7 +106,7 @@ Besides, observe that the choice of a specific point estimator to summarize the 
 
 \section{Functional logistic regression}\label{sec:rkhs-logistic-model}
 
-In the case of functional logistic regression, we can regard the binary response variable \(Y\in\{0, 1\}\) as a Bernoulli random variable given \(X=x \in L^2[0, 1]\), and as usual suppose that \(\log\left(p(x)/(1-p(x))\right)\) is linear in \(x\), where \(p(x)=\P(Y=1| X=x)\). Then, following the approach  suggested by \citet{berrendero2018functional}, a RKHS model might be given, in terms of the isometric transformation \(X \mapsto \dotprod{X}{\alpha}_K = \Psi_X(\alpha)\), by the equation
+In the case of functional logistic regression, we can regard the binary response variable \(Y\in\{0, 1\}\) as a Bernoulli random variable given \(X=x \in L^2[0, 1]\), and as usual suppose that \(\log\left(p(x)/(1-p(x))\right)\) is linear in \(x\), where \(p(x)=\P(Y=1| X=x)\). Then, following the approach  suggested by \citet{berrendero2018functional}, a RKHS model might be given, in terms of the correspondence \(\dotprod{X}{\alpha}_K = \Psi_X(\alpha)\), by the equation
 \begin{equation}\label{eq:rkhs-model-logistic}
   \P(Y=1 \mid X) = \frac{1}{1 + \exp\{-\alpha_0 - \dotprod{X}{\alpha}_K\}}, \quad \alpha_0 \in \R, \ \alpha \in \Hcal_{0,p}(K).
 \end{equation}
