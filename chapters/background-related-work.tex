@@ -14,7 +14,7 @@
 \chapter{Background and related work}\label{ch:background}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-FDA is undoubtedly an active area of research, which finds applications in a wide variety of fields, such as biomedicine, finance, meteorology or chemistry \citep[see for example][]{ullah2013applications}. Accordingly, there are many recent contributions on how to tackle functional data problems, both from a theoretical and practical standpoint. Chief among them is the approach of reducing the problem to a finite-dimensional one, for example using a truncated basis expansion or spline interpolation methods \citep[e.g.][]{muller2005generalized, aguilera2013comparative}. At the same time, much effort has also been put into the task of building a sound theoretical basis for FDA, generalizing different concepts to the infinite-dimensional framework. Examples of this endeavor include the definition of centraility measures and depth-based notions for functional data \citep[e.g.][]{fraiman2001trimmed, cuevas2007robust, lopez2009concept}, an ANOVA test for functional data \citep{cuevas2004anova}, a purely functional partial least squares algorithm \citep{delaigle2012methodology}, a functional Mahalanobis distance \citep{berrendero2020mahalanobis}, or an extension of Fisher's discriminant analysis for function-valued random elements \citep[e.g.][]{james2001functional, shin2008extension}, among many others. Interestingly enough, these last two are examples of situations in which a RKHS-based approach provides useful insights.
+FDA is undoubtedly an active area of research, which finds applications in a wide variety of fields, such as biomedicine, finance, meteorology or chemistry \citep[see for example][]{ullah2013applications}. Accordingly, there are many recent contributions on how to tackle functional data problems, both from a theoretical and practical standpoint. Chief among them is the approach of reducing the problem to a finite-dimensional one, for example using a truncated basis expansion or spline interpolation methods \citep[e.g.][]{muller2005generalized, aguilera2013comparative}. At the same time, much effort has also been put into the task of building a sound theoretical basis for FDA, generalizing different concepts to the infinite-dimensional framework. Examples of this endeavor include the definition of centrality measures and depth-based notions for functional data \citep[e.g.][]{fraiman2001trimmed, cuevas2007robust, lopez2009concept}, an ANOVA test for functional data \citep{cuevas2004anova}, a purely functional partial least squares algorithm \citep{delaigle2012methodology}, a functional Mahalanobis distance \citep{berrendero2020mahalanobis}, or an extension of Fisher's discriminant analysis for function-valued random elements \citep[e.g.][]{james2001functional, shin2008extension}, among many others. Interestingly enough, these last two are examples of situations in which a RKHS-based approach provides useful insights.
 
 Another technique found in the related literature is the use of Gaussian processes to model the functional behavior of the data \citep[see for instance][]{shi2011gaussian}. These ideas extend the theory of Gaussian process regression in classical finite-dimensional settings \citep[e.g.][]{rasmussen2004gaussian}, providing an alternative Bayesian approach to functional inference and prediction problems. Additional non-parametric methods for functional prediction and classification were notably explored in \citet{ferraty2006nonparametric}.
 
@@ -24,7 +24,7 @@ Another technique found in the related literature is the use of Gaussian process
 \begin{equation}\label{eq:l2-linear-model}
 Y = \alpha_0 + \dotprod{X}{\beta} + \epsilon = \alpha_0 + \int_0^1 X(t)\beta(t)\, dt + \epsilon,
 \end{equation}
-where \(\alpha_0\in \R\), \(\epsilon\) is a random error term independent from \(X\) with \(\E [\epsilon]=0\), and the functional slope parameter \(\beta=\beta(\cdot)\) is assumed to be a member of the infinite-dimensional space \(L^2[0, 1]\). A careful rearrangement of~\eqref{eq:l2-linear-model} shows that the model is equivalently expressed as \(\Delta=\K\beta\), where \(\Delta(\cdot)\) is the cross-covariance function of \(X\) and \(Y\), and \(\K\) is the covariance operator of the process \(X\) (to be defined in Section~\ref{sec:rkhs}). This expression is a continuous analog of the normal equations that arise in finite-dimensional regression settings, and since the operator \(\K\) is non-invertible in general, questions of existence and unicity of \(\beta\) need further study \citep[see][]{cardot2011functional}.
+where \(\alpha_0\in \R\), \(\epsilon\) is a random error term independent from \(X\) with \(\E [\epsilon]=0\), and the functional slope parameter \(\beta=\beta(\cdot)\) is assumed to be a member of the infinite-dimensional space \(L^2[0, 1]\). A careful rearrangement of~\eqref{eq:l2-linear-model} shows that the model is equivalently expressed as \(\Delta=\K\beta\), where \(\Delta(\cdot)\) is the cross-covariance function of \(X\) and \(Y\), and \(\K\) is the covariance operator of the process \(X\) (to be defined in Section~\ref{sec:rkhs}). This expression is a continuous analog of the normal equations that arise in finite-dimensional regression settings, and since the operator \(\K\) is non-invertible in general, questions of existence and uniqueness of \(\beta\) need further study \citep[see][]{cardot2011functional}.
 
 Technical details aside, the inference on \(\beta\) is also hampered by the fact that \(L^2[0,1]\) is an extremely wide space that contains many non-smooth or ill-behaved functions, so that any estimation procedure involving optimization on it would typically be hard.
 Although it can be tempting to simply discretize the observed values on a grid and proceed with standard multiple linear regression, this would result in an under-determined model in which the estimated parameters lose meaning. This happens essentially because the number of available parameters is infinite, but the number of equations is finite \citep[see][Sec.~15.2]{ramsay2005functional}. Thus, some regularization or dimensionality reduction techniques are needed for parameter estimation; see \citet{reiss2017methods} for a summary of several widespread methods.
@@ -58,20 +58,20 @@ There are other proposals for models that change the habitat of the functional p
 
 A major aim of this work is to motivate these recently-proposed RKHS models inside the functional framework, while also providing efficient techniques to apply them in practice. Our main contribution is the proposal of a Bayesian approach to parameter estimation within the aforementioned RKHS models, in which a prior distribution is imposed on the unknown functional parameter to obtain a posterior distribution after seeing the data. Although setting a prior distribution on a functional space is generally a hard task, the specific parametric formulation of the RKHS models we propose greatly facilitates this (see Chapter~\ref{ch:bayesian} for details). A similar Bayesian scheme has recently been explored in \citet{grollemund2019bayesian}, albeit not within a RKHS framework.
 
-Another set of techniques extensively studied in this context are variable selection methods, which aim to select the marginals \(\{X(t_j)\}\) of the process that better summarize it according to some optimality criterion. As it happens, some variable selection methods have already been proposed in the RKHS framework \citep[see for example][]{berrendero2019rkhs}, but in general they have their own dedicated algorithms and procedures. As will become apparent in the forthcoming chapters, given the nature of our suggested Bayesian model we can easily isolate the marginal posterior distribution corresponding to a finite set of points \(\{t_j\}\), and thus provide a Bayesian-motivated variable selection process along with the other prediction methods that naturally arise within our model. In this way, in addition to making predictions about the input data, we can evaluate exactly which marginals of the functional explanatory variable contain the most relevant information. These points-of-impact selection models for functional predictors have also been considered in the  literature; see \citet{poss2020superconsistent}, \citet{berrendero2016variable} or \citet{ferraty2010most} by way of illustration. Another example of a related strategy is the work of \citet{james2009functional}, in which the authors propose a method to estimate \(\beta(t)\) in such a way that it is exactly zero over some regions in the domain (a sort of ``region selection'' algorithm).
+Another set of techniques extensively studied in this context are variable selection methods, which aim to select the marginals \(\{X(t_j)\}\) of the process that better summarize it according to some optimality criterion. As it happens, some variable selection methods have already been proposed in the RKHS framework \citep[see for example][]{berrendero2019rkhs, bueno2019variable}, but in general they have their own dedicated algorithms and procedures. As will become apparent in the forthcoming chapters, given the nature of our suggested Bayesian model we can easily isolate the marginal posterior distribution corresponding to a finite set of points \(\{t_j\}\), and thus provide a Bayesian-motivated variable selection process along with the other prediction methods that naturally arise within our model. In this way, in addition to making predictions about the input data, we can evaluate exactly which marginals of the functional explanatory variable contain the most relevant information. These points-of-impact selection models for functional predictors have also been considered in the  literature; see \citet{poss2020superconsistent}, \citet{berrendero2016variable} or \citet{ferraty2010most} by way of illustration. Another example of a related strategy is the work of \citet{james2009functional}, in which the authors propose a method to estimate \(\beta(t)\) in such a way that it is exactly zero over some regions in the domain (a sort of ``region selection'' algorithm).
 
 
 \subsection*{Bayesian inference}
 
 The term Bayesian inference usually refers to a wide class of methods that to some extent employ Bayes' theorem to update the initial probability assigned to a hypothesis (or a parameter) when new information is available. It can be seen as a general tool for modeling situations or problems that involve uncertainty; some examples include Bayesian hierarchical modeling, Bayesian regression or even Bayesian neural networks \citep[see e.g.][]{murphy2012machine, bishop2006pattern}. Specifically, in this work we will be interested in performing parameter estimation in a Bayesian framework, so that pre-existing information and beliefs about the parameters can be incorporated into the model.
 
-One difficulty found in almost all Bayesian methods is that the posterior distribution, the main object of interest, is usually intractable due to the integral that appears as the normalizing constant in Bayes' rule. A way to bypass this limitation is to use conjugate distributions, where it can be rigorously proven that a certain combination of likelihood and prior distributions produces a posterior distribution in the same family as the prior. However, unless conjugate priors are used, a closed-form expression is generally unattainable and some type of approximation is required. Apart from basic numerical integration, some well-performing methods in this regard are variational inference approaches \citep[e.g.][]{blei2017variational} and MCMC methods \citep[e.g.][]{brooks2011handbook}. The former are based on approximating the posterior by another distribution restricted to a certain parametric family so that the Kullback-Leibler divergence between them is minimized, whereas the latter are iterative methods that directly provide approximate samples of the posterior distribution.
+One difficulty found in almost all Bayesian methods is that the posterior distribution, the main object of interest, is usually intractable due to the integral that appears as the normalizing constant in Bayes' rule. A way to bypass this limitation is to use conjugate distributions, where it can be rigorously proven that a certain combination of likelihood and prior distributions produces a posterior distribution in the same family as the prior. However, unless conjugate priors are used, a closed-form expression of the posterior is generally unattainable and some type of approximation is required. Apart from basic numerical integration, some well-performing methods in this regard are variational inference approaches \citep[e.g.][]{blei2017variational} and MCMC methods \citep[e.g.][]{brooks2011handbook}. The former are based on approximating the posterior by another distribution restricted to a certain parametric family so that the Kullback-Leibler divergence between them is minimized, whereas the latter are iterative methods that directly provide approximate samples of the posterior distribution.
 
-On a separate note, there are some recent works that tackle Bayesian inference from a functional perspective, mostly in relation to the distribution over functions induced by Bayesian neural networks. Some examples are the functional Bayesian neural networks proposed by~\citet{sun2019functional}, variational implicit processes \citep{ma2019variational} and their deep variants \citep{ortega2022deep}, or the functional variational inference approach suggested in~\citet{ma2021functional}. Moreover, there are approaches to functional regression from a Bayesian perspective that impose a Gaussian process prior on the functional parameter \(\beta\) \citep[e.g][]{lian2016posterior}, and it turns out that the RKHS's corresponding to these Gaussian processes, described for example in~\citet{van2008reproducing}, are useful when studying contraction rates of the posterior distribution.
+On a separate note, there are some recent works that tackle Bayesian inference from a functional perspective, mostly in relation to the distribution over functions induced by a Bayesian neural network. Some examples are the functional Bayesian neural networks proposed by~\citet{sun2019functional}, variational implicit processes \citep{ma2019variational} and their deep variants \citep{ortega2022deep}, or the functional variational inference techniques suggested in~\citet{ma2021functional}. Moreover, there are approaches to functional regression from a Bayesian perspective that impose a Gaussian process prior on the functional parameter \(\beta\) \citep[e.g][]{lian2016posterior}, and it turns out that the RKHS's corresponding to these Gaussian processes, described for example in~\citet{van2008reproducing}, are useful when studying contraction rates of the posterior distribution.
 
 \section{Reproducing kernel Hilbert spaces}\label{sec:rkhs}
 
-In this section we present a brief exposition of some basic concepts regarding reproducing kernel Hilbert spaces. Although there are quite a few ways of introducing these spaces, we adopt a probabilistic point of view that will set the stage for the development of the subsequent theory. For a more detailed account, a good reference is the book by~\citet{berlinet2004reproducing}. Although the following ideas can be extended to complex functions, we restrict ourselves to real-valued functions for the sake of simplicity. We start by defining the concept of kernel functions, which are the foundation of these spaces.
+In this section we present a brief exposition of some basic concepts regarding reproducing kernel Hilbert spaces. Although there are quite a few ways of introducing these spaces, we adopt a probabilistic point of view that will set the stage for the development of the subsequent theory. Although the following ideas can be extended to complex functions, we restrict ourselves to real-valued functions for the sake of simplicity; for a more detailed account, a good reference is the book by~\citet{berlinet2004reproducing}. We start by defining the concept of kernel functions, which are the foundation of these spaces.
 
 \begin{definition}
   We say that a function of two variables \(K: \T \times \T \to \R\) is positive semidefinite\footnote{Sometimes in the literature these functions are known simply as positive definite.} if
@@ -91,7 +91,11 @@ Note that, as subsets, \(\Hcal_0(K)\subset L^2[0,1]\). However, this new space c
 \[
 \dotprod{f}{g}_K = \sum_{i, j} a_i b_j K(t_i, s_j),
 \]
-for \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_j, \cdot)\). We show below that it is well defined, but before we note that functions in this space satisfy the so-called \textit{reproducing property}: \(f(t) = \dotprod{K(t, \cdot)}{f}_K\) for all \(t \in [0, 1]\). In particular, \(K(t, s)=\dotprod{K(t, \cdot)}{K(s, \cdot)}_K\), which can be understood as saying that the kernel \textit{reproduces} itself, hence the term ``reproducing kernel''.
+for \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_j, \cdot)\). We show below that it is well defined, but before we note that functions in this space satisfy the so-called \textit{reproducing property}:
+\[
+f(t) = \dotprod{K(t, \cdot)}{f}_K, \quad \text{for all } t \in [0, 1].
+\]
+In particular, \(K(t, s)=\dotprod{K(t, \cdot)}{K(s, \cdot)}_K\), which can be understood as saying that the kernel \textit{reproduces} itself, hence the term ``reproducing kernel''.
 
 \begin{proposition} \((\Hcal_0(K), \dotprod{\cdot}{\cdot}_K)\) is an inner product space.
 \end{proposition}
@@ -104,7 +108,7 @@ for \(f(\cdot)=\sum_i a_i K(t_i, \cdot) \) and \(g(\cdot)=\sum_j b_j K(s_j, \cdo
     \[
     0 \leq \dotprod{f + \epsilon K(t, \cdot)}{f + \epsilon K(t, \cdot)}_K = \dotprod{f}{f}_K + 2\epsilon\dotprod{f}{K(t, \cdot)}_K + \epsilon^2 K(t, t).
     \]
-    Now, if \(\dotprod{f}{f}_K=0\), by letting \(\epsilon\to 0^{\pm}\) we see that \(f(t)=\dotprod{f}{K(t, \cdot)}_K\) necessarily vanishes for all \(t\), as desired.
+    Now, if \(\dotprod{f}{f}_K=0\), by letting \(\epsilon\to 0^{\pm}\) it follows that \(f(t)=\dotprod{f}{K(t, \cdot)}_K\) necessarily vanishes for all \(t\), as desired.
   \end{proof}
 
 At this point, \(\Hcal(K)\) is defined to be the completion of \(\Hcal_0(K)\) under the norm induced by the scalar product \(\dotprod{\cdot}{\cdot}_K\), which informally amounts to adding all the limits of Cauchy sequences in \(\Hcal_0(K)\), turning it into a genuine Hilbert space with the inner product extended accordingly. Then it is immediate to see that the reproducing property is retained. An important consequence is that \(\Hcal(K)\) is a space of actual functions and not of equivalence classes, since the values of the functions at particular points are in fact relevant, unlike in \(L^2\)-spaces.
@@ -119,15 +123,15 @@ Indeed, another way of defining a RKHS is via the continuity of all the \textit{
   \end{enumerate}
 \end{proposition}
 \begin{proof}
-  To prove \((i)\), simply note that for any \(t\in[0,1]\) and \(f\in\Hcal(K)\) the Cauchy-Schwarz inequality and the reproducing property tell us that
+  To prove \textit{(i)}, simply note that for any \(t\in[0,1]\) and \(f\in\Hcal(K)\) the Cauchy-Schwarz inequality and the reproducing property tell us that
   \[
   |\delta_t(f)| = |f(t)| = |\dotprod{f}{K(t, \cdot)}_K| \leq \|K(t, \cdot)\|_K \|f\|_K = \sqrt{K(t, t)}\|f\|_K,
   \]
-  and consequently \(\|\delta_t\|\leq \sqrt{K(t, t)}\). To see \((ii)\), observe that for any \(t\in[0,1]\) we have
+  and consequently \(\|\delta_t\|\leq \sqrt{K(t, t)}\). To see \textit{(ii)}, observe that for any \(t\in[0,1]\) we have
   \[
     |f_n(t) - f(t)| = |\delta_t(f_n - f)| \leq \|\delta_t\|\|f_n - f\|_K,
   \]
-  as we have just shown in \((i)\) that the evaluation operator is bounded. Moreover, if \(K\) is continuous on its (compact) domain, \(\|\delta_t\| \leq \sup_s \sqrt{K(s, s)}=M<\infty\) for all \(t\), so the convergence is indeed uniform. Finally, we prove the second statement in \((iii)\), and refer the reader to \citet[][Th 2.6]{saitoh2016theory} for a complete proof. If \(K\) is continuous, then it is clear that every function in \(\Hcal_0(K)\) is continuous. Let us now fix an arbitrary \(f\in \Hcal(K)\). By definition, there exists a sequence \(\{f_n\}\subset \Hcal_0(K)\) of continuous functions such that \(\|f_n - f\|_K \to 0\). But then \(f_n \to f\) uniformly by \((ii)\), and therefore \(f\) is continuous as the uniform limit of continuous functions. Note that this statement remains valid, with a slightly different proof, even when the underlying domain is not compact.
+  as we have just shown in \textit{(i)} that the evaluation operator is bounded. Moreover, if \(K\) is continuous on its (compact) domain, \(\|\delta_t\| \leq \sup_s \sqrt{K(s, s)}=M<\infty\) for all \(t\), so the convergence is indeed uniform. Finally, we prove the second statement in \textit{(iii)}, and refer the reader to \citet[][Th 2.6]{saitoh2016theory} for a complete proof. If \(K\) is continuous, then it is clear that every function in \(\Hcal_0(K)\) is continuous. Let us now fix an arbitrary \(f\in \Hcal(K)\). By definition, there exists a sequence \(\{f_n\}\subset \Hcal_0(K)\) of continuous functions such that \(\|f_n - f\|_K \to 0\). But then \(f_n \to f\) uniformly by \textit{(ii)}, and therefore \(f\) is continuous as the uniform limit of continuous functions. Note that this statement remains valid, with a slightly different proof, even when the underlying domain is not compact.
 \end{proof}
 
 For the sake of completeness, it is worth mentioning that the RKHS associated with a kernel function is unique, and indeed the Moore-Aronszajn theorem \citep[e.g.][Th. 3]{berlinet2004reproducing} states that there is a one-to-one correspondence between kernel functions and reproducing kernel Hilbert spaces. Let us now illustrate the definition in a few simple cases; see \citet[][Ch.~1]{saitoh2016theory} for more involved examples.
@@ -154,7 +158,7 @@ For the sake of completeness, it is worth mentioning that the RKHS associated wi
 
 \subsection*{The covariance operator}
 
- Note that, as expected, the covariance function of \(X\) plays a crucial role in characterizing the associated RKHS. An integral operator closely related to the kernel is the so-called covariance operator, namely
+ Note that, as expected, the covariance function of \(X\) plays a crucial role in characterizing the associated RKHS. An integral operator closely related to this covariance function is the so-called covariance operator, namely
 \[
 \K f(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f \in L^2[0, 1],
 \]
@@ -168,7 +172,7 @@ which is self-adjoint and compact when \(K\) is continuous \citep[e.g.][Th.~4.6.
     for all \(t\) and \(s\), where the convergence is absolute and uniform.
 \end{theorem}
 
-In connection with our RKHS theory, it can be shown that the set \(\{\sqrt{\lambda_j}\phi_j\}\) constitutes an orthonormal basis of \(\Hcal(K)\) \citep[see e.g.][Sec.~4.4]{cucker2007learning}. Furthermore, a similar orthogonal decomposition holds for our stochastic process \(X\), an expansion which lies at the base of many \(L^2\) functional regression models. The proof of the following result, along with the proof of Mercer's theorem, can be consulted in \citet[][Sec.~3.2]{berlinet2004reproducing}.
+In connection with our RKHS theory, it can be shown that the set \(\{\sqrt{\lambda_j}\phi_j\}\) constitutes an orthonormal basis of \(\Hcal(K)\) \citep[see e.g.][Sec.~4.4]{cucker2007learning}. Furthermore, a similar orthogonal decomposition holds for the stochastic process \(X\), an expansion that lies at the base of many \(L^2\) functional regression models. The proof of the following result, along with the proof of Mercer's theorem, can be consulted in \citet[][Sec.~3.2]{berlinet2004reproducing}.
 
 \begin{theorem}[Karhunen-Loève expansion]
   With the assumptions and notations of Theorem~\ref{th:mercer}, the centered process \(X=X(t)\) with covariance function \(K\) admits the quadratic-mean representation
@@ -181,13 +185,15 @@ In connection with our RKHS theory, it can be shown that the set \(\{\sqrt{\lamb
   \]
 \end{theorem}
 
+\enlargethispage{1\baselineskip}
+
 In addition to these results, it is worth mentioning that the covariance operator \(\K\) provides several alternative definitions of \(\Hcal(K)\). For example, the RKHS can be identified with the image of the operator's square root, i.e., \(\Hcal(K) = \K^{1/2}(L^2[0, 1])\), with inner product \(\dotprod{f}{g}_K = \dotprod{\K^{-1/2}(f)}{\K^{-1/2}(g)}\). Furthermore, we can think of the norm in \(\Hcal(K)\) as an \(L^2\)-like regularized norm, since this space can also be seen as the set \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), with corresponding inner product \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}\). Note that, since \(\{\lambda_j\}\) tends to zero, this definition highlights the fact that functions in \(\Hcal(K)\) are smooth, not only in that they inherit the regularity of the kernel \(K\), but also in the sense that their components in an orthonormal basis, namely \(\dotprod{f}{\phi_j}\), need to vanish quickly.
 
 \subsection*{Loève's isometry}
 
-Until now we have seen that \(\Hcal(K)\) is a space related to \(X\) only through its covariance function. Nevertheless, we will now hopefully clarify that this space can indeed be seen as \textit{the} Hilbert space inherently associated with the process \(X\) itself. Let us shift the perspective momentarily and consider the linear span of \(X\) in the space of all zero-mean random variables with finite second moment, i.e.:
+Until now we have seen that \(\Hcal(K)\) is a space related to \(X\) only through its covariance function. Nevertheless, we will now hopefully clarify that this space can indeed be seen as \textit{the} Hilbert space inherently associated with the process \(X\) itself. Let us shift the perspective momentarily and consider the space \(L^2(\Omega)\) of all zero-mean random variables with finite second moment, endowed with the usual norm \(\|U\|^2=\E[U]^2\). Then, the linear span of \(X\) in \(L^2(\Omega)\) is given by
 \[
-\Lcal_0(X) = \left\{\sum_{i=1}^p a_i X(t_i): p\in\N, \ a_i \in \R, \ t_i \in [0,1]\right\}.
+\Lcal_0(X) = \left\{U \in L^2(\Omega): U = \sum_{i=1}^p a_i X(t_i): p\in\N, \ a_i \in \R, \ t_i \in [0,1]\right\}.
 \]
 It is well known that its completion in \(L^2(\Omega)\), denoted \(\Lcal(X)\), is a Hilbert space, sometimes called the Hilbert space generated by \(X\). In the words of \citet{berlinet2004reproducing}, ``\(\Lcal(X)\) \textit{contains the random variables attainable by linear operations, including limits, on the measurements of the process}''. As it happens, via \textit{Loève's isometry} \citep{loeve1948fonctions} one can establish a congruence \(\Psi_X\) between \(\Hcal(K)\) and \(\Lcal(X)\) \citep[see Lemma 1.1 in][]{lukic2001stochastic}. This isometry is essentially the completion of the correspondence
   \begin{equation}\label{eq:loeves-isometry}
@@ -195,7 +201,7 @@ It is well known that its completion in \(L^2(\Omega)\), denoted \(\Lcal(X)\), i
   \end{equation}
 and can be formally defined, in terms of its inverse, as \(\Psi^{-1}_X(U)(t) = \E[U X(t)]\) for \(U \in \Lcal(X)\). Thus, \(\Hcal(K)\) can be regarded as an isometric copy of \(\Lcal(X)\), an approach that is often useful in statistics.
 
-However, despite the close connection between the process \(X\) and the space \(\Hcal(K)\), special care must be taken when dealing with concrete realizations of the process. It can be shown that under rather general conditions the trajectories of \(X\) \textit{do not belong} to the corresponding RKHS with probability one \citep[see for example][Cor.~7.1]{lukic2001stochastic}. For instance, the trajectories of a Brownian motion are known to be nowhere differentiable, but as shown in Example~\ref{ex:bm}, the elements of the corresponding RKHS are differentiable almost everywhere. An heuristic argument to justify this fact, given in \citet{wahba1990spline}, is as follows: consider the Karhunen-Loève expansion of \(X\), i.e.,
+However, despite the close connection between the process \(X\) and the space \(\Hcal(K)\), special care must be taken when dealing with concrete realizations of the process. It can be shown that under rather general conditions the trajectories of \(X\) \textit{do not belong} to the corresponding RKHS with probability one \citep[see for example][Cor.~7.1]{lukic2001stochastic}. For instance, the trajectories of a Brownian motion are known to be nowhere differentiable, but as shown in Example~\ref{ex:bm}, the elements of the associated RKHS are differentiable almost everywhere. A heuristic argument to justify this fact, given in \citet{wahba1990spline}, is as follows: consider the Karhunen-Loève expansion of \(X\), i.e.,
 \[
   X(t) = \sum_{j=1}^\infty \zeta_j \phi_j(t),
 \]
@@ -214,32 +220,34 @@ As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined and lacks m
   \item \(\E[\dotprod{X}{f}_K\dotprod{X}{g}_K] = \dotprod{f}{g}_K\).
 \end{enumerate}
 \end{proposition}
-Note that the statement \((iii)\) above provides yet another characterization of the inner product in \(\Hcal(K)\), where \(\dotprod{X}{f}_K\) and \(\dotprod{X}{g}_K\) are understood as the random variables representing \(f\) and \(g\) in \(\Lcal(X)\), respectively.
+Note that the statement \textit{(iii)} above provides yet another characterization of the inner product in \(\Hcal(K)\), where \(\dotprod{X}{f}_K\) and \(\dotprod{X}{g}_K\) are understood as the random variables representing \(f\) and \(g\) in \(\Lcal(X)\), respectively.
 
 
 \subsection*{Applications in machine learning}
 
-Although not the main concern of this work, the theory of reproducing kernels and the associated kernel methods find applications in many areas of machine learning. For example, the well-known \textit{kernel trick} can be seen as a specific application of the reproducing property, where a feature map \(\Phi(x) \in \Hcal\) is applied to the objects in the space of interest, transforming them into richer elements in a RKHS. Then, many computations can be efficiently carried out in an implicit manner by means of the corresponding kernel
+Although not the main concern of this work, the theory of reproducing kernels and the associated kernel methods find applications in many areas of machine learning. For example, the well-known \textit{kernel trick} can be seen as a specific application of the reproducing property. First, a feature map \(\Phi(x) \in \Hcal\) is applied to the objects in the space of interest, transforming them into richer elements in a RKHS. Then, many computations can be efficiently carried out in an implicit manner by means of the corresponding kernel
 \[
 K(x, y)=\dotprod{\Phi(x)}{\Phi(y)}_{\Hcal}.
 \]
-The fact that one does not need to explicitly compute \(\Phi(x)\) is especially relevant for kernels with a simple expression but a possibly complex feature space (e.g. infinite-dimensional), such as the Gaussian kernel \(K(x, y)=\exp(-\gamma\|x-y\|^2)\).
+The fact that one does not need to explicitly compute \(\Phi(x)\) is especially relevant for kernels with a simple expression but a possibly complex (e.g. infinite-dimensional) feature space, such as the Gaussian kernel \(K(x, y)=\exp(-\gamma\|x-y\|^2)\).
 
 Another example of the use of RKHS's is in the context of regularization problems, where the celebrated \textit{representer theorems} provide a way of obtaining closed-form solutions to a penalized optimization problem. For instance, learning techniques that rely on empirical risk minimization \citep[e.g.][]{vapnik1991principles} benefit from one such result by \citet{scholkopf2001generalized}, stated below.
 
 \begin{theorem}[Generalized representer theorem]
-  Consider a RKHS of functions \(\Hcal(K)\) defined over a non-empty set \(\X\), a training set \(\{(x_i, y_i)\}_{i=1}^n \subset (\X \times \R)^n\), an arbitrary error function \(R: (\X  \times \R^2)^n \to \R\cup\{\infty\}\), and a strictly increasing real-valued function \(\Omega:[0,\infty)\to \R\). Then, any minimizer \(f^\ast\) of the regularized empirical risk
+  Consider a RKHS of functions \(\Hcal(K)\) defined over a non-empty set \(\X\), a training set \(\{(x_i, y_i)\}_{i=1}^n \subset (\X \times \R)^n\), an arbitrary error function \(\mathcal R: (\X  \times \R^2)^n \to \R\cup\{\infty\}\), and a strictly increasing real-valued function \(\Omega:[0,\infty)\to \R\). Then, any minimizer \(f^\ast\) of the regularized empirical risk
   \[
-    R(\{(x_i, y_i, f(x_i))\}_{i=1}^n) + \Omega(\|f\|_K)
+    \mathcal R(\{(x_i, y_i, f(x_i))\}_{i=1}^n) + \Omega(\|f\|_K)
   \]
   is of the form \(f^\ast(\cdot) = \sum_{i=1}^n a_i K(x_i, \cdot)\), where \(a_i\in\R\) for all \(i=1,\dots,n\).
 \end{theorem}
 
 \section{Markov chain Monte Carlo}\label{sec:mcmc}
 
-In the context of Bayesian inference, there are many situations in which we would like to sample from a distribution without using its explicit closed-form density, either because we do not know it, or because it is computationally difficult to do so. In these cases, we could work with a function \(f(x)\) proportional to our target density \(\pi(x)\). More specifically, in a Bayesian framework the posterior distribution is often intractable due to the normalizing integral constant, but we do know that \(posterior \propto prior \times likelihood\).
+In the context of Bayesian inference, there are many situations in which we would like to sample from a distribution without using its explicit closed-form density, either because we do not know it, or because it is computationally difficult to do so. In these cases, we could work with a function \(f(x)\) proportional to our target density \(\pi(x)\). More to the point, in a Bayesian framework the posterior distribution is often intractable due to the normalizing integral constant, but we do know that \textit{posterior} \(\propto\) \textit{prior} \(\times\) \textit{likelihood}.
 
 When \(x\in\R\), we can use Monte Carlo algorithms such as \textit{rejection sampling}. In a nutshell, this method samples uniformly from the area under \(f(x)\) by means of an auxiliary density that encompasses this area. Specifically, one needs to find a density function \(g\) with \(\supp f \subset \supp g\) and \(f \leq Mg\) for some \(M>1\). Then, sampling from \(g\) and accepting the proposal, say \(x\), with probability \(f(x)/Mg(x)\) yields an approximate set of samples from \(f\). Nevertheless, these kinds of algorithms are rapidly affected by the so-called \textit{curse of dimensionality} (see the schematic in Figure~\ref{fig:curse_dimensionality}), so new techniques are needed when sampling from multidimensional distributions. This is where Markov chain Monte Carlo (MCMC) methods come into play.
+
+\vspace{1em}
 
 \begin{figure}[ht!]
   \centering
@@ -247,13 +255,13 @@ When \(x\in\R\), we can use Monte Carlo algorithms such as \textit{rejection sam
   \caption{To cover the volume of \(f(x)\) in higher dimensions we intuitively need a volume that grows exponentially with the dimension itself.}\label{fig:curse_dimensionality}
 \end{figure}
 
-MCMC methods are based on the iterative construction of a Markov chain whose stationary distribution is the objective distribution \(\pi(x)\). In this way, we can take the samples of a sufficiently advanced chain as approximate realizations of \(X\sim \pi(x)\). When it comes to building the chains, transition probabilities are assigned in such a way that regions with higher density with respect to \(\pi(x)\) are favored (by means of the known proportional function \(f(x)\)). The dimensionality issues are somewhat mitigated, and on top of that there are specific tuning techniques to tackle them. However, the samples obtained from this procedure are not independent, though they can be made so by \textit{thinning} the chain and considering only one every few samples.
+MCMC methods are based on the iterative construction of a Markov chain whose stationary distribution is the objective distribution \(\pi(x)\). In this way, we can take the samples of a sufficiently advanced chain as approximate realizations of \(X\sim \pi(x)\). When it comes to building the chains, the transition probabilities are assigned in such a way that regions with higher density with respect to \(\pi(x)\) are favored (by means of the known proportional function \(f(x)\)). The dimensionality issues are somewhat mitigated, and on top of that there are specific tuning techniques to tackle them. However, the samples obtained from this procedure are not independent, though they can be made more or less so by \textit{thinning} the chain and considering only one every few samples.
 
-Another advantage of these methods is that they recover the marginal distributions directly. Suppose that after a successful MCMC run we have \(M\) multivariate samples \(\{\theta^{(m)}=(\theta_1^{(m)},\dots, \theta_p^{(m)})\}\) of a joint \(p\)-dimensional distribution. The marginal distribution of each variable, which would be theoretically computed as
+Another advantage of these methods is that they recover the marginal distributions directly. Suppose that after a successful MCMC run we have \(M\) multivariate approximate samples \(\{\theta^{(m)*}=(\theta_1^{(m)*},\dots, \theta_p^{(m)*})\}\) of a joint \(p\)-dimensional distribution. The marginal distribution of each variable, which would be theoretically computed as
 \[
 \pi(\theta_i) = \int \pi(\theta)\,d\theta_1\,\cdots\,d\theta_{i-1}\,d\theta_{i+1}\,\cdots \,d\theta_p,
 \]
-can be approximated by just retaining the samples \(\{\theta_i^{(m)}\}\) corresponding to \(\theta_i\).
+can be approximated by just retaining the samples \(\{\theta_i^{(m)*}\}\) corresponding to \(\theta_i\).
 
 \subsection*{Metropolis-Hastings}
 
@@ -262,20 +270,17 @@ The Metropolis-Hastings algorithm \citep{metropolis1953equation} is arguably the
   \item Generate a proposal \(x' \sim g(x'|x_t)\).
   \item Accept the proposal with probability \(\alpha=\min\{1, f(x')/f(x_t)\}\). If accepted, set \(x_{t+1}=x'\); otherwise set \(x_{t+1}=x_t\).
 \end{enumerate}
-
  \begin{figure}[ht!]
    \centering
    \includegraphics[width=.55\textwidth]{mh}
    \caption{Representation of the Metropolis-Hastings algorithm (taken from \citet{jaewook2015metamodel}). The discarded proposals are represented by dashed circles.}\label{fig:mh}
  \end{figure}
-
-Figure~\ref{fig:mh} shows a schematic representation of the process. Note that \(f(x')/f(x_t)=\pi(x')/\pi(x_t)\) is a measure of how more likely is \(x'\) to be a sample from \(\pi\) than \(x_t\). This specific acceptance rate is also chosen so that the detailed balance equations of the chain are satisfied, i.e., \(\pi(x)P(x'|x)=\pi(x')P(x|x')\), where \(P(x|y)\) represents the transition probability from state \(x\) to state \(y\). These conditions essentially guarantee that \(\pi\) is the stationary distribution of the chain; see \citet{robert1999monte} for additional details. An immediate generalization consists on choosing a general (possibly non-symmetric) jump distribution \(g\), in which case the acceptance probability is rewritten as
+Figure~\ref{fig:mh} shows a schematic representation of the process. Note that the acceptance ratio \(f(x')/f(x_t)=\pi(x')/\pi(x_t)\) is a measure of how more likely is \(x'\) to be a sample from \(\pi\) than \(x_t\). This specific acceptance value is also chosen so that the detailed balance equations of the chain are satisfied, i.e., \(\pi(x)P(x'|x)=\pi(x')P(x|x')\), where \(P(x|y)\) is the transition probability from state \(x\) to state \(y\). These conditions essentially guarantee that \(\pi\) is the stationary distribution of the chain; see \citet{robert1999monte} for additional details. An immediate generalization consists on choosing a general (possibly non-symmetric) jump distribution \(g\), in which case the acceptance probability is rewritten as
 \[
 \alpha = \min\left\{1, \frac{f(x')g(x_t \mid x')}{f(x_t)g(x'\mid x_t)}\right\}.
 \]
 
 Although this algorithm performs well on a wide range of problems, it can be difficult to find a suitable jump distribution when the number of dimensions is high. If we know the conditional distribution of each variable on the rest of them, an alternative approach to sampling is \textit{Gibb's algorithm} \citep{geman1984stochastic}, which is a particular case of Metropolis-Hastings that considers separate samples for each dimension. Specifically, in each step we get unidimensional samples \textit{in turn} (e.g. via rejection sampling) of each variable conditional on the rest of them, using always the more up-to-date values available:
-
 \[
 \pi(x_l^{(i+1)} \mid x_{1}^{(i+1)}, \dots, x_{l-1}^{(i+1)}, x_{l+1}^{(i)}, \dots, x_L^{(i)}), \quad l=1,\dots,L.
 \]
@@ -286,7 +291,7 @@ Lastly, there are several methods based on Metropolis-Hastings that are the subj
 
 An interesting and often desirable property of sampling algorithms is that they be \textit{affine-invariant}, which means that they regard two distributions that differ in an affine transformation, say \(\pi(x)\) and \(\pi_{A, b}(Ax + b)\), as equally difficult to sample from. This is useful when one is working with very asymmetrical or skewed distributions, for an affine transformation can turn them into ones with simpler shapes.
 
-Generally speaking, a MCMC algorithm can be described at time \(t+1\) as \(\Lambda(t+1)=R(\Lambda(t), \xi(t), \pi)\), where \(\Lambda(t)\) is the state of the chain at instant \(t\), \(\pi(x)\) is the objective distribution, and \(\xi(t)\) is a sequence of i.i.d. random variables that represent the random behavior of the chain. With this notation, the property of affine-invariant can be characterized as \citep{goodman2010ensemble}:
+Generally speaking, a MCMC algorithm can be described through a function \(R\) as \(\Lambda(t+1)=R(\Lambda(t), \xi(t), \pi)\), where \(\Lambda(t)\) is the state of the chain at instant \(t\), \(\pi\) is the objective distribution, and \(\xi(t)\) is a sequence of i.i.d. random variables that represent the random behavior of the chain. With this notation, the  affine-invariance property can be characterized as \citep{goodman2010ensemble}:
  \[
  R(A\lambda+b, \xi(t), \pi_{A,b}) = AR(\lambda, \xi(t), \pi) + b,
  \]
@@ -319,7 +324,7 @@ Supposing \(\R^p\) is the sample space, the corresponding acceptance probability
 \]
 where \(W\) is a normal distribution with mean \(0\) and the same covariance as the sample covariance of all walkers in \(S_l\). The acceptance probability in this case is just the Metropolis ratio, i.e., \(\alpha=\min\{1, \pi(\Gamma)/\pi(\Lambda_l(t))\}\).\\
 
-From a computational perspective, the Python library \textit{emcee}\footnote{\url{https://emcee.readthedocs.io/en/stable/}} \citep{foreman2013emcee} provides a parallel implementation of this algorithm. The idea is to divide the ensemble \(\Lambda\) into two equally-sized subsets \(\Lambda^{(0)}\) and \(\Lambda^{(1)}\), and then proceed on each iteration in the following alternate fashion:
+From a computational perspective, the Python library \textit{emcee}\footnote{\url{https://emcee.readthedocs.io}} \citep{foreman2013emcee} provides a parallel implementation of this algorithm. The idea is to divide the ensemble \(\Lambda\) into two equally-sized subsets \(\Lambda^{(0)}\) and \(\Lambda^{(1)}\), and then proceed on each iteration in the following alternate fashion:
 
 \begin{enumerate}[1.]
   \item Update \textit{all} walkers in \(\Lambda^{(0)}\) through one of the available moves explained above, using \(\Lambda^{(1)}\) as the complementary ensemble.

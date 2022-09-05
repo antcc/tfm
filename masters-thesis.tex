@@ -21,6 +21,8 @@
 \usepackage{metalogo}
 \usepackage{etoolbox}
 \usepackage{tocloft}
+\usepackage{pdfpages}
+\usepackage{placeins}
 \usepackage{xcolor}
 \usepackage{cancel}
 \usepackage{bbding}
@@ -178,7 +180,7 @@
 %\setlist{itemsep=0.05em}
 \setlist{noitemsep}
 \setlist[1]{labelindent=\parindent} % < Usually a good idea
-\setlist[enumerate,1]{label=\((\roman*)\)}
+\setlist[enumerate,1]{label=(\roman*)}
 
 % Continuous counter for footnotes and figures
 \counterwithout{footnote}{chapter}
@@ -255,8 +257,11 @@
 \color{teal}\FourStar
 \end{center}
 
+\noindent \textbf{Acknowledgments}
+\vspace{.5em}
+
 \begin{small}
-This research has been partially supported by grant PRE\(2020\)-\(095147\) of the Spanish Ministry of Science and Innovation (MICINN). We also wish to acknowledge the computational resources provided by the Centro de Computación Científica-Universidad Autónoma de Madrid (CCC-UAM), which were instrumental in performing the experiments in this work.
+\noindent This research has been partially supported by grant PRE\(2020\)-\(095147\) of the Spanish Ministry of Science and Innovation (MICINN). We also wish to acknowledge the computational resources provided by the Centro de Computación Científica-Universidad Autónoma de Madrid (CCC-UAM), which were instrumental in performing the experiments in this work.
 \end{small}
 
 
