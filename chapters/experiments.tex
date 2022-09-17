@@ -46,7 +46,7 @@ Also, when applicable, we fix a variance \(\sigma^2=0.5\) for the error terms \(
 
 \paragraph{Linear regression data sets.} We consider three different types of simulated data sets, all with a common value of \(\alpha_0=5\).
 \begin{itemize}
-  \item A RKHS model where the response is generated as \(Y= 0.5 -5X(0.1) + X(0.4) + 10X(0.8) + \epsilon\), for each of the four GP's mentioned above.
+  \item A RKHS model where the response is generated as \(Y=5 -5X(0.1) + X(0.4) + 10X(0.8) + \epsilon\), for each of the four GP's mentioned above.
   \item A \(L^2\)-model with underlying coefficient function \(\beta(t)=\log(1+4t)\), again for the same four GP's.
   \item A model based on non-GP regressors. Specifically, we use a geometric Brownian motion (GBM) defined as \(X(t)=e^{BM(t)}\), where \(BM(t)\) is a standard Brownian motion. In this case, we consider two data sets, one with a RKHS response and one with a \(L^2\) response, with the same parameters as above.
 \end{itemize}
@@ -204,7 +204,7 @@ In this section we present some experiments that are not directly related to mea
 
 One requirement that our model should satisfy is that it should be able to recover the true parameter function when the underlying data generation model is a finite-dimensional RKHS model. This is generally the case when the value of \(p\) in our model and the true value of \(p\) coincide, but what happens when we change the value of \(p\) in the model?
 
-Take for example a RKHS data set with two components generated according to the formula \(Y=-5X(0.1) + 10X(0.8) + \epsilon\), with \(\epsilon\sim \mathcal N(0, 0.5)\). Figure~\ref{fig:beta_trace_3} shows the resulting posterior distribution of the parameters \(b=(\beta_1, \beta_2, \beta_3)\) and \(\tau=(\tau_1, \tau_2, \tau_3)\) for a model with 3 components. As we can see, one of the coefficients has gone to zero to account for the overspecification of the model, while the other two have stabilized very close to the true parameters. The same goes for the time instants, except that in this case there is no default value to represent that a component is unused, so the time corresponding to the null coefficient oscillates back and forth. The estimated function (based for example in the mode of the posterior distributions) will not be perfect, essentially because of the noise in the response. But it should be close to the true parameter function \(\alpha(t)=-5K(t, 0.1) + 10K(t, 0.8)\), providing a good predictive performance.
+Take for example a RKHS data set with two components generated according to the formula \(Y=5 -5X(0.1) + 10X(0.8) + \epsilon\), with \(\epsilon\sim \mathcal N(0, 0.5)\). Figure~\ref{fig:beta_trace_3} shows the resulting posterior distribution of the parameters \(b=(\beta_1, \beta_2, \beta_3)\) and \(\tau=(\tau_1, \tau_2, \tau_3)\) for a model with 3 components. As we can see, one of the coefficients has gone to zero to account for the overspecification of the model, while the other two have stabilized very close to the true parameters. The same goes for the time instants, except that in this case there is no default value to represent that a component is unused, so the time corresponding to the null coefficient oscillates back and forth. The estimated function (based for example in the mode of the posterior distributions) will not be perfect, essentially because of the noise in the response. But it should be close to the true parameter function \(\alpha(t)=-5K(t, 0.1) + 10K(t, 0.8)\), providing a good predictive performance.
 
 \begin{figure}[ht!]
   \centering

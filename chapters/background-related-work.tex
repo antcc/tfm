@@ -40,7 +40,7 @@ Y = \alpha_0 + \sum_{j=1}^p \beta_j Z_j,
 \]
 which can then be solved in the usual manner. For example, when the chosen basis is composed of eigenfunctions of the covariance operator \(\K\), this method is known as Functional Principal Component Regression (FPCR). Another class of methods focus on selecting an \textit{a priori} basis for \(\beta\) (e.g. a spline basis) and solving a penalized least squares problem. In particular, for a truncated basis representation of the form \(\beta(t)=\phi(t)'b\), with \(\phi(t)=(\phi_1(t), \dots, \phi_p(t))'\) and \(b\in\R^p\), a typical minimization problem would be
 \[
-\argmin_{(\alpha_0, b)\in\R\times\R^p} \ \left\{ \sum_{i=1}^n \left( y_i - \alpha_0 - \int_0^1 x_i(t)[\phi(t)'b]\, dt\right)^2 + \lambda \Omega(b) \right\},
+\argmin_{(\alpha_0, b)\in\R\times\R^p} \ \ \ \left\{ \sum_{i=1}^n \left( y_i - \alpha_0 - \int_0^1 x_i(t)[\phi(t)'b]\, dt\right)^2 + \lambda \Omega(b) \right\},
 \]
 where \(\Omega\) is some penalty function and \(\lambda>0\) is a regularization parameter.
 
@@ -52,7 +52,7 @@ where \(\alpha_0 \in \R\) and \(\beta \in L^2[0, 1]\). In this situation, the mo
 
 \subsection*{RKHS models}
 
-In spite of the apparent generality of model~\eqref{eq:l2-linear-model}, it can be shown that it is not flexible enough to include ``simple'' finite-dimensional models based on linear combinations of the marginals, such as \(Y=\alpha_0 + \beta_1 X(t_1)+ \cdots + \beta_p X(t_p) + \epsilon\) for some constants \(\beta_j\in\R\) and instants \(t_j\in[0,1]\); see \citet{berrendero2020general} for additional details on this. It turns out that in both linear and logistic scenarios a natural alternative to the \(L^2\)-model is the so-called Reproducing Kernel Hilbert Space (RKHS) model, which instead assumes the unknown functional parameter to be a member of the RKHS associated with the covariance function of the process \(X\), making use of the scalar product of that functional space. As we will show later on, not only is this model simpler and arguably easier to interpret, but it also constrains the parameter space to smoother and more manageable functions. In fact, it does include a model based on finite linear combinations of the marginals of \(X\) as a particular case, which is especially appealing to practitioners confronted with functional data problems due to its simplicity. These RKHS-based models and their idiosyncrasies have been explored in \citet{berrendero2019rkhs, berrendero2020general} in the functional linear regression setting, and in \citet{berrendero2018functional} for the case of functional logistic regression.
+In spite of the apparent generality of model~\eqref{eq:l2-linear-model}, it can be shown that it is not flexible enough to include ``simple'' finite-dimensional models based on linear combinations of the marginals of the process, such as \(Y=\alpha_0 + \beta_1 X(t_1)+ \cdots + \beta_p X(t_p) + \epsilon\) for some constants \(\beta_j\in\R\) and instants \(t_j\in[0,1]\); see \citet{berrendero2020general} for additional details on this. It turns out that in both linear and logistic scenarios a natural and more general alternative to the \(L^2\)-model is the so-called Reproducing Kernel Hilbert Space (RKHS) model, which instead assumes the unknown functional parameter to be a member of the RKHS associated with the covariance function of the process \(X\), making use of the scalar product of that functional space. As we will show later on, not only is this model simpler and arguably easier to interpret, but it also constrains the parameter space to smoother and more manageable functions. In fact, it does include a model based on finite linear combinations of the marginals of \(X\) as a particular case, which is especially appealing to practitioners confronted with functional data problems due to its simplicity. These RKHS-based models and their idiosyncrasies have been explored in \citet{berrendero2019rkhs, berrendero2020general} in the functional linear regression setting, and in \citet{berrendero2018functional} for the case of functional logistic regression.
 
 There are other proposals for models that change the habitat of the functional parameter, and there are even some in which \(\beta\) is supposed to live in a RKHS, most notably \citet{yuan2010reproducing}. However, theirs are arbitrary RKHS's that do not directly exploit the relation with the process \(X\) (though the authors do use this connection to derive some asymptotic properties of their estimators), and therefore the approach is somewhat different. Incidentally, the RKHS associated with \(X\) also has some interesting properties that contribute to shed light on the near-perfect classification phenomenon for functional data, described by \citet{delaigle2012achieving} and further examined for example in the works of \citet{berrendero2018use} or \citet{torrecilla2020optimal}.
 
@@ -113,7 +113,7 @@ In particular, \(K(t, s)=\dotprod{K(t, \cdot)}{K(s, \cdot)}_K\), which can be un
 
 At this point, \(\Hcal(K)\) is defined to be the completion of \(\Hcal_0(K)\) under the norm induced by the scalar product \(\dotprod{\cdot}{\cdot}_K\), which informally amounts to adding all the limits of Cauchy sequences in \(\Hcal_0(K)\), turning it into a genuine Hilbert space with the inner product extended accordingly. Then it is immediate to see that the reproducing property is retained. An important consequence is that \(\Hcal(K)\) is a space of actual functions and not of equivalence classes, since the values of the functions at particular points are in fact relevant, unlike in \(L^2\)-spaces.
 
-Indeed, another way of defining a RKHS is via the continuity of all the \textit{evaluation operators}, i.e., \(\delta_t(f) := f(t)\) for \(f\in\Hcal(K)\) and \(t\in[0,1]\). In this case, the interpretation is that if two functions are close in the RKHS norm, they are also pointwise close. Although in this definition there is no explicit mention of the kernel, it can be recovered through the Riesz representation theorem. We summarize below some interesting topological properties of \(\Hcal(K)\).
+Indeed, another way of defining a RKHS is via the continuity of all the \textit{evaluation operators}, i.e., \(\delta_t(f) := f(t)\) for \(f\in\Hcal(K)\) and \(t\in[0,1]\). In this case, the interpretation is that if two functions are close in the RKHS norm, they are also pointwise close. Although in this definition there is no explicit mention of the kernel, it can be recovered through the Riesz representation theorem. We summarize below some interesting properties of \(\Hcal(K)\).
 
 \begin{proposition} The following properties hold for the space \(\Hcal(K)\):
   \begin{enumerate}
@@ -131,7 +131,7 @@ Indeed, another way of defining a RKHS is via the continuity of all the \textit{
   \[
     |f_n(t) - f(t)| = |\delta_t(f_n - f)| \leq \|\delta_t\|\|f_n - f\|_K,
   \]
-  as we have just shown in \textit{(i)} that the evaluation operator is bounded. Moreover, if \(K\) is continuous on its (compact) domain, \(\|\delta_t\| \leq \sup_s \sqrt{K(s, s)}=M<\infty\) for all \(t\), so the convergence is indeed uniform. Finally, we prove the second statement in \textit{(iii)}, and refer the reader to \citet[][Th 2.6]{saitoh2016theory} for a complete proof. If \(K\) is continuous, then it is clear that every function in \(\Hcal_0(K)\) is continuous. Let us now fix an arbitrary \(f\in \Hcal(K)\). By definition, there exists a sequence \(\{f_n\}\subset \Hcal_0(K)\) of continuous functions such that \(\|f_n - f\|_K \to 0\). But then \(f_n \to f\) uniformly by \textit{(ii)}, and therefore \(f\) is continuous as the uniform limit of continuous functions. Note that this statement remains valid, with a slightly different proof, even when the underlying domain is not compact.
+  as we have shown in \textit{(i)} that the evaluation operator is bounded. Moreover, if \(K\) is continuous on its (compact) domain, \(\|\delta_t\| \leq \sup_s \sqrt{K(s, s)}=M<\infty\) for all \(t\), so the convergence is indeed uniform. Finally, we prove the second statement in \textit{(iii)}, and refer the reader to \citet[][Th 2.6]{saitoh2016theory} for a complete proof. If \(K\) is continuous, then it is clear that every function in \(\Hcal_0(K)\) is continuous. Let us now fix an arbitrary \(f\in \Hcal(K)\). By definition, there exists a sequence \(\{f_n\}\subset \Hcal_0(K)\) of continuous functions such that \(\|f_n - f\|_K \to 0\). But then \(f_n \to f\) uniformly by \textit{(ii)}, and therefore \(f\) is continuous as the uniform limit of continuous functions. Note that this statement remains valid, with a slightly different proof, even when the underlying domain is not compact.
 \end{proof}
 
 For the sake of completeness, it is worth mentioning that the RKHS associated with a kernel function is unique, and indeed the Moore-Aronszajn theorem \citep[e.g.][Th. 3]{berlinet2004reproducing} states that there is a one-to-one correspondence between kernel functions and reproducing kernel Hilbert spaces. Let us now illustrate the definition in a few simple cases; see \citet[][Ch.~1]{saitoh2016theory} for more involved examples.
@@ -139,9 +139,9 @@ For the sake of completeness, it is worth mentioning that the RKHS associated wi
 \begin{example}\label{ex:bm}
   If \(X\) is the standard Brownian motion on \([0, 1]\), it is well known that the associated covariance function is \(K_{\text{bm}}(t, s) = \min\{t,s\}\). The corresponding RKHS is given by \citep[][Ex. 8.19]{janson1997gaussian}:
   \[
-    \Hcal(K_{\text{bm}}) = \{f: f \text{ is absolutely continuous, } f(0)=0 \text{ and } f'\in L^2[0, 1]\},
+    \Hcal(K_{\text{bm}}) = \left\{f: f \text{ is absolutely continuous, } f(0)=0 \text{ and } f'\in L^2[0, 1]\right\},
   \]
-  with inner product \(\dotprod{f}{g}_{K_{\text{bm}}} = \int f'g'\).
+  with inner product \(\dotprod{f}{g}_{K_{\text{bm}}} = \text{\large\(\int\)}f'g'\).
 \end{example}
 
 \begin{example}[Finite-dimensional RKHS]
@@ -151,28 +151,28 @@ For the sake of completeness, it is worth mentioning that the RKHS associated wi
 \begin{example}[Non-RKHS Hilbert space]
   As we pointed out before, the space of square integrable functions \(L^2(\R)\) \textit{is not} a RKHS. There are many ways of seeing this; for example, in this space norm convergence does not imply pointwise convergence. Another possibility is to observe that the would-be reproducing kernel must be the Dirac delta function:
   \[
-    f(s) = \int_{-\infty}^\infty f(t)\delta(t, s)\, dt \quad \forall s \in \R.
+    f(s) = \int_{-\infty}^\infty \delta(t, s) f(t)\, dt, \quad s \in \R.
   \]
   However, \(\delta(t, \cdot) \notin L^2(\R)\).
 \end{example}
 
 \subsection*{The covariance operator}
 
- Note that, as expected, the covariance function of \(X\) plays a crucial role in characterizing the associated RKHS. An integral operator closely related to this covariance function is the so-called covariance operator, namely
+ Note that, as expected, the covariance function of \(X\) plays a crucial role in characterizing the associated RKHS. An integral operator closely related to this covariance function is the so-called covariance operator, namely \(\K: L^2[0,1] \to L^2[0,1]\) given by
 \[
-\K f(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f \in L^2[0, 1],
+\K f(\cdot) = \int_0^1 K(t, \cdot)f(t)\, dt, \quad f \in L^2[0, 1],
 \]
-which is self-adjoint and compact when \(K\) is continuous \citep[e.g.][Th.~4.6.2]{hsing2015theoretical}, so for the remaining of this work we will indeed suppose that \(K\) is continuous. As it turns out, the covariance function admits a spectral decomposition in terms of the eigenvalues and eigenfunctions of this integral operator, a sort of continuous generalization of the eigendecomposition of a symmetric positive semidefinite matrix.
+which is self-adjoint and compact when \(K\) is continuous \citep[e.g.][Th.~4.6.2]{hsing2015theoretical}, so for the remaining of this work we will indeed suppose that \(K\) is continuous. As it turns out, the covariance function admits a spectral decomposition in terms of the eigenvalues and eigenfunctions of this operator, a sort of continuous generalization of the eigendecomposition of a symmetric positive semidefinite matrix.
 
 \begin{theorem}[Mercer's theorem]\label{th:mercer}
-    Let \(K\) be a continuous kernel on \([0,1]^2\). Then, there exists an orthonormal system \(\{\phi_j\}\) in \(L^2[0,1]\) consisting of eigenfunctions of \(\K\), whose corresponding eigenvalues are all positive and form a non-increasing sequence \(\{\lambda_j\}\to 0\), and such that
+    Let \(K\) be a continuous kernel on \([0,1]^2\). Then, there exists an orthonormal basis \(\{\phi_j\}\) of \(L^2[0,1]\) consisting of eigenfunctions of \(\K\), whose corresponding eigenvalues are all positive\footnote{Even though the spectral theorem only guarantees that the eigenvalues of \(\K\) are non-negative, there is no loss of generality in assuming \(\lambda_j> 0\) for all \(j\geq 1\); see Remark 3 in \citet[Ch.~3]{cucker2001mathematical}.} and form a non-increasing sequence \(\{\lambda_j\}\to 0\), and such that
     \[
       K(t, s) = \sum_{j=1}^\infty \lambda_j \phi_j(t)\phi_j(s)
     \]
     for all \(t\) and \(s\), where the convergence is absolute and uniform.
 \end{theorem}
 
-In connection with our RKHS theory, it can be shown that the set \(\{\sqrt{\lambda_j}\phi_j\}\) constitutes an orthonormal basis of \(\Hcal(K)\) \citep[see e.g.][Sec.~4.4]{cucker2007learning}. Furthermore, a similar orthogonal decomposition holds for the stochastic process \(X\), an expansion that lies at the base of many \(L^2\) functional regression models. The proof of the following result, along with the proof of Mercer's theorem, can be consulted in \citet[][Sec.~3.2]{berlinet2004reproducing}.
+In connection with our RKHS theory, it can be shown that the set \(\{\sqrt{\lambda_j}\phi_j\}\) constitutes an orthonormal basis of \(\Hcal(K)\) \citep[see e.g.][Sec.~4.4]{cucker2007learning}. Furthermore, a similar orthogonal decomposition holds for the stochastic process \(X\), an expansion that lies at the base of many \(L^2\) functional regression models.
 
 \begin{theorem}[Karhunen-Loève expansion]
   With the assumptions and notations of Theorem~\ref{th:mercer}, the centered process \(X=X(t)\) with covariance function \(K\) admits the quadratic-mean representation
@@ -185,23 +185,25 @@ In connection with our RKHS theory, it can be shown that the set \(\{\sqrt{\lamb
   \]
 \end{theorem}
 
-\enlargethispage{1\baselineskip}
-
-In addition to these results, it is worth mentioning that the covariance operator \(\K\) provides several alternative definitions of \(\Hcal(K)\). For example, the RKHS can be identified with the image of the operator's square root, i.e., \(\Hcal(K) = \K^{1/2}(L^2[0, 1])\), with inner product \(\dotprod{f}{g}_K = \dotprod{\K^{-1/2}(f)}{\K^{-1/2}(g)}\). Furthermore, we can think of the norm in \(\Hcal(K)\) as an \(L^2\)-like regularized norm, since this space can also be seen as the set \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), with corresponding inner product \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}\). Note that, since \(\{\lambda_j\}\) tends to zero, this definition highlights the fact that functions in \(\Hcal(K)\) are smooth, not only in that they inherit the regularity of the kernel \(K\), but also in the sense that their components in an orthonormal basis, namely \(\dotprod{f}{\phi_j}\), need to vanish quickly.
+In addition to these theorems, it is worth mentioning that the covariance operator \(\K\) provides several alternative definitions of \(\Hcal(K)\). For example, the RKHS can be identified with the image of the operator's square root, i.e., \(\Hcal(K) = \K^{1/2}(L^2[0, 1])\), with inner product \(\dotprod{f}{g}_K = \dotprod{\K^{-1/2}(f)}{\K^{-1/2}(g)}\). Furthermore, we can think of the norm in \(\Hcal(K)\) as an \(L^2\)-like regularized norm, since this space can also be seen as the set \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\),
+with corresponding inner product \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}\). Note that, since \(\{\lambda_j\}\) tends to zero, this definition highlights the fact that functions in \(\Hcal(K)\) are smooth, not only in that they inherit the regularity of the kernel \(K\), but also in the sense that their components in an orthonormal basis, namely \(\dotprod{f}{\phi_j}\), need to vanish quickly. A proof of the previous results can be consulted for example in \citet[][Sec.~3.2]{berlinet2004reproducing}.
 
 \subsection*{Loève's isometry}
 
-Until now we have seen that \(\Hcal(K)\) is a space related to \(X\) only through its covariance function. Nevertheless, we will now hopefully clarify that this space can indeed be seen as \textit{the} Hilbert space inherently associated with the process \(X\) itself. Let us shift the perspective momentarily and consider the space \(L^2(\Omega)\) of all zero-mean random variables with finite second moment, endowed with the usual norm \(\|U\|^2=\E[U]^2\). Then, the linear span of \(X\) in \(L^2(\Omega)\) is given by
+Until now we have seen that \(\Hcal(K)\) is a space related to \(X\) only through its covariance function. Nevertheless, we will now hopefully clarify that this space can indeed be seen as \textit{the} Hilbert space inherently associated with the process \(X\) itself. Let us shift the perspective momentarily and consider the space \(L^2(\Omega)\) of all zero-mean random variables with finite second moment, endowed with the usual norm \(\|U\|^2=\E[U^2]\). Then, the linear span of \(X\) in \(L^2(\Omega)\) is given by
+
+\setlength{\headsep}{11pt}
+
 \[
 \Lcal_0(X) = \left\{U \in L^2(\Omega): U = \sum_{i=1}^p a_i X(t_i): p\in\N, \ a_i \in \R, \ t_i \in [0,1]\right\}.
 \]
-It is well known that its completion in \(L^2(\Omega)\), denoted \(\Lcal(X)\), is a Hilbert space, sometimes called the Hilbert space generated by \(X\). In the words of \citet{berlinet2004reproducing}, ``\(\Lcal(X)\) \textit{contains the random variables attainable by linear operations, including limits, on the measurements of the process}''. As it happens, via \textit{Loève's isometry} \citep{loeve1948fonctions} one can establish a congruence \(\Psi_X\) between \(\Hcal(K)\) and \(\Lcal(X)\) \citep[see Lemma 1.1 in][]{lukic2001stochastic}. This isometry is essentially the completion of the correspondence
+It is well known that its completion in \(L^2(\Omega)\), denoted \(\Lcal(X)\), is a Hilbert space, sometimes called the Hilbert space generated by \(X\). In the words of \citet{berlinet2004reproducing}, ``\(\Lcal(X)\) \textit{contains the random variables attainable by linear operations, including limits, on the measurements of the process}''. As it happens, via \textit{Loève's isometry} \citep{loeve1948fonctions} one can establish a congruence \(\Psi_X\) between \(\Hcal(K)\) and \(\Lcal(X)\) \citep[see Lemma 1.1 in][]{lukic2001stochastic}. This isometry is essentially the continuous extension of the correspondence
   \begin{equation}\label{eq:loeves-isometry}
   \sum_{i=1}^p a_i X(t_i) \longleftrightarrow \sum_{i=1}^p a_i K(t_i, \cdot),
   \end{equation}
-and can be formally defined, in terms of its inverse, as \(\Psi^{-1}_X(U)(t) = \E[U X(t)]\) for \(U \in \Lcal(X)\). Thus, \(\Hcal(K)\) can be regarded as an isometric copy of \(\Lcal(X)\), an approach that is often useful in statistics.
+and can be formally defined, in terms of its inverse, as \(\Psi^{-1}_X(U)(t) = \E[U X(t)]\) for all \(U \in \Lcal(X)\). Thus, \(\Hcal(K)\) can be regarded as an isometric copy of \(\Lcal(X)\), an approach that is often useful in statistics.
 
-However, despite the close connection between the process \(X\) and the space \(\Hcal(K)\), special care must be taken when dealing with concrete realizations of the process. It can be shown that under rather general conditions the trajectories of \(X\) \textit{do not belong} to the corresponding RKHS with probability one \citep[see for example][Cor.~7.1]{lukic2001stochastic}. For instance, the trajectories of a Brownian motion are known to be nowhere differentiable, but as shown in Example~\ref{ex:bm}, the elements of the associated RKHS are differentiable almost everywhere. A heuristic argument to justify this fact, given in \citet{wahba1990spline}, is as follows: consider the Karhunen-Loève expansion of \(X\), i.e.,
+However, despite the close connection between the process \(X\) and the space \(\Hcal(K)\), special care must be taken when dealing with concrete realizations of the process. It can be shown that under rather general conditions the trajectories of \(X\) \textit{do not belong} to the corresponding RKHS with probability one \parencites[e.g.][Cor.~7.1]{lukic2001stochastic}[][Th.~11]{pillai2007characterizing}. For instance, the trajectories of a Brownian motion are known to be nowhere differentiable, but as shown in Example~\ref{ex:bm}, the elements of the associated RKHS are differentiable almost everywhere. A heuristic argument to justify this fact, given in \citet{wahba1990spline}, is as follows: consider the Karhunen-Loève expansion of \(X\), i.e.,
 \[
   X(t) = \sum_{j=1}^\infty \zeta_j \phi_j(t),
 \]
@@ -212,8 +214,10 @@ and the truncated version \(X_N(t)\) up to the \(N\)-th term. On the one hand, f
 
 As a consequence, the expression \(\dotprod{x}{f}_K\) is ill-defined and lacks meaning when \(x\) is a realization of \(X\). However, following Parzen's approach in his seminal work \citep[e.g.][Th.~4E]{parzen1961approach}, we can leverage Loève's isometry and identify \(\dotprod{x}{f}_K \) with the image \( \Psi_x(f) := \Psi_X(f)(\omega)\), for \(x=X(\omega)\) and \(f\in \Hcal(K)\). This notation, viewed as a formal extension of the inner product, often proves to be useful and convenient. Some properties stemming from this interpretation are stated below \citep[see][p.~974]{parzen1961approach}.
 
+\setlength{\headsep}{21.75pt}
+
 \begin{proposition}
-  For every \(t\in[0,1]\) and \(f, g \in \Hcal(K)\), the following relations are satisfied:
+  For every \(t\in[0,1]\) and \(f, g \in \Hcal(K)\), the following relations hold:
 \begin{enumerate}
   \item \(\dotprod{X}{K(t, \cdot)}_K = X(t)\), a particular reproducing property.
   \item \(\E[\dotprod{X}{f}_K] = 0\).
@@ -247,11 +251,11 @@ In the context of Bayesian inference, there are many situations in which we woul
 
 When \(x\in\R\), we can use Monte Carlo algorithms such as \textit{rejection sampling}. In a nutshell, this method samples uniformly from the area under \(f(x)\) by means of an auxiliary density that encompasses this area. Specifically, one needs to find a density function \(g\) with \(\supp f \subset \supp g\) and \(f \leq Mg\) for some \(M>1\). Then, sampling from \(g\) and accepting the proposal, say \(x\), with probability \(f(x)/Mg(x)\) yields an approximate set of samples from \(f\). Nevertheless, these kinds of algorithms are rapidly affected by the so-called \textit{curse of dimensionality} (see the schematic in Figure~\ref{fig:curse_dimensionality}), so new techniques are needed when sampling from multidimensional distributions. This is where Markov chain Monte Carlo (MCMC) methods come into play.
 
-\vspace{1em}
+\vspace{.1em}
 
-\begin{figure}[ht!]
+\begin{figure}[htbp!]
   \centering
-  \includegraphics[width=.25\textwidth]{cube_sphere}
+  \includegraphics[width=.2\textwidth]{cube_sphere}
   \caption{To cover the volume of \(f(x)\) in higher dimensions we intuitively need a volume that grows exponentially with the dimension itself.}\label{fig:curse_dimensionality}
 \end{figure}
 
@@ -272,8 +276,8 @@ The Metropolis-Hastings algorithm \citep{metropolis1953equation} is arguably the
 \end{enumerate}
  \begin{figure}[ht!]
    \centering
-   \includegraphics[width=.55\textwidth]{mh}
-   \caption{Representation of the Metropolis-Hastings algorithm (taken from \citet{jaewook2015metamodel}). The discarded proposals are represented by dashed circles.}\label{fig:mh}
+   \includegraphics[width=.5\textwidth]{mh}
+   \caption{Representation of the Metropolis-Hastings algorithm (taken from \citet{jaewook2015metamodel}). The discarded proposals are depicted as dashed circles.}\label{fig:mh}
  \end{figure}
 Figure~\ref{fig:mh} shows a schematic representation of the process. Note that the acceptance ratio \(f(x')/f(x_t)=\pi(x')/\pi(x_t)\) is a measure of how more likely is \(x'\) to be a sample from \(\pi\) than \(x_t\). This specific acceptance value is also chosen so that the detailed balance equations of the chain are satisfied, i.e., \(\pi(x)P(x'|x)=\pi(x')P(x|x')\), where \(P(x|y)\) is the transition probability from state \(x\) to state \(y\). These conditions essentially guarantee that \(\pi\) is the stationary distribution of the chain; see \citet{robert1999monte} for additional details. An immediate generalization consists on choosing a general (possibly non-symmetric) jump distribution \(g\), in which case the acceptance probability is rewritten as
 \[
@@ -318,13 +322,19 @@ Supposing \(\R^p\) is the sample space, the corresponding acceptance probability
     \alpha = \min\left\{1, \ Z^{p-1}\frac{\pi(\Gamma)}{\pi(\Lambda_l(t))}\right\}.
   \]
 
+  \setlength{\footskip}{60pt}
+
   \paragraph{Walk move.} For each walker \(1\leq l \leq L\) a random subset \(S_l \subseteq \Lambda_{-l}(t)\) with \(|S_l| \geq 2\) is chosen, and the proposed move is
 \[
 \Lambda_l(t) \to \Gamma = \Lambda_l(t) + W,
 \]
-where \(W\) is a normal distribution with mean \(0\) and the same covariance as the sample covariance of all walkers in \(S_l\). The acceptance probability in this case is just the Metropolis ratio, i.e., \(\alpha=\min\{1, \pi(\Gamma)/\pi(\Lambda_l(t))\}\).\\
+where \(W\) is a normal distribution with mean \(0\) and the same covariance as the sample covariance of all walkers in \(S_l\). The acceptance probability in this case is just the Metropolis ratio, i.e., \(\alpha=\min\{1, \pi(\Gamma)/\pi(\Lambda_l(t))\}\).
+
+\vspace*{.75em}
 
 From a computational perspective, the Python library \textit{emcee}\footnote{\url{https://emcee.readthedocs.io}} \citep{foreman2013emcee} provides a parallel implementation of this algorithm. The idea is to divide the ensemble \(\Lambda\) into two equally-sized subsets \(\Lambda^{(0)}\) and \(\Lambda^{(1)}\), and then proceed on each iteration in the following alternate fashion:
+
+\enlargethispage{2\baselineskip}
 
 \begin{enumerate}[1.]
   \item Update \textit{all} walkers in \(\Lambda^{(0)}\) through one of the available moves explained above, using \(\Lambda^{(1)}\) as the complementary ensemble.
