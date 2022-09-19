@@ -11,26 +11,6 @@
 \RequirePackage{fix-cm}
 \documentclass[9pt, english, professionalfonts]{beamer}
 
-% BEAMER OPTIONS
-
-\definecolor{Maroon}{cmyk}{0, 0.87, 0.88, 0.1}
-\definecolor{teal}{rgb}{0.0, 0.45, 0.45}
-
-\usetheme[block=fill, subsectionpage=progressbar, titleformat section=smallcaps]{metropolis}
-\setbeamertemplate{frametitle continuation}[roman]
-\setbeamerfont{section title}{size=\huge}
-\setbeamertemplate{section in toc}[sections numbered]
-%\setbeamertemplate{subsection in toc}[subsections unnumbered]
-%\setsansfont[BviejoFont={Fira Sans SemiBold}]{Fira Sans Book}  % Increase font weigth
-\widowpenalties 1 10000
-\raggedbottom
-
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}
-
-% COLORS
-\setbeamercolor{palette primary}{bg=teal}
-\setbeamercolor{progress bar}{use=Maroon, fg=Maroon}
-
 % PACKAGES
 
 \usepackage{fontspec}
@@ -44,33 +24,48 @@
 \usepackage{hyperref}
 \usepackage{bm}
 \usepackage{amssymb, amsmath, amsthm, amsfonts, amscd, dsfont}
-\usepackage{listings}
+
+% BEAMER OPTIONS
+
+\usetheme[block=fill, subsectionpage=progressbar, titleformat section=smallcaps]{metropolis}
+\setbeamertemplate{frametitle continuation}[roman]
+\setbeamerfont{section title}{size=\huge}
+\setbeamertemplate{section in toc}[sections numbered]
+%\setbeamertemplate{subsection in toc}[subsections unnumbered]
+\widowpenalties 1 10000
+\raggedbottom
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand{\baselinestretch}{1.3}
+
+% COLORS
+
+\definecolor{Maroon}{cmyk}{0, 0.87, 0.88, 0.1}
+\definecolor{teal}{rgb}{0.0, 0.45, 0.45}
+\definecolor{mLightBrown}{HTML}{f97e0b}
+% \definecolor{mLightBrown}{HTML}{990000}  % Darker accent color
+% \definecolor{backg}{HTML}{F2F2F2} % Fondo
+% \definecolor{comments}{HTML}{a8a8a8} % Comentarios
+% \definecolor{keywords}{HTML}{08388c} % Palabras clave
+% \definecolor{strings}{HTML}{0489B1}  % Strings
+\setbeamercolor{palette primary}{bg=teal}
+\setbeamercolor{progress bar}{use=Maroon, fg=Maroon}
+
+% BIBLIOGRAPHY
 
 \usepackage[backend=biber,style=numeric-comp,sorting=none]{biblatex}
 \addbibresource{bibliography.bib}
 \setbeamertemplate{bibliography item}[article]
 
+% GRAPHICS
+
 \graphicspath{%
   {../figures/}
 }
 
-% FONTS
-%\usefonttheme{professionalfonts}
-%\usepackage{mathpazo}
-%\usepackage{eulervm}
-
-\definecolor{backg}{HTML}{F2F2F2} % Fondo
-\definecolor{comments}{HTML}{a8a8a8} % Comentarios
-\definecolor{keywords}{HTML}{08388c} % Palabras clave
-\definecolor{strings}{HTML}{0489B1}  % Strings
-
 % CUSTOM COMMANDS
 
-\renewcommand{\baselinestretch}{1.3}
-\definecolor{mLightBrown}{HTML}{f97e0b}
-% \definecolor{mLightBrown}{HTML}{990000}  % Darker accent color
 \newcommand\maroon[1]{\color{mLightBrown}#1\color{mDarkTeal}}
-
 \renewcommand{\epsilon}{\varepsilon}
 
 %% Math operators
@@ -112,7 +107,7 @@
   \end{textblock*}
 }
 
-% DOCUMENTO
+% DOCUMENT
 
 \begin{document}
 \maketitle
@@ -151,7 +146,7 @@
 \end{frame}
 
 \begin{frame}{Functional linear regression}
-  \textbf{First problem}: linear regression with functional data.
+  \maroon{First problem}: linear regression with functional data.
   \vspace{2em}
 
 \begin{figure}
@@ -160,7 +155,7 @@
 \end{frame}
 
 \begin{frame}{Functional logistic regression}
-  \textbf{Second problem}: logistic regression with functional data.
+  \maroon{Second problem}: logistic regression with functional data.
 \vspace{2em}
 
 \begin{figure}
@@ -199,7 +194,7 @@
     \[
       Y = \alpha_0 + \sum_{j=1}^p \beta_j X(t_j) + \varepsilon.
     \]
-    \item In the logistic case, the maximum likelihood estimator does not exist with probability one under fairly general conditions.
+    \item In the logistic case, the maximum likelihood estimator does not exist with probability 1 under fairly general conditions.
   \end{itemize}
 \end{frame}
 
@@ -216,7 +211,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 \end{alertblock}
 
 \vspace{1em}
-  We consider a functional parameter \maroon{\(\alpha \in \mathcal H(K)\)}, where \(\mathcal H(K)\) is the RKHS associated with the covariance function \(K(t, s)=\mathbb E[X(t)X(s)]\) of the centered process \(X\). Moreover, we substitute \(\dotprod{X}{\beta}_2\) for \maroon{\(\dotprod{X}{\alpha}_K\)}.
+  We consider a functional parameter \maroon{\(\alpha \in \Hcal(K)\)}, where \(\Hcal(K)\) is the RKHS associated with the covariance function \(K(t, s)=\mathbb E[X(t)X(s)]\) of the centered process \(X\). Moreover, we substitute \(\dotprod{X}{\beta}_2\) for \maroon{\(\dotprod{X}{\alpha}_K\)}.
 \end{frame}
 
 \begin{frame}{Historical review of RKHS theory}
@@ -227,7 +222,6 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
     \item Uses in FDA \(\longrightarrow\) 2010's onwards.
   \end{itemize}
 \end{frame}
-
 
 \begin{frame}{RKHS's in a nutshell}
   \begin{definition}
@@ -254,32 +248,14 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
     \begin{enumerate}
       \item All the evaluation operators \(\delta_t(f)=f(t)\) are continuous \maroon{(characterization)}.
       \item Norm convergence implies pointwise convergence.
-      \item If \(K\) is continuous, then so is every function \(f\in\mathcal H(K)\).
+      \item If \(K\) is continuous, then so is every function \(f\in\Hcal(K)\).
     \end{enumerate}
   \end{block}
 \end{frame}
 
-
-% \begin{frame}{RKHS's in a nutshell (cont.)}
-%   There are other equivalent definitions of \(\Hcal(K)\), mainly based on the \textit{covariance operator}
-% \[
-% \mathcal Kf(\cdot) = \int_0^1 K(s, \cdot)f(s)\, ds, \quad f\in L^2[0, 1].
-% \]
-%
-% \begin{definition}
-% \begin{enumerate}
-%   \item  \(\Hcal(K) = \mathcal K^{1/2}(L^2[0, 1])\), with \(\dotprod{f}{g}_K = \dotprod{\mathcal K^{-1/2}(f)}{\mathcal K^{-1/2}(g)}_2\).
-%   \item \(\Hcal(K) = \{f \in L^2[0, 1]: \ \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}^2 < \infty \}\), with \(\dotprod{f}{g}_K = \sum_j \lambda_j^{-1}\dotprod{f}{\phi_j}\dotprod{g}{\phi_j}_2\). Here, \(\lambda_j\to 0\) and \(\phi_j\) are the eigenvalues and (orthonormal) eigenfunctions of \(\mathcal K\).
-% \end{enumerate}
-% \end{definition}
-%
-% The second definition emphasizes the fact that functions in \(\Hcal(K)\) are ``simple'', in the sense that their components in an orthonormal basis need to vanish quickly.
-%
-% \end{frame}
-
 \begin{frame}{A small subtlety}
 
-  Generally speaking, the concrete realizations \(x=X(\omega)\) \maroon{do not belong to \(\Hcal(K)\) with probability \(1\)}, so the expression \(\dotprod{x}{\alpha}_K\) lacks meaning. However, we can make use of the relationship between \(\Hcal(K)\) and \(\mathcal L(X)\), the linear span of the process \(X\) within \(L^2(\Omega)\).
+  Generally speaking, the concrete realizations \(x=X(\omega)\) \maroon{do not belong to \(\Hcal(K)\) with probability 1}, so the expression \(\dotprod{x}{\alpha}_K\) lacks meaning. However, we can make use of the relationship between \(\Hcal(K)\) and \(\Lcal(X)\), the linear span of the process \(X\) within \(L^2(\Omega)\).
 
   \vspace{1em}
   \begin{block}{Loève's isometry}
@@ -287,7 +263,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
     \[
 \sum_{j=1}^p a_j X(t_j) \longleftrightarrow \sum_{j=1}^p a_j K(t_j, \cdot).
     \]
-    Formally, \(\Psi^{-1}_X(U)(t) := \E[U X(t)]\) for \(U \in \mathcal L(X)\).
+    Formally, \(\Psi^{-1}_X(U)(t) := \E[U X(t)]\) for \(U \in \Lcal(X)\).
   \end{block}
   With a slight abuse of notation, we will write \maroon{\(\dotprod{x}{\alpha}_K \equiv [\Psi_X(\alpha)](\omega) := \Psi_x(\alpha)\)}\ for \(x=X(\omega)\) and \(\alpha \in \Hcal(K)\).
 \end{frame}
@@ -307,9 +283,8 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 
 \end{frame}
 
-
 \begin{frame}{\ldots and two new models}
-  Given a data set \(\mathcal D_n = \{(X_i, Y_i): i=1,\dots, n\}\) composed of i.i.d. samples of \((X, Y)\), for \(\alpha \in \Hcal_0(K)\) we consider the following models:
+  Given a data set \(\D_n = \{(X_i, Y_i): i=1,\dots, n\}\) composed of i.i.d. samples of \((X, Y)\), for \(\alpha \in \Hcal_0(K)\) we consider the following models:
 
   \vspace{1em}
 
@@ -351,7 +326,7 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
 
       \begin{block}{Bayes's formula}
       \[
-      \pi(\theta \mid \mathcal D_n) \propto \left( \prod_{i=1}^n \pi(Y_i\mid X_i, \theta) \right)\pi(\theta).
+      \pi(\theta \mid \D_n) \propto \left( \prod_{i=1}^n \pi(Y_i\mid X_i, \theta) \right)\pi(\theta).
       \]
   \end{block}
 
@@ -379,12 +354,12 @@ We will exploit the theory of \textit{reproducing kernel Hilbert spaces} (RKHS's
     \vspace{-1em}
   \begin{align*}
   \pi(\alpha_0, \sigma^2)              & \propto 1/\sigma^2,                                                     \\
-  \tau                     & \sim \mathcal U([0, 1]^p),                                              \\
-  b\mid \tau, \sigma^2 & \sim \mathcal N_p\big(b_0, g\sigma^2{\underbrace{\left[\mathcal X_\tau' \mathcal X_\tau + \eta I\right]}_{G_\tau}}^{-1}\big),
+  \tau                     & \sim \U([0, 1]^p),                                              \\
+  b\mid \tau, \sigma^2 & \sim \mathcal N_p\big(b_0, g\sigma^2{\underbrace{\left[\X_\tau' \X_\tau + \eta I\right]}_{G_\tau}}^{-1}\big),
 \end{align*}
 
 \vspace{-1em}
-where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\) is the data matrix, and \(b_0\in \R^p, \ g \in \R\) and \(\eta \in \R^+\) are hyperparameters.
+where \(I\) is the identity matrix, \(\X_\tau = (X_i(t_j))_{i,j}\) is the data matrix, and \(b_0\in \R^p, \ g \in \R\) and \(\eta \in \R^+\) are hyperparameters.
 \end{block}
 
 \metroset{block=transparent}
@@ -401,8 +376,8 @@ where \(I\) is the identity matrix, \(\mathcal X_\tau = (X_i(t_j))_{i,j}\) is th
   \begin{block}{Linear log-posterior}
     \vspace{-1em}
     \begin{align*}
-  \log \pi(\theta\mid \mathcal D_n) & \propto \frac{1}{2}\log |G_\tau| - (p+n+2)\log \sigma\\
-  &-\frac{1}{2\sigma^2} \left(\|\bm{Y}-\alpha_0\bm{1} - \mathcal X_\tau b\|^2 + \frac{1}{g}(b - b_0)'G_\tau(b - b_0) \right),
+  \log \pi(\theta\mid \D_n) & \propto \frac{1}{2}\log |G_\tau| - (p+n+2)\log \sigma\\
+  &-\frac{1}{2\sigma^2} \left(\|\bm{Y}-\alpha_0\bm{1} - \X_\tau b\|^2 + \frac{1}{g}(b - b_0)'G_\tau(b - b_0) \right),
 \end{align*}
 where \(\bm Y=(Y_1,\dots,Y_n)'\) and \(\bm{1}\) is an \(n\)-dimensional vector of ones.
   \end{block}
@@ -410,7 +385,7 @@ where \(\bm Y=(Y_1,\dots,Y_n)'\) and \(\bm{1}\) is an \(n\)-dimensional vector o
   \begin{block}{Logistic log-posterior}
       \vspace{-1em}
     \begin{align*}
-  \log \pi(\theta \mid \mathcal D_n) & \propto \sum_{i=1}^n \left[ \left(\alpha_0 + \dotprod{X_i}{\alpha}_K\right)Y_i - \log\left(1 + \exp\left\{\alpha_0 + \dotprod{X_i}{\alpha}_K\right\}\right)\right]\\
+  \log \pi(\theta \mid \D_n) & \propto \sum_{i=1}^n \left[ \left(\alpha_0 + \dotprod{X_i}{\alpha}_K\right)Y_i - \log\left(1 + \exp\left\{\alpha_0 + \dotprod{X_i}{\alpha}_K\right\}\right)\right]\\
   \quad &+ \frac{1}{2}\log |G_\tau| - (p+2)\log \sigma -\frac{1}{2g\sigma^2} (b - b_0)'G_\tau(b - b_0).
 \end{align*}
 Remember that \(\dotprod{X_i}{\alpha}_K = \sum_j \beta_j X_i(t_j)\).
@@ -422,7 +397,7 @@ Remember that \(\dotprod{X_i}{\alpha}_K = \sum_j \beta_j X_i(t_j)\).
 
   \begin{figure}
     \centering
-    \includegraphics[width=.85\textwidth]{posterior}
+    \includegraphics[width=.9\textwidth]{posterior}
   \end{figure}
 
 Many alternatives: Metropolis-Hastings, \maroon{emcee}, Hamiltonian Monte Carlo, \ldots.
@@ -446,7 +421,7 @@ Hence, the components may be inadvertently exchanged from one iteration to the n
 \end{frame}
 
 \begin{frame}{Predictions}
-  \textbf{Summarize-then-predict}. A summary of the posterior distribution \(\theta| \mathcal D_n\) is obtained via a point-estimate statistic (mean, median, mode), and then predictions are made according to the assumed model, e.g.:
+  \textbf{Summarize-then-predict}. A summary of the posterior distribution \(\theta| \D_n\) is obtained via a point-estimate statistic (mean, median, mode), and then predictions are made according to the assumed model, e.g.:
   \[
   \hat Y_i =\hat \alpha_0 + \sum_{j=1}^p \hat \beta_j X_i(\hat t_j), \quad i=1,\dots, n.
   \]
@@ -464,7 +439,7 @@ Hence, the components may be inadvertently exchanged from one iteration to the n
 \begin{frame}{Predictions (cont.)}
     We are essentially approximating the \textit{posterior predictive distribution}
 \[
-\pi(y\mid x, \mathcal D_n) = \int_{\Theta} \pi(y\mid x, \theta)\pi(\theta\mid \mathcal D_n)\, d\theta.
+\pi(y\mid x, \D_n) = \int_{\Theta} \pi(y\mid x, \theta)\pi(\theta\mid \D_n)\, d\theta.
 \]
   \begin{figure}
     \includegraphics[width=.675\textwidth]{ppc_linear}
@@ -472,12 +447,11 @@ Hence, the components may be inadvertently exchanged from one iteration to the n
 \end{frame}
 
 \begin{frame}{Predictions (cont.)}
-    \textbf{Variable selection}. We select \(p\) variables using only a point estimator of \(\tau|\mathcal D_n\) (so-called \textit{impact points}), and then we can apply any multiple regression algorithm to the reduced data set.
+    \textbf{Variable selection}. We select \(p\) variables using only a point estimator of \(\tau|\D_n\) (so-called \textit{impact points}), and then we can apply any multiple regression algorithm to the reduced data set.
     \vspace{1em}
 
     \begin{figure}
       \includegraphics[width=\textwidth]{credible_intervals}
-      \caption{Approximate posterior distribution for the impact points.}
     \end{figure}
 
     At any rate, all the above predictors can be obtained after a single run of the MCMC algorithm.
@@ -614,10 +588,11 @@ Hence, the components may be inadvertently exchanged from one iteration to the n
   Thank you for your attention
 \end{frame}
 
+
+
 %%
 % BACKUP SLIDES
 %%
-
 
 \begin{frame}{Dependence on \(\bm p\)}
 Mean accuracy for our logistic RKHS methods as a function of \(p\), using \(\eta=0.01\) and the homoscedastic mixture data set.
@@ -677,7 +652,8 @@ Consider an \maroon{ensemble} \ of walkers \(\Lambda(t) = (\Lambda_1(t), \dots, 
     \Lambda_l(t) \to \Gamma = \Lambda_j + Z(\Lambda_l(t) - \Lambda_j),
 \]
 where \(Z \stackrel{i.i.d.}{\sim} g(z)\) satisfying \(g(z^{-1})=zg(z)\).
-\item  The proposal is accepted with probability
+
+\item If \(\R^p\) is the sample space, the proposal is accepted with probability
   \[
     \alpha = \min\left\{1, \ Z^{p-1}\frac{\pi(\Gamma)}{\pi(\Lambda_l(t))}\right\}.
   \]
