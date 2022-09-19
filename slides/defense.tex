@@ -406,7 +406,7 @@ Many alternatives: Metropolis-Hastings, \maroon{emcee}, Hamiltonian Monte Carlo,
 \begin{frame}{Label switching}
 The model suffers from non-identifiability of the components caused by their interchangeability: \(\pi(Y|X,\theta)=\pi(Y|X, \nu(\theta))\) for any permutation \(\nu\) that rearranges the indices \(j=1,\dots, p\):
     \[
-    (\beta_1, \beta_2, \tau_1, \tau_2, \alpha_0, \sigma^2) \leftrightsquigarrow (\beta_2, \beta_1, \tau_2, \tau_1, \alpha_0, \sigma^2).
+    (\beta_1, \beta_2, t_1, t_2, \alpha_0, \sigma^2) \leftrightsquigarrow (\beta_2, \beta_1, t_2, t_1, \alpha_0, \sigma^2).
   \]
 
 Hence, the components may be inadvertently exchanged from one iteration to the next in any MCMC algorithm.
@@ -568,8 +568,8 @@ Hence, the components may be inadvertently exchanged from one iteration to the n
 
  \begin{exampleblock}{The road ahead}
    \begin{itemize}
-     \item Experiment with different prior distributions.
      \item Derive theoretical properties of the predictors.
+     \item Experiment with different prior distributions.
      \item Try different MCMC algorithms (e.g. reversible-jump MCMC).
    \end{itemize}
  \end{exampleblock}
