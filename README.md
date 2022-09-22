@@ -6,7 +6,7 @@ Trabajo de Fin de Máster del Máster Universitario en Ciencia de Datos de la Un
 
 This repository contains the source code of my master's thesis in Statistics and Data Science at the Autonomous University of Madrid, which is licensed under a [CC BY-SA-4.0](http://creativecommons.org/licenses/by-sa/4.0/) license. The code developed is available on a [separate repository](https://github.com/antcc/rk-bfr).
 
-The compiled pdf version of the thesis is available [here](https://github.com/antcc/tfm/releases/download/v1.0/masters-thesis.pdf). It can also be generated via the command `latexmk -pdf masters-thesis` (requires `xelatex`). The template used is a slightly modified version of [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis).
+The compiled pdf version of the thesis is available [here](https://github.com/antcc/tfm/releases/download/v1.1/masters-thesis.pdf). It can also be generated via the command `latexmk -pdf masters-thesis` (requires `xelatex`). The template used is a slightly modified version of [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis).
 
 ## Abstract
 
