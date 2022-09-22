@@ -147,7 +147,7 @@ Lastly, the results for the non-GP case can be seen in Figure~\ref{fig:reg_emcee
 
 \subsection*{Real data}
 
-Figure~\ref{fig:reg_emcee_real} shows the results for the real data sets. In these data sets there is a substantial difference in performance between some of our methods and the reference algorithms. However, the predict-then-summarize approach (represented as \textit{posterior\_mean}) seems to work quite well, always scoring near the mean RMSE of all the comparison algorithms. Moreover, our two-stage methods seem to outperform the summarize-then-predict methods in these cases, scoring again very close to the mean of the reference methods.
+Figure~\ref{fig:reg_emcee_real} shows the results for the real data sets. In these data sets there is a substantial difference in performance between some of our methods and the reference algorithms. However, the predict-then-summarize approach (represented as \textit{posterior\_mean}) seems to work quite well, always scoring near the mean RMSE of all the comparison algorithms. Moreover, our two-stage methods seem to outperform the summarize-then-predict methods in Moisture and Sugar, scoring again very close to the mean of the reference models.
 
 We have to bear in mind that real data is more complex and noisy than simulated data, and it is possible that after a suitable pre-preprocessing we would obtain better results with our methods. However, our goal was to perform a general comparison without focusing too much on the specifics of any particular data set.
 
@@ -161,7 +161,7 @@ We have to bear in mind that real data is more complex and noisy than simulated 
 
 \subsection*{Simulated data sets}
 
-In Figure~\ref{fig:clf_emcee_rkhs} we see the results for the GP regressors in the logistic RKHS case. Our models perform fairly well in this advantageous case, although the two-stage methods fare somewhat poorly in these data sets. However, in most cases the differences observed account for only one or two misclassified samples.
+In Figure~\ref{fig:clf_emcee_rkhs} we see the results for the GP regressors in the logistic RKHS case. Our models perform fairly well in this advantageous case, although they are not always better than the comparison methods. However, in most cases the differences observed account for only one or two misclassified samples.
 
 \begin{figure}[ht!]
   \centering
@@ -169,7 +169,7 @@ In Figure~\ref{fig:clf_emcee_rkhs} we see the results for the GP regressors in t
   \caption{Accuracy of classifiers for simulated GP data that obeys an underlying logistic RKHS model (higher is better).}\label{fig:clf_emcee_rkhs}
 \end{figure}
 
-Continuing with Figure~\ref{fig:clf_emcee_l2}, we see that in the \(L^2\) case the results are again promising, since our models score consistently on or above the mean of the reference models, and in many cases surpassing most of them. The predict-then-summarize approaches (\textit{emcee\_posterior\_mean} and \textit{emcee\_posterior\_vote}) are particularly good in this case, and in general have low standard errors. Moreover, the overall accuracy of all methods is low (below 60\%), so this is indeed a difficult problem in which even small increases in accuracy are relevant.
+Continuing with Figure~\ref{fig:clf_emcee_l2}, we see that in the \(L^2\) case the results are again promising, since our models score consistently on or above the mean of the reference models, and in many cases surpassing most of them. The predict-then-summarize approaches (\textit{emcee\_posterior\_mean} and \textit{emcee\_posterior\_vote}) are particularly good in this case, and in general have low standard errors. Moreover, the overall accuracy of all methods is poor (below 60\%), so this is indeed a difficult problem in which even small increases in accuracy are relevant.
 
 Finally, Figure~\ref{fig:clf_emcee_nongp} shows that our classifiers perform better than most comparison algorithms when separating two homoscedastic Gaussian processes, but they struggle in the heteroscedastic case. Incidentally, this heteroscedastic case of two zero-mean Brownian motions has a special interest, since it can be shown that the Bayes error is zero in the limit of dense monitoring (i.e. with an arbitrarily fine measurement grid), a manifestation of the ``near-perfect'' classification phenomenon analyzed for example in \citet{torrecilla2020optimal}. Our results are in line with the empirical studies of this article, where the authors conclude that even though the asymptotic theoretical error is zero, most classification methods are suboptimal in practice (possibly due to the high collinearity of the data), with the notable exception of PCA+QDA.
 
@@ -187,7 +187,7 @@ Finally, Figure~\ref{fig:clf_emcee_nongp} shows that our classifiers perform bet
 
 \subsection*{Real data}
 
-As for the real data sets, in Figure~\ref{fig:clf_emcee_real} we see positive results in general, obtaining in most cases accuracies well above the mean of the reference models, and sometimes above most of them. In particular, the predict-then-summarize methods tend to have a good performance and achieve a lower standard error across executions, which is a trend that we also saw in the simulated data sets. However, our variable selection methods seem to be a bit worse in this case. Again, the models that use \textit{emcee\_mean} are the exception, and in all these data sets they perform steadily worse than the rest of our Bayesian models.
+As for the real data sets, in Figure~\ref{fig:clf_emcee_real} we see positive results in general, obtaining in most cases accuracies well above the mean of the reference models, and sometimes above most of them. In particular, the predict-then-summarize methods tend to have a good performance and achieve a lower standard error across executions, which is a trend that we also saw in the simulated data sets. As we have been seeing almost invariably, the models that use \textit{emcee\_mean} are the exception, and in all these data sets they perform steadily worse than the rest of our Bayesian models.
 
 \begin{figure}[ht!]
   \centering
