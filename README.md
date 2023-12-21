@@ -6,7 +6,7 @@ Trabajo de Fin de Máster del Máster Universitario en Ciencia de Datos de la Un
 
 This repository contains the source code of my master's thesis in Statistics and Data Science at the Autonomous University of Madrid, which is licensed under a [CC BY-SA-4.0](http://creativecommons.org/licenses/by-sa/4.0/) license. The code developed is available on a [separate repository](https://github.com/antcc/rk-bfr).
 
-The compiled pdf version of the thesis is available [here](https://github.com/antcc/tfm/releases/download/v1.2/masters-thesis.pdf). It can also be generated via the command `latexmk -pdf masters-thesis` (requires `xelatex`). The template used is a slightly modified version of [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis).
+The compiled PDF version of the thesis is available [here](https://github.com/antcc/tfm/releases/download/v1.2/masters-thesis.pdf). It can also be generated via the command `latexmk -pdf masters-thesis` (requires `xelatex`). The template used is a slightly modified version of [latex-mimosis](https://github.com/Pseudomanifold/latex-mimosis).
 
 ## Abstract
 
@@ -20,4 +20,4 @@ Grollemund, P.-M., Abraham, C., Baragatti, M., and Pudlo, P. (2019). "Bayesian F
 
 Berrendero, J. R., Cholaquidis, A., and Cuevas, A. (2020). "On a general definition of the functional linear model". In: *arXiv preprint arXiv:2011.05441* ([preprint](https://arxiv.org/abs/2011.05441)).
 
-Berrendero, J. R., Bueno-Larraz, B., and Cuevas, A. (2023). "On functional logistic regression: some conceptual issues". In: *TEST* 32, pp. 321-349 ([preprint](https://arxiv.org/abs/1812.00721) | [doi](https://link.springer.com/article/10.1007/s11749-022-00836-9)).
+Berrendero, J. R., Bueno-Larraz, B., and Cuevas, A. (2023). "On functional logistic regression: some conceptual issues". In: *Test* 32, pp. 321-349 ([preprint](https://arxiv.org/abs/1812.00721) | [doi](https://link.springer.com/article/10.1007/s11749-022-00836-9)).
