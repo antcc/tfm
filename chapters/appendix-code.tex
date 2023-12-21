@@ -15,10 +15,11 @@
 The Python source code developed for this work is available at the GitHub repository \url{https://github.com/antcc/rk-bfr}, under a GPLv3 license. The code is adequately documented and is structured in several directories as follows:
 
 \begin{itemize}
-  \item In the \texttt{rkbfr} folder we find the files responsible for the implementation of our models, separated according to the functionality they provide.
+  \item In the \texttt{rkbfr} folder we find the files responsible for the implementation of our Bayesian models, separated according to the functionality they provide.
   \item The \texttt{reference\_methods} folder contains our implementation of the functional comparison algorithms that were not available through a standard Python library.
-  \item The \texttt{utils} folder contains some utility files for simulation, experimentation and visualization.
-  \item At the root folder we have files for executing our experiments, which accept many user-specified parameters (e.g. number of iterations, type of data set, \ldots). In particular, the script \texttt{results\_cv.py} contains the code for our comparison experiments, while the script \texttt{results\_all.py} allows the execution of our Bayesian methods without a cross-validation loop.
+  \item The \texttt{utils} folder has some utility files for simulation, experimentation and visualization.
+  \item The \texttt{experiments} folder contains plain text files with the numerical experimental results shown in Appendix~\ref{ch:tables}, as well as \texttt{.csv} and \texttt{.npz} files that facilitate working with them directly in Python.
+  \item At the root folder we have files for executing our experiments, which accept several user-specified parameters (such as the number of iterations or the type of data set). In particular, the script \texttt{results\_cv.py} contains the code for our comparison experiments, while the script \texttt{results\_all.py} executes our Bayesian methods without a cross-validation loop.
 \end{itemize}
 
 When possible, the code was implemented in a generic way that would allow for easy extensions or derivations. It was also developed with efficiency in mind, so many functions and methods exploit the vectorization capabilities of the \textit{numpy}\footnote{\url{https://numpy.org}} and \textit{scipy} libraries. Moreover, we followed closely the style of the \textit{scikit-learn} and \textit{scikit-fda} libraries, so our methods are fully compatible and could be integrated (after some minor tweaking) with both of them. The code for the experiments was executed in a machine with 4 cores, and a random seed with value 2022 was set for reproducibility. We provide a script file \texttt{launch.sh} that illustrates a typical execution.
