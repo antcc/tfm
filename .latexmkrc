@@ -25,5 +25,5 @@ sub makenlo2nls {
 $bibtex_use = 2;
 
 #remove more files than in the default configuration
-@generated_exts = qw(brf acn acr alg aux code ist fls glg glo gz gls glsdefs idx ind lof lot out thm toc tpt wrt ilg run.xml synctex  synctex.gz mw bcf synctex(busy));
+@generated_exts = qw(brf acn acr alg aux code ist fls glg glo gz gls glsdefs idx ind lof lot log out thm toc tpt wrt ilg run.xml synctex  synctex.gz mw bcf synctex(busy));
 $clean_ext .= ' %R.ist %R.xdy';
