@@ -129,7 +129,7 @@ In Figure~\ref{fig:reg_emcee_l2} we see the results for the case with an underly
 
 \enlargethispage{1\baselineskip}
 
-Lastly, the results for the non-GP case can be seen in Figure~\ref{fig:reg_emcee_nongp}, in which the regressors are realizations of a GBM. In this case we still get better results under the RKHS model, while the results under the \(L^2\)-model are slightly worse. However, as before, the difference is small (except for the \textit{emcee\_mean} methods).
+Lastly, the results for the non-GP case can be seen in Figure~\ref{fig:reg_emcee_non_gp}, in which the regressors are realizations of a GBM. In this case we still get better results under the RKHS model, while the results under the \(L^2\)-model are slightly worse. However, as before, the difference is small (except for the \textit{emcee\_mean} methods).
 
 \vspace{.2em}
 
@@ -141,8 +141,8 @@ Lastly, the results for the non-GP case can be seen in Figure~\ref{fig:reg_emcee
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=.65\textwidth]{reg_emcee_nongp}
-  \caption{RMSE of predictors for simulated data with GBM regressors (lower is better).}\label{fig:reg_emcee_nongp}
+  \includegraphics[width=.65\textwidth]{reg_emcee_non_gp}
+  \caption{RMSE of predictors for simulated data with GBM regressors (lower is better).}\label{fig:reg_emcee_non_gp}
 \end{figure}
 
 \subsection*{Real data}
@@ -171,7 +171,7 @@ In Figure~\ref{fig:clf_emcee_rkhs} we see the results for the GP regressors in t
 
 Continuing with Figure~\ref{fig:clf_emcee_l2}, we see that in the \(L^2\) case the results are again promising, since our models score consistently on or above the mean of the reference models, and in many cases surpassing most of them. The predict-then-summarize approaches (\textit{emcee\_posterior\_mean} and \textit{emcee\_posterior\_vote}) are particularly good in this case, and in general have low standard errors. Moreover, the overall accuracy of all methods is poor (below 60\%), so this is indeed a difficult problem in which even small increases in accuracy are relevant.
 
-Finally, Figure~\ref{fig:clf_emcee_nongp} shows that our classifiers perform better than most comparison algorithms when separating two homoscedastic Gaussian processes, but they struggle in the heteroscedastic case. Incidentally, this heteroscedastic case of two zero-mean Brownian motions has a special interest, since it can be shown that the Bayes error is zero in the limit of dense monitoring (i.e. with an arbitrarily fine measurement grid), a manifestation of the ``near-perfect'' classification phenomenon analyzed for example in \citet{torrecilla2020optimal}. Our results are in line with the empirical studies of this article, where the authors conclude that even though the asymptotic theoretical error is zero, most classification methods are suboptimal in practice (possibly due to the high collinearity of the data), with the notable exception of PCA+QDA.
+Finally, Figure~\ref{fig:clf_emcee_non_gp} shows that our classifiers perform better than most comparison algorithms when separating two homoscedastic Gaussian processes, but they struggle in the heteroscedastic case. Incidentally, this heteroscedastic case of two zero-mean Brownian motions has a special interest, since it can be shown that the Bayes error is zero in the limit of dense monitoring (i.e. with an arbitrarily fine measurement grid), a manifestation of the ``near-perfect'' classification phenomenon analyzed for example in \citet{torrecilla2020optimal}. Our results are in line with the empirical studies of this article, where the authors conclude that even though the asymptotic theoretical error is zero, most classification methods are suboptimal in practice (possibly due to the high collinearity of the data), with the notable exception of PCA+QDA.
 
 \begin{figure}[htbp!]
   \centering
@@ -181,8 +181,8 @@ Finally, Figure~\ref{fig:clf_emcee_nongp} shows that our classifiers perform bet
 
 \begin{figure}[htbp!]
   \centering
-  \includegraphics[width=.65\textwidth]{clf_emcee_nongp}
-  \caption{Accuracy of classifiers for simulated data coming from two different GP's, labeled according to their origin (higher is better).}\label{fig:clf_emcee_nongp}
+  \includegraphics[width=.65\textwidth]{clf_emcee_non_gp}
+  \caption{Accuracy of classifiers for simulated data coming from two different GP's, labeled according to their origin (higher is better).}\label{fig:clf_emcee_non_gp}
 \end{figure}
 
 \subsection*{Real data}
